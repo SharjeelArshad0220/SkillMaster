@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Session View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0F1923;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .code-block {
+            font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error": "#ffb4ab",
+              "surface-container-low": "#121c27",
+              "surface": "#0a141e",
+              "on-primary-container": "#004965",
+              "on-secondary-fixed": "#111c2d",
+              "surface-tint": "#7bd0ff",
+              "primary": "#8ed5ff",
+              "tertiary-container": "#f1a02b",
+              "primary-fixed": "#c4e7ff",
+              "on-error-container": "#ffdad6",
+              "surface-container-lowest": "#050f19",
+              "inverse-surface": "#d9e3f2",
+              "background": "#0a141e",
+              "tertiary-fixed-dim": "#ffb960",
+              "surface-container-highest": "#2c3641",
+              "surface-container": "#17202b",
+              "on-secondary-container": "#abb5cd",
+              "on-background": "#d9e3f2",
+              "on-tertiary-fixed-variant": "#653e00",
+              "inverse-on-surface": "#27313c",
+              "outline-variant": "#3e484f",
+              "on-tertiary-container": "#613b00",
+              "on-primary": "#00354a",
+              "primary-container": "#38bdf8",
+              "surface-dim": "#0a141e",
+              "inverse-primary": "#00668a",
+              "on-secondary": "#273143",
+              "on-primary-fixed-variant": "#004c69",
+              "secondary-fixed": "#d9e2fb",
+              "surface-variant": "#2c3641",
+              "surface-container-high": "#212b35",
+              "surface-bright": "#303a45",
+              "on-secondary-fixed-variant": "#3d475b",
+              "secondary": "#bdc6df",
+              "secondary-container": "#3d475b",
+              "tertiary": "#ffc176",
+              "on-primary-fixed": "#001e2c",
+              "error-container": "#93000a",
+              "on-tertiary-fixed": "#2a1700",
+              "secondary-fixed-dim": "#bdc6df",
+              "on-tertiary": "#472a00",
+              "primary-fixed-dim": "#7bd0ff",
+              "outline": "#87929a",
+              "on-surface": "#d9e3f2",
+              "on-error": "#690005",
+              "tertiary-fixed": "#ffddb8",
+              "on-surface-variant": "#bdc8d1"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-[#0F1923] text-on-surface antialiased min-h-screen">
+<!-- TopNavBar Component -->
+<header class="h-[56px] w-full sticky top-0 z-50 bg-[#121c27] flex justify-between items-center px-6 mx-auto">
+<div class="text-base font-semibold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-[#38BDF8]" data-icon="school">school</span>
+<span>Skill Master</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-[#CBD5E1] opacity-60 hover:opacity-100 transition-opacity text-base font-normal" href="#">Home</a>
+<a class="text-[#CBD5E1] opacity-60 hover:opacity-100 transition-opacity text-base font-normal" href="#">Roadmap</a>
+<a class="text-[#CBD5E1] opacity-60 hover:opacity-100 transition-opacity text-base font-normal" href="#">Progress</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#17202b] rounded-lg transition-colors duration-200 active:scale-95 text-[#CBD5E1]">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-xs font-bold text-white cursor-pointer hover:bg-surface-bright transition-colors">
+                SA
+            </div>
+</div>
+</header>
+<main class="max-w-[760px] mx-auto py-12 px-6">
+<!-- Header Block -->
+<section class="mb-10">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[#38BDF8] text-[10px] font-bold uppercase tracking-[0.12em]">LESSON PHASE</span>
+<span class="px-3 py-1 bg-[#38BDF8]/10 text-[#38BDF8] text-[11px] font-bold rounded-full">Learning</span>
+</div>
+<h1 class="text-[20px] font-semibold text-white mb-2">Introduction to Components</h1>
+<p class="text-[#64748B] text-[13px] font-normal">Day 3 — Monday · Module 1 · Week 2</p>
+</section>
+<!-- Progress Indicator -->
+<section class="mb-12">
+<div class="flex justify-between items-end mb-3">
+<span class="text-[#CBD5E1] text-xs font-medium">Part 1 of 3</span>
+<span class="text-[#38BDF8] text-xs font-bold">33% complete</span>
+</div>
+<div class="w-full h-[6px] bg-[#2E3D52] overflow-hidden">
+<div class="h-full bg-[#38BDF8]" style="width: 33%"></div>
+</div>
+</section>
+<!-- Lesson Card -->
+<article class="bg-[#162032] rounded-xl overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.12)] border border-[#1E2F42] mb-10">
+<div class="p-8">
+<h2 class="text-[18px] font-semibold text-white mb-6">What Are React Components?</h2>
+<div class="space-y-6 text-[#CBD5E1] text-[15px] leading-[1.7]">
+<p>
+                        At the core of React development lies the concept of components. Think of components as the building blocks of your user interface—modular, reusable pieces of code that encapsulate both logic and visual representation. 
+                    </p>
+<p>
+                        By breaking down a complex UI into smaller, self-contained components, you gain the ability to manage state more effectively and maintain a clean, readable codebase. This architectural approach mirrors the way we think about physical structures: individual bricks coming together to form a cohesive whole.
+                    </p>
+<!-- Code Block -->
+<div class="bg-[#0F1923] p-6 rounded-lg overflow-x-auto my-8">
+<pre class="code-block text-[#38BDF8] text-[13px]"><code>function Greeting() {
+  return &lt;h1&gt;Hello, Skill Master!&lt;/h1&gt;;
+}</code></pre>
+</div>
+<p>
+                        A React component can be as simple as a single HTML element or as complex as an entire application feature. They accept inputs called "props" and return React elements describing what should appear on the screen.
+                    </p>
+</div>
+</div>
+</article>
+<!-- Action Row -->
+<footer class="flex items-center justify-between pt-6">
+<button class="px-6 py-2.5 rounded-lg border border-[#3e484f]/20 text-[#38BDF8] text-sm font-semibold hover:bg-surface-container transition-colors active:scale-95">
+                Previous Part
+            </button>
+<button class="px-6 py-2.5 rounded-lg bg-[#38BDF8] text-[#001e2c] text-sm font-bold hover:bg-[#7bd0ff] transition-colors shadow-sm active:scale-95">
+                Next Part
+            </button>
+</footer>
+<!-- Decorative Subtle Accent -->
+<div class="mt-20 flex justify-center opacity-20">
+<div class="w-12 h-1 bg-[#38BDF8] rounded-full"></div>
+</div>
+</main>
+</body></html>

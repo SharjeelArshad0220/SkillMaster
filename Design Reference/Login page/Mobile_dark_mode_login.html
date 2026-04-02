@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container": "#38bdf8",
+                        "secondary-container": "#37485c",
+                        "surface-container-high": "#212b35",
+                        "surface": "#0a141e",
+                        "error": "#ffb4ab",
+                        "on-tertiary-container": "#8d0012",
+                        "on-primary-container": "#004965",
+                        "surface-tint": "#7bd0ff",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-bright": "#303a45",
+                        "on-surface-variant": "#bdc8d1",
+                        "surface-variant": "#2c3641",
+                        "inverse-surface": "#d9e3f2",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#d9e3f2",
+                        "on-secondary-fixed": "#0a1d2f",
+                        "on-primary": "#00354a",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "surface-dim": "#0a141e",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#37485c",
+                        "inverse-on-surface": "#27313c",
+                        "on-secondary-container": "#a5b7ce",
+                        "primary": "#8ed5ff",
+                        "tertiary-container": "#ff938c",
+                        "on-primary-fixed": "#001e2c",
+                        "on-surface": "#d9e3f2",
+                        "tertiary": "#ffbcb7",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "outline-variant": "#3e484f",
+                        "secondary-fixed-dim": "#b6c8e0",
+                        "surface-container-lowest": "#050f19",
+                        "surface-container-highest": "#2c3641",
+                        "surface-container": "#17202b",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "background": "#0a141e",
+                        "on-tertiary-fixed": "#410004",
+                        "secondary": "#b6c8e0",
+                        "secondary-fixed": "#d2e4fd",
+                        "primary-fixed": "#c4e7ff",
+                        "on-secondary": "#213245",
+                        "inverse-primary": "#00668a",
+                        "outline": "#87929a",
+                        "on-primary-fixed-variant": "#004c69",
+                        "on-error": "#690005",
+                        "surface-container-low": "#121c27",
+                        "on-tertiary": "#68000a"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0a141e;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex items-center justify-center min-h-screen bg-black">
+<!-- Mobile Viewport Container (390x844) -->
+<div class="w-[390px] h-[844px] flex flex-col overflow-hidden shadow-2xl">
+<!-- TOP ZONE (35% height) -->
+<header class="h-[35%] bg-[#17202b] flex flex-col items-center justify-center px-6">
+<!-- Logo Mark -->
+<div class="w-[36px] h-[36px] rounded-[10px] bg-[#38bdf8] flex items-center justify-center mb-4">
+<svg fill="none" height="24" viewbox="0 0 24 24" width="24">
+<circle cx="12" cy="5" r="2.5" stroke="#0a141e" stroke-width="2"></circle>
+<circle cx="5" cy="17" r="2.5" stroke="#0a141e" stroke-width="2"></circle>
+<circle cx="19" cy="17" r="2.5" stroke="#0a141e" stroke-width="2"></circle>
+<line stroke="#0a141e" stroke-linecap="round" stroke-width="2" x1="12" x2="6.5" y1="7.5" y2="15"></line>
+<line stroke="#0a141e" stroke-linecap="round" stroke-width="2" x1="12" x2="17.5" y1="7.5" y2="15"></line>
+</svg>
+</div>
+<!-- App Name -->
+<h1 class="text-[22px] font-semibold text-[#d9e3f2] leading-tight">Skill Master</h1>
+<!-- Tagline -->
+<p class="text-[12px] font-normal text-[#87929a] mt-1 text-center">AI-powered personalized learning</p>
+</header>
+<!-- BOTTOM ZONE (65% height) -->
+<main class="h-[65%] bg-[#0a141e] px-[24px] py-[28px] flex flex-col">
+<!-- Auth Tabs -->
+<div class="flex border-b border-[#2c3641] mb-8">
+<button class="flex-1 pb-3 text-[14px] font-semibold text-[#38bdf8] border-b-2 border-[#38bdf8]">
+                    Log In
+                </button>
+<button class="flex-1 pb-3 text-[14px] font-normal text-[#87929a]">
+                    Sign Up
+                </button>
+</div>
+<!-- Login Form -->
+<form class="flex flex-col gap-6" onsubmit="return false;">
+<!-- Email Field (Error State) -->
+<div class="flex flex-col gap-1.5">
+<label class="text-[12px] font-medium text-[#d9e3f2]">Email Address</label>
+<div class="relative">
+<input class="w-full h-[40px] bg-[#050f19] border-[#ffb4ab] border-[1.5px] rounded-lg px-3 text-[14px] text-[#d9e3f2] focus:outline-none focus:border-[#8ed5ff]" placeholder="name@company.com" type="email" value="user@example"/>
+</div>
+<span class="text-[11px] font-medium text-[#ffb4ab]">Enter a valid email address</span>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-1.5">
+<label class="text-[12px] font-medium text-[#d9e3f2]">Password</label>
+<div class="relative">
+<input class="w-full h-[40px] bg-[#050f19] border-[#2c3641] border-[1px] rounded-lg px-3 pr-10 text-[14px] text-[#d9e3f2] focus:outline-none focus:border-[#8ed5ff]" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-[#87929a]" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-[40px] bg-[#38bdf8] text-[#0a141e] font-semibold text-[14px] rounded-lg mt-2 active:scale-[0.98] transition-transform" type="submit">
+                    Log In
+                </button>
+<!-- Helper Redirect -->
+<div class="text-center text-[13px] mt-2">
+<span class="text-[#87929a]">Don't have an account?</span>
+<button class="text-[#38bdf8] font-medium ml-1" type="button">Sign Up</button>
+</div>
+</form>
+<!-- Decorative/Editorial Space Filler -->
+<div class="mt-auto opacity-5 flex justify-center">
+<svg fill="none" height="120" viewbox="0 0 100 100" width="120" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 10H90V90H10V10Z" stroke="#38bdf8" stroke-width="0.5"></path>
+<path d="M10 50H90" stroke="#38bdf8" stroke-width="0.5"></path>
+<path d="M50 10V90" stroke="#38bdf8" stroke-width="0.5"></path>
+<circle cx="50" cy="50" r="30" stroke="#38bdf8" stroke-width="0.5"></circle>
+</svg>
+</div>
+</main>
+</div>
+</body></html>

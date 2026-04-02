@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Set Up Your Learning Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for better editorial feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container": "#38bdf8",
+                        "on-surface": "#0F172A",
+                        "on-surface-variant": "#64748B",
+                        "outline": "#94A3B8",
+                        "outline-variant": "#E2E8F0",
+                        "surface": "#FFFFFF",
+                        "background": "#F1F5F9",
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col items-center py-16 px-4">
+<!-- Page Title Block -->
+<header class="w-full max-w-[720px] mb-8 text-left">
+<h1 class="text-[28px] font-bold text-[#0F172A] tracking-tight leading-tight mb-2">
+            Set Up Your Learning Profile
+        </h1>
+<p class="text-[14px] text-[#64748B] font-medium">
+            Tailor your educational journey by providing your details and preferences.
+        </p>
+</header>
+<!-- Main Form Card -->
+<main class="w-full max-w-[720px] bg-[#FFFFFF] border border-[#E2E8F0] shadow-[0_1px_4px_rgba(0,0,0,0.10)] rounded-xl overflow-hidden">
+<form class="flex flex-col">
+<!-- Section A: LEARNER INFORMATION -->
+<section class="p-10 pb-6">
+<h2 class="text-[12px] font-extrabold tracking-[0.05em] text-[#0EA5E9] mb-8 uppercase">
+                    LEARNER INFORMATION
+                </h2>
+<div class="space-y-8">
+<!-- Full Name -->
+<div class="flex flex-col gap-2">
+<label class="text-[12px] font-semibold text-[#0F172A]">Full Name</label>
+<input class="w-full px-4 py-3 bg-[#FFFFFF] border border-[#E2E8F0] rounded-lg text-[14px] text-[#0F172A] placeholder-[#94A3B8] focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all outline-none" placeholder="e.g. Alex Johnson" type="text"/>
+</div>
+<!-- Your Role -->
+<div class="flex flex-col gap-3">
+<label class="text-[12px] font-semibold text-[#0F172A]">Your Role</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-5 py-2 text-[13px] font-semibold rounded-full border-2 border-[#0EA5E9] bg-[#FFFFFF] text-[#0EA5E9] transition-all" type="button">Student</button>
+<button class="px-5 py-2 text-[13px] font-medium rounded-full border border-[#E2E8F0] bg-[#FFFFFF] text-[#64748B] hover:border-[#CBD5E1] transition-all" type="button">Job Seeker</button>
+<button class="px-5 py-2 text-[13px] font-medium rounded-full border border-[#E2E8F0] bg-[#FFFFFF] text-[#64748B] hover:border-[#CBD5E1] transition-all" type="button">Other</button>
+</div>
+</div>
+<!-- Current Level -->
+<div class="flex flex-col gap-3">
+<label class="text-[12px] font-semibold text-[#0F172A]">Current Level</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-5 py-2 text-[13px] font-semibold rounded-full border-2 border-[#0EA5E9] bg-[#FFFFFF] text-[#0EA5E9] transition-all" type="button">Beginner</button>
+<button class="px-5 py-2 text-[13px] font-medium rounded-full border border-[#E2E8F0] bg-[#FFFFFF] text-[#64748B] hover:border-[#CBD5E1] transition-all" type="button">Intermediate</button>
+<button class="px-5 py-2 text-[13px] font-medium rounded-full border border-[#E2E8F0] bg-[#FFFFFF] text-[#64748B] hover:border-[#CBD5E1] transition-all" type="button">Advanced</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section B: LEARNING GOAL -->
+<section class="p-10 py-6">
+<h2 class="text-[12px] font-extrabold tracking-[0.05em] text-[#0EA5E9] mb-8 uppercase">
+                    LEARNING GOAL
+                </h2>
+<div class="space-y-8">
+<div class="flex flex-col gap-2">
+<label class="text-[12px] font-semibold text-[#0F172A]">What do you want to learn?</label>
+<input class="w-full px-4 py-3 bg-[#FFFFFF] border border-[#E2E8F0] rounded-lg text-[14px] text-[#0F172A] placeholder-[#94A3B8] focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all outline-none" placeholder="e.g. Advanced Data Structures" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[12px] font-semibold text-[#0F172A]">Why do you want to learn this?</label>
+<textarea class="w-full px-4 py-3 bg-[#FFFFFF] border border-[#E2E8F0] rounded-lg text-[14px] text-[#0F172A] placeholder-[#94A3B8] focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all outline-none resize-none" placeholder="Describe your motivation or specific objective..." rows="3"></textarea>
+</div>
+</div>
+</section>
+<!-- Section C: LEARNING PREFERENCES -->
+<section class="p-10 pt-6 pb-12">
+<h2 class="text-[12px] font-extrabold tracking-[0.05em] text-[#0EA5E9] mb-8 uppercase">
+                    LEARNING PREFERENCES
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+<div class="flex flex-col gap-2">
+<label class="text-[12px] font-semibold text-[#0F172A]">Daily Available Time</label>
+<select class="w-full px-4 py-3 bg-[#FFFFFF] border border-[#E2E8F0] rounded-lg text-[14px] text-[#0F172A] focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all outline-none appearance-none cursor-pointer">
+<option>15 – 30 minutes</option>
+<option selected="">30 – 60 minutes</option>
+<option>1 – 2 hours</option>
+<option>2+ hours</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[12px] font-semibold text-[#0F172A]">Preferred Pace</label>
+<select class="w-full px-4 py-3 bg-[#FFFFFF] border border-[#E2E8F0] rounded-lg text-[14px] text-[#0F172A] focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all outline-none appearance-none cursor-pointer">
+<option>Relaxed</option>
+<option selected="">Steady</option>
+<option>Fast-Track</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<label class="text-[12px] font-semibold text-[#0F172A]">Preferred Learning Style</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-5 py-2 text-[13px] font-medium rounded-full border border-[#E2E8F0] bg-[#FFFFFF] text-[#64748B] hover:border-[#CBD5E1] transition-all" type="button">Reading</button>
+<button class="px-5 py-2 text-[13px] font-semibold rounded-full border-2 border-[#0EA5E9] bg-[#FFFFFF] text-[#0EA5E9] transition-all" type="button">Examples</button>
+<button class="px-5 py-2 text-[13px] font-medium rounded-full border border-[#E2E8F0] bg-[#FFFFFF] text-[#64748B] hover:border-[#CBD5E1] transition-all" type="button">Practice</button>
+</div>
+</div>
+</section>
+<!-- Action Area / Bottom Nav Concept -->
+<footer class="p-8 bg-[#FAFBFC] border-t border-[#E2E8F0] flex items-center justify-between">
+<span class="text-[12px] text-[#94A3B8] font-medium hidden sm:block">
+                    Your roadmap is generated using AI based on these inputs.
+                </span>
+<div class="flex items-center gap-4 ml-auto">
+<!-- Component: BottomNavBar (Desktop Translation) -->
+<button class="flex flex-row items-center justify-center text-[#94A3B8] px-6 py-3 border border-[#CBD5E1] rounded-md font-semibold text-[14px] hover:bg-slate-50 transition-colors duration-200" type="button">
+                        Back
+                    </button>
+<button class="flex flex-row items-center justify-center bg-[#0EA5E9] text-[#FFFFFF] rounded-md px-8 py-3 font-bold text-[14px] shadow-sm hover:opacity-90 transition-all duration-200" type="submit">
+<span class="material-symbols-outlined mr-2 text-[18px]">auto_awesome</span>
+                        Generate Roadmap
+                    </button>
+</div>
+</footer>
+</form>
+</main>
+<!-- Global Layout Note: Shared component logic dictates suppressed navigation for transactional setup screen -->
+</body></html>

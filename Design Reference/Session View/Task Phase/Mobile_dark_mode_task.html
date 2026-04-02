@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-on-surface": "#27313c",
+              "inverse-primary": "#00668a",
+              "on-error-container": "#ffdad6",
+              "primary-fixed-dim": "#7bd0ff",
+              "outline": "#87929a",
+              "primary-container": "#38bdf8",
+              "on-surface": "#d9e3f2",
+              "on-secondary-container": "#abb5cd",
+              "on-secondary": "#273143",
+              "surface-container-high": "#212b35",
+              "background": "#0a141e",
+              "error": "#ffb4ab",
+              "on-tertiary": "#472a00",
+              "surface-bright": "#303a45",
+              "surface-container": "#17202b",
+              "surface-variant": "#2c3641",
+              "tertiary-fixed-dim": "#ffb960",
+              "secondary": "#bdc6df",
+              "on-tertiary-fixed": "#2a1700",
+              "primary": "#8ed5ff",
+              "on-surface-variant": "#bdc8d1",
+              "surface-container-highest": "#2c3641",
+              "on-secondary-fixed": "#111c2d",
+              "surface-container-lowest": "#050f19",
+              "tertiary": "#ffc176",
+              "on-tertiary-container": "#613b00",
+              "outline-variant": "#3e484f",
+              "on-error": "#690005",
+              "on-secondary-fixed-variant": "#3d475b",
+              "on-primary-fixed-variant": "#004c69",
+              "on-tertiary-fixed-variant": "#653e00",
+              "secondary-container": "#3d475b",
+              "tertiary-fixed": "#ffddb8",
+              "inverse-surface": "#d9e3f2",
+              "surface-tint": "#7bd0ff",
+              "on-primary-container": "#004965",
+              "surface": "#0a141e",
+              "secondary-fixed-dim": "#bdc6df",
+              "surface-dim": "#0a141e",
+              "primary-fixed": "#c4e7ff",
+              "secondary-fixed": "#d9e2fb",
+              "on-primary-fixed": "#001e2c",
+              "tertiary-container": "#f1a02b",
+              "surface-container-low": "#121c27",
+              "error-container": "#93000a",
+              "on-primary": "#00354a",
+              "on-background": "#d9e3f2"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0F1923; /* Explicit request override for background */
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased text-on-surface">
+<!-- TopNavBar (Derived from JSON with Mobile Specific Constraints) -->
+<nav class="h-[56px] w-full sticky top-0 z-50 bg-[#162032] backdrop-blur-xl flex items-center justify-between px-6">
+<div class="flex items-center gap-2 text-lg font-bold tracking-tighter text-slate-100">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<span>Skill Master</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-slate-400 hover:bg-slate-800 transition-all active:scale-90">
+<span class="material-symbols-outlined text-[20px]">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container">
+                SA
+            </div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="max-w-[390px] mx-auto px-6 py-8">
+<!-- Header Section -->
+<header class="mb-8">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold tracking-[0.12em] text-[#38BDF8] uppercase">TASK PHASE</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary text-[11px] font-bold uppercase tracking-wider">Task</span>
+</div>
+<h1 class="text-[18px] font-semibold text-white leading-tight mb-2">Introduction to Components</h1>
+<p class="text-[12px] font-normal text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                Day 3 — Monday · Module 1 · Week 2
+            </p>
+</header>
+<!-- Task Card -->
+<section class="w-full bg-[#162032] border border-[#1E2F42] rounded-[12px] p-6 shadow-[0_1px_4px_rgba(0,0,0,0.12)]">
+<h2 class="text-[18px] font-semibold text-white mb-3">Build Your First Component</h2>
+<p class="text-[15px] font-normal text-[#CBD5E1] leading-relaxed mb-6">
+                Now that you understand what React components are, it is time to build one yourself. Create a functional React component that displays a welcome message with your name.
+            </p>
+<!-- Divider -->
+<div class="h-px w-full bg-[#2E3D52] mb-6"></div>
+<!-- Answer Section -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<label class="text-[11px] font-semibold tracking-[0.06em] text-[#38BDF8] uppercase">YOUR ANSWER</label>
+</div>
+<div class="relative">
+<textarea class="w-full h-[180px] bg-[#0F1923] border border-[#2E3D52] rounded-lg p-4 text-[14px] text-on-surface placeholder:text-[#64748B] focus:outline-none focus:border-primary-container/50 transition-colors resize-none font-mono" placeholder="Write your React component code here. Explain your thinking as you go — the AI will evaluate both your code and your reasoning."></textarea>
+</div>
+<div class="flex justify-end">
+<span class="text-[12px] font-normal text-[#64748B]">0 / 1000 characters</span>
+</div>
+<!-- Submit Button -->
+<button class="w-full py-3.5 bg-primary-container text-[#0F1923] font-bold text-[14px] rounded-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                    Submit Task
+                    <span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+<!-- Helper Text -->
+<p class="text-[12px] font-normal text-[#64748B] text-center mt-4 px-2">
+                    AI will evaluate your answer and provide personalised feedback.
+                </p>
+</div>
+</section>
+<!-- Empty State / Spacing for Footer if needed -->
+<div class="h-24"></div>
+</main>
+<!-- Decorative Structural Elements (Architectural Feel) -->
+<div class="fixed top-0 left-0 w-1 h-full bg-gradient-to-b from-primary-container/20 to-transparent pointer-events-none opacity-30"></div>
+</body></html>

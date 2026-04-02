@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Progress</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-container": "#214b61",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "tertiary-fixed": "#ffddb8",
+                        "primary-fixed": "#c4e7ff",
+                        "on-primary-container": "#004965",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error": "#690005",
+                        "on-background": "#d9e3f2",
+                        "on-tertiary-container": "#613b00",
+                        "surface-variant": "#2c3641",
+                        "secondary-fixed-dim": "#a4cce6",
+                        "on-primary-fixed-variant": "#004c69",
+                        "on-primary-fixed": "#001e2c",
+                        "on-tertiary": "#472a00",
+                        "on-secondary-fixed": "#001e2c",
+                        "surface-dim": "#0a141e",
+                        "background": "#0a141e",
+                        "on-secondary-fixed-variant": "#214b61",
+                        "on-secondary-container": "#92bad4",
+                        "outline": "#87929a",
+                        "inverse-primary": "#00668a",
+                        "secondary": "#a4cce6",
+                        "on-surface-variant": "#bdc8d1",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#ffc176",
+                        "primary-container": "#38bdf8",
+                        "surface-container-highest": "#2c3641",
+                        "surface-bright": "#303a45",
+                        "inverse-surface": "#d9e3f2",
+                        "inverse-on-surface": "#27313c",
+                        "outline-variant": "#3e484f",
+                        "on-surface": "#d9e3f2",
+                        "tertiary-fixed-dim": "#ffb960",
+                        "on-secondary": "#023449",
+                        "surface-container-high": "#212b35",
+                        "surface-container": "#17202b",
+                        "secondary-fixed": "#c4e7ff",
+                        "error-container": "#93000a",
+                        "surface": "#0a141e",
+                        "primary": "#8ed5ff",
+                        "surface-tint": "#7bd0ff",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "surface-container-lowest": "#050f19",
+                        "surface-container-low": "#121c27",
+                        "error": "#ffb4ab",
+                        "on-primary": "#00354a",
+                        "tertiary-container": "#f1a02b"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0F1923;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased">
+<!-- TopNavBar -->
+<nav class="sticky top-0 z-50 bg-[#162032] border-b border-[#1E2F42] h-[56px] flex items-center">
+<div class="flex justify-between items-center w-full px-8 max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<!-- Brand Anchor -->
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 bg-[#38BDF8] flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-[#0F1923] text-lg" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<span class="text-base font-bold text-white tracking-tighter">Skill Master</span>
+</div>
+<!-- Navigation Links -->
+<div class="hidden md:flex items-center gap-6 h-[56px]">
+<a class="text-[#64748B] text-sm font-medium hover:text-white transition-colors" href="#">Home</a>
+<a class="text-[#64748B] text-sm font-medium hover:text-white transition-colors" href="#">Roadmap</a>
+<a class="text-white text-sm font-bold border-b-2 border-[#38BDF8] h-full flex items-center" href="#">Progress</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-white transition-colors">dark_mode</span>
+<div class="w-8 h-8 rounded-full bg-[#1E2F42] flex items-center justify-center text-xs font-bold text-[#38BDF8] border border-[#3e484f]">
+                    SA
+                </div>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-8 py-12">
+<!-- Header -->
+<header class="mb-12">
+<h1 class="text-[26px] font-bold text-white mb-2">Progress</h1>
+<p class="text-[14px] text-[#64748B]">Your learning record, performance, and growth.</p>
+</header>
+<!-- Overview Section -->
+<section class="mb-16">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-[10px] font-bold text-[#38BDF8] tracking-[0.12em] uppercase">Overview</span>
+<div class="h-[1px] flex-grow bg-[#1E2F42]"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<!-- Stat Card 1 -->
+<div class="bg-[#162032] border border-[#1E2F42] p-6 rounded-sm">
+<p class="text-[10px] font-bold text-[#64748B] tracking-[0.12em] uppercase mb-3">Completed Sessions</p>
+<p class="text-3xl font-extrabold text-white">12</p>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-[#162032] border border-[#1E2F42] p-6 rounded-sm">
+<p class="text-[10px] font-bold text-[#64748B] tracking-[0.12em] uppercase mb-3">Modules Completed</p>
+<p class="text-3xl font-extrabold text-white">1 <span class="text-lg font-medium text-[#64748B]">/ 4</span></p>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-[#162032] border border-[#1E2F42] p-6 rounded-sm">
+<p class="text-[10px] font-bold text-[#64748B] tracking-[0.12em] uppercase mb-3">Latest Result</p>
+<div class="flex items-center gap-2">
+<span class="text-3xl font-extrabold text-[#22C55E]">Passed</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-[#162032] border border-[#1E2F42] p-6 rounded-sm">
+<p class="text-[10px] font-bold text-[#64748B] tracking-[0.12em] uppercase mb-3">Revision Topics</p>
+<p class="text-3xl font-extrabold text-white">3</p>
+</div>
+</div>
+</section>
+<!-- Learning Record Section -->
+<section class="mb-16">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-[10px] font-bold text-[#38BDF8] tracking-[0.12em] uppercase">Learning Record</span>
+<div class="h-[1px] flex-grow bg-[#1E2F42]"></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Left Panel: Learning Summary -->
+<div class="bg-[#162032] border border-[#1E2F42] rounded-sm overflow-hidden">
+<div class="p-6 border-b border-[#1E2F42] bg-[#1E2F42]/30">
+<h3 class="text-sm font-bold text-white">Learning Summary</h3>
+</div>
+<div class="divide-y divide-[#1E2F42]">
+<div class="flex justify-between items-center p-5">
+<span class="text-sm text-[#bdc8d1]">Lessons Completed</span>
+<span class="text-sm font-bold text-white">9</span>
+</div>
+<div class="flex justify-between items-center p-5">
+<span class="text-sm text-[#bdc8d1]">Revision Sessions</span>
+<span class="text-sm font-bold text-white">2</span>
+</div>
+<div class="flex justify-between items-center p-5">
+<span class="text-sm text-[#bdc8d1]">Exams Attempted</span>
+<span class="text-sm font-bold text-white">2</span>
+</div>
+<div class="flex justify-between items-center p-5">
+<span class="text-sm text-[#bdc8d1]">Exams Passed</span>
+<span class="text-sm font-bold text-white">1</span>
+</div>
+</div>
+</div>
+<!-- Right Panel: Recent Outcomes -->
+<div class="bg-[#162032] border border-[#1E2F42] rounded-sm overflow-hidden">
+<div class="p-6 border-b border-[#1E2F42] bg-[#1E2F42]/30">
+<h3 class="text-sm font-bold text-white">Recent Outcomes</h3>
+</div>
+<div class="divide-y divide-[#1E2F42]">
+<div class="flex justify-between items-center p-5">
+<span class="text-sm text-[#bdc8d1]">Last Completed</span>
+<span class="text-sm font-bold text-white">React JSX Basics</span>
+</div>
+<div class="flex justify-between items-center p-5">
+<span class="text-sm text-[#bdc8d1]">Latest Session</span>
+<span class="px-2 py-0.5 text-[10px] font-bold bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20 rounded-sm">PASSED</span>
+</div>
+<div class="flex justify-between items-center p-5">
+<span class="text-sm text-[#bdc8d1]">Latest Exam</span>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-white">70%</span>
+<span class="px-2 py-0.5 text-[10px] font-bold bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20 rounded-sm uppercase">Needs Revision</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Revision Queue Section -->
+<section>
+<div class="flex items-center gap-4 mb-6">
+<span class="text-[10px] font-bold text-[#38BDF8] tracking-[0.12em] uppercase">Revision Queue</span>
+<div class="h-[1px] flex-grow bg-[#1E2F42]"></div>
+</div>
+<div class="bg-[#162032] border border-[#1E2F42] rounded-sm overflow-hidden">
+<div class="divide-y divide-[#1E2F42]">
+<!-- Row 1 -->
+<div class="flex items-center p-5 gap-6 group">
+<div class="w-2 h-2 rounded-full bg-[#2E3D52]"></div>
+<div class="flex-grow">
+<p class="text-sm font-bold text-white">React Props</p>
+<p class="text-xs text-[#64748B]">Week 1 Module</p>
+</div>
+<span class="material-symbols-outlined text-[#64748B] text-lg opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+<!-- Row 2 -->
+<div class="flex items-center p-5 gap-6 group">
+<div class="w-2 h-2 rounded-full bg-[#2E3D52]"></div>
+<div class="flex-grow">
+<p class="text-sm font-bold text-white">JSX Syntax</p>
+<p class="text-xs text-[#64748B]">Exam Review Required</p>
+</div>
+<span class="material-symbols-outlined text-[#64748B] text-lg opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+<!-- Row 3 -->
+<div class="flex items-center p-5 gap-6 group">
+<div class="w-2 h-2 rounded-full bg-[#2E3D52]"></div>
+<div class="flex-grow">
+<p class="text-sm font-bold text-white">Component Structure</p>
+<p class="text-xs text-[#64748B]">Week 2 Module</p>
+</div>
+<span class="material-symbols-outlined text-[#64748B] text-lg opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Space -->
+<footer class="py-12 flex justify-center border-t border-[#1E2F42] mt-20">
+<p class="text-[10px] font-bold text-[#64748B] tracking-[0.2em] uppercase">Technical Performance Blueprint v1.0</p>
+</footer>
+</body></html>

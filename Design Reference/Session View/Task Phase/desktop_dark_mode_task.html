@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Task Phase</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-on-surface": "#27313c",
+              "inverse-primary": "#00668a",
+              "on-error-container": "#ffdad6",
+              "primary-fixed-dim": "#7bd0ff",
+              "outline": "#87929a",
+              "primary-container": "#38bdf8",
+              "on-surface": "#d9e3f2",
+              "on-secondary-container": "#abb5cd",
+              "on-secondary": "#273143",
+              "surface-container-high": "#212b35",
+              "background": "#0a141e",
+              "error": "#ffb4ab",
+              "on-tertiary": "#472a00",
+              "surface-bright": "#303a45",
+              "surface-container": "#17202b",
+              "surface-variant": "#2c3641",
+              "tertiary-fixed-dim": "#ffb960",
+              "secondary": "#bdc6df",
+              "on-tertiary-fixed": "#2a1700",
+              "primary": "#8ed5ff",
+              "on-surface-variant": "#bdc8d1",
+              "surface-container-highest": "#2c3641",
+              "on-secondary-fixed": "#111c2d",
+              "surface-container-lowest": "#050f19",
+              "tertiary": "#ffc176",
+              "on-tertiary-container": "#613b00",
+              "outline-variant": "#3e484f",
+              "on-error": "#690005",
+              "on-secondary-fixed-variant": "#3d475b",
+              "on-primary-fixed-variant": "#004c69",
+              "on-tertiary-fixed-variant": "#653e00",
+              "secondary-container": "#3d475b",
+              "tertiary-fixed": "#ffddb8",
+              "inverse-surface": "#d9e3f2",
+              "surface-tint": "#7bd0ff",
+              "on-primary-container": "#004965",
+              "surface": "#0a141e",
+              "secondary-fixed-dim": "#bdc6df",
+              "surface-dim": "#0a141e",
+              "primary-fixed": "#c4e7ff",
+              "secondary-fixed": "#d9e2fb",
+              "on-primary-fixed": "#001e2c",
+              "tertiary-container": "#f1a02b",
+              "surface-container-low": "#121c27",
+              "error-container": "#93000a",
+              "on-primary": "#00354a",
+              "on-background": "#d9e3f2"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #0F1923; /* Matching user specified deep dark background */
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary/30 selection:text-primary">
+<!-- Top Navigation Bar -->
+<nav class="h-[56px] w-full sticky top-0 z-50 bg-[#162032]/80 backdrop-blur-xl transition-all duration-200">
+<div class="flex justify-between items-center px-6 w-full max-w-screen-2xl mx-auto h-full">
+<div class="flex items-center gap-2 text-lg font-bold tracking-tighter text-slate-100">
+<span class="material-symbols-outlined text-[#38bdf8]" data-icon="school">school</span>
+                Skill Master
+            </div>
+<div class="hidden md:flex items-center gap-8 font-['Plus_Jakarta_Sans'] text-sm tracking-tight font-medium">
+<a class="text-slate-400 hover:text-slate-100 transition-colors" href="#">Home</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors" href="#">Roadmap</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors" href="#">Progress</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-800/50 rounded-lg transition-all duration-200 scale-95 active:scale-90 text-slate-400">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-xs font-bold text-on-secondary-container">
+                    SA
+                </div>
+</div>
+</div>
+</nav>
+<main class="min-h-[calc(100vh-56px)] py-12 px-6 flex flex-col items-center">
+<!-- Header Section -->
+<header class="w-full max-w-[760px] mb-10 text-left">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[#38BDF8] text-[10px] font-[700] uppercase tracking-[0.12em] font-label">
+                    TASK PHASE
+                </span>
+<span class="px-2.5 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                    Task
+                </span>
+</div>
+<h1 class="text-[#FFFFFF] text-[20px] font-[600] leading-tight mb-2 font-headline">
+                Introduction to Components
+            </h1>
+<p class="text-[#64748B] text-[13px] font-[400] font-body">
+                Day 3 — Monday · Module 1 · Week 2
+            </p>
+</header>
+<!-- Task Card -->
+<section class="w-full max-w-[760px] bg-[#162032] border border-[#1E2F42] rounded-[12px] p-[36px] shadow-[0_1px_4px_rgba(0,0,0,0.12)] transition-all duration-300">
+<!-- Phase Pillar Indicator (Design System Signature) -->
+<div class="relative">
+<div class="absolute -left-[36px] top-0 bottom-0 w-[2px] bg-[#38BDF8]"></div>
+<h2 class="text-[#FFFFFF] text-[18px] font-[600] mb-4 font-headline">
+                    Build Your First Component
+                </h2>
+<p class="text-[#CBD5E1] text-[15px] font-[400] leading-[1.6] mb-8 font-body">
+                    Now that you understand what React components are, it is time to build one yourself. Create a functional React component that displays a welcome message with your name.
+                </p>
+<div class="w-full h-[1px] bg-[#2E3D52] mb-8"></div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<label class="text-[#38BDF8] text-[11px] font-[600] uppercase tracking-[0.06em] font-label">
+                            YOUR ANSWER
+                        </label>
+</div>
+<div class="relative">
+<textarea class="w-full h-[200px] bg-[#0F1923] border border-[#2E3D52] rounded-lg p-4 text-[#d9e3f2] font-mono text-sm focus:ring-0 focus:border-[#38BDF8] transition-colors placeholder:text-[#64748B] resize-none" placeholder="Write your React component code here. Explain your thinking as you go — the AI will evaluate both your code and your reasoning."></textarea>
+<div class="mt-2 text-right">
+<span class="text-[#64748B] text-[12px] font-[400] font-body">0 / 1000 characters</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-6 mt-8">
+<div class="w-full flex justify-end">
+<button class="bg-[#38BDF8] text-[#0F1923] px-8 py-3 rounded-lg text-[14px] font-[600] hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#38BDF8]/10">
+                                Submit Task
+                            </button>
+</div>
+<p class="text-[#64748B] text-[12px] font-[400] text-center font-body max-w-sm">
+                            AI will evaluate your answer and provide personalised feedback.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Progress Indicator (Minimalist Micro-bar from DS) -->
+<div class="w-full max-w-[760px] mt-12 h-[2px] bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-[#38BDF8] w-[45%]" style="width: 45%;"></div>
+</div>
+<div class="w-full max-w-[760px] mt-2 flex justify-between text-[10px] uppercase font-bold tracking-widest text-slate-500">
+<span>Progress</span>
+<span>45% Complete</span>
+</div>
+</main>
+<!-- Visual Polish: Architectural Gradient Blobs (No standard gradients, just atmospheric tonal shifts) -->
+<div class="fixed top-0 right-0 -z-10 w-[500px] h-[500px] bg-[#38bdf8]/5 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="fixed bottom-0 left-0 -z-10 w-[400px] h-[400px] bg-[#38bdf8]/3 blur-[100px] rounded-full pointer-events-none"></div>
+</body></html>

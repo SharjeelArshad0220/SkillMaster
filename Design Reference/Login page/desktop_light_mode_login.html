@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "page-bg": "#F1F5F9",
+                "panel-bg": "#FFFFFF",
+                "card-bg": "#FFFFFF",
+                "card-border": "#E2E8F0",
+                "input-bg": "#FFFFFF",
+                "input-border": "#CBD5E1",
+                "primary-accent": "#0EA5E9",
+                "button-text": "#FFFFFF",
+                "primary-text": "#0F172A",
+                "body-text": "#334155",
+                "muted-text": "#94A3B8",
+                "error-color": "#EF4444",
+                "divider-line": "#E2E8F0"
+              },
+              fontFamily: {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Plus Jakarta Sans"],
+                "label": ["Plus Jakarta Sans"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+      </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+            color: #334155;
+            margin: 0;
+            overflow: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .auth-card-shadow {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body class="h-screen w-full flex items-stretch">
+<!-- LEFT PANEL (40% width) -->
+<aside class="w-[40%] bg-panel-bg flex flex-col items-center justify-center border-r border-card-border">
+<div class="max-w-xs text-center">
+<!-- Logo Mark -->
+<div class="mb-6 flex justify-center">
+<div class="w-10 h-10 rounded-xl bg-primary-accent flex items-center justify-center">
+<svg fill="none" height="24" viewbox="0 0 24 24" width="24">
+<circle cx="12" cy="5" r="2.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="5" cy="17" r="2.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="19" cy="17" r="2.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="12" x2="6.5" y1="7.5" y2="15"></line>
+<line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="12" x2="17.5" y1="7.5" y2="15"></line>
+</svg>
+</div>
+</div>
+<!-- Brand Identity -->
+<h1 class="text-[26px] font-semibold text-primary-text leading-tight">Skill Master</h1>
+<p class="text-[13px] font-normal text-muted-text mt-1">AI-powered personalized learning</p>
+<!-- Decorative Branding -->
+<div class="mt-8">
+<p class="text-[12px] italic text-muted-text opacity-60 tracking-wide uppercase">Learn. Track. Master.</p>
+</div>
+</div>
+</aside>
+<!-- RIGHT PANEL (60% width) -->
+<main class="w-[60%] bg-page-bg flex items-center justify-center">
+<!-- Auth Card -->
+<div class="w-full max-w-[400px] bg-card-bg p-8 rounded-xl border border-card-border auth-card-shadow">
+<!-- Tabs -->
+<div class="flex items-center mb-6 border-b border-divider-line">
+<button class="flex-1 pb-3 text-[14px] font-semibold text-primary-text border-b-2 border-primary-accent">
+                    Log In
+                </button>
+<button class="flex-1 pb-3 text-[14px] font-normal text-muted-text">
+                    Sign Up
+                </button>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-6" onsubmit="return false;">
+<!-- Email Field (Error State) -->
+<div class="flex flex-col gap-2">
+<label class="text-[12px] font-medium text-primary-text">Email</label>
+<div class="relative">
+<input class="w-full h-10 bg-input-bg border-[1.5px] border-error-color rounded-lg px-4 text-[14px] text-primary-text focus:outline-none focus:border-error-color transition-all" placeholder="name@company.com" type="email" value="user@example"/>
+</div>
+<span class="text-[11px] font-medium text-error-color flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                        Enter a valid email address
+                    </span>
+</div>
+<!-- Password Field (Normal State) -->
+<div class="flex flex-col gap-2">
+<label class="text-[12px] font-medium text-primary-text">Password</label>
+<div class="relative">
+<input class="w-full h-10 bg-input-bg border border-input-border rounded-lg px-4 text-[14px] text-primary-text focus:outline-none focus:border-primary-accent transition-all" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-text hover:text-primary-text" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-10 bg-primary-accent text-button-text font-semibold rounded-lg text-[14px] hover:opacity-90 transition-colors active:scale-[0.98] duration-150" type="submit">
+                    Log In
+                </button>
+<!-- Helper Footer -->
+<div class="text-center mt-2">
+<p class="text-[13px] text-body-text">
+                        Don't have an account? 
+                        <a class="text-primary-accent font-medium hover:underline ml-1" href="#">Sign Up</a>
+</p>
+</div>
+</form>
+</div>
+</main>
+</body></html>

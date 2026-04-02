@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Roadmap</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed": "#001e2c",
+              "surface-variant": "#2c3641",
+              "tertiary-fixed-dim": "#ffb960",
+              "on-tertiary": "#472a00",
+              "on-tertiary-container": "#613b00",
+              "secondary-fixed-dim": "#a4cce6",
+              "surface-container-lowest": "#050f19",
+              "on-secondary-fixed-variant": "#214b61",
+              "surface-container-high": "#212b35",
+              "secondary-fixed": "#c4e7ff",
+              "inverse-primary": "#00668a",
+              "on-primary-fixed": "#001e2c",
+              "secondary": "#a4cce6",
+              "on-primary-fixed-variant": "#004c69",
+              "surface-container": "#17202b",
+              "surface-container-low": "#121c27",
+              "on-tertiary-fixed-variant": "#653e00",
+              "tertiary-container": "#f1a02b",
+              "surface-tint": "#7bd0ff",
+              "on-surface": "#d9e3f2",
+              "surface-container-highest": "#2c3641",
+              "on-secondary": "#023449",
+              "on-primary": "#00354a",
+              "on-background": "#d9e3f2",
+              "outline": "#87929a",
+              "inverse-surface": "#d9e3f2",
+              "on-error": "#690005",
+              "on-tertiary-fixed": "#2a1700",
+              "secondary-container": "#214b61",
+              "surface-dim": "#0a141e",
+              "surface-bright": "#303a45",
+              "primary-fixed": "#c4e7ff",
+              "outline-variant": "#3e484f",
+              "primary-container": "#38bdf8",
+              "on-secondary-container": "#92bad4",
+              "primary-fixed-dim": "#7bd0ff",
+              "inverse-on-surface": "#27313c",
+              "on-primary-container": "#004965",
+              "error": "#ffb4ab",
+              "background": "#0a141e",
+              "tertiary-fixed": "#ffddb8",
+              "primary": "#8ed5ff",
+              "error-container": "#93000a",
+              "on-surface-variant": "#bdc8d1",
+              "tertiary": "#ffc176",
+              "surface": "#0a141e",
+              "on-error-container": "#ffdad6"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F1F5F9;
+            color: #0a141e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .light-card {
+            background-color: #FFFFFF;
+            border-radius: 0px !important;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-24">
+<!-- TopNavBar -->
+<header class="bg-[#0a141e] h-[56px] w-full flex justify-between items-center px-6 sticky top-0 z-50">
+<div class="text-xl font-bold tracking-tighter text-[#38bdf8] flex items-center gap-2">
+            Skill Master
+        </div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#bdc8d1]">light_mode</span>
+<div class="w-8 h-8 rounded-full bg-[#212b35] flex items-center justify-center text-xs font-bold text-[#38bdf8]">
+                SA
+            </div>
+</div>
+</header>
+<main class="px-4 py-6 max-w-md mx-auto space-y-8">
+<!-- Header Section -->
+<section>
+<p class="text-[11px] font-bold uppercase tracking-[0.12em] text-[#0ea5e9] mb-2">Current Path</p>
+<h1 class="text-3xl font-extrabold tracking-tight text-[#0f172a]">Roadmap View</h1>
+</section>
+<!-- Summary Card: 2x3 Grid -->
+<section>
+<div class="light-card shadow-sm p-6">
+<div class="grid grid-cols-2 gap-y-6 gap-x-4">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold uppercase tracking-wider text-[#64748b]">Progress</span>
+<span class="text-xl font-bold text-[#0ea5e9]">64%</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold uppercase tracking-wider text-[#64748b]">Modules</span>
+<span class="text-xl font-bold text-[#0f172a]">12/24</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold uppercase tracking-wider text-[#64748b]">Time Spent</span>
+<span class="text-xl font-bold text-[#0f172a]">42h</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold uppercase tracking-wider text-[#64748b]">Streak</span>
+<span class="text-xl font-bold text-[#f59e0b]">14d</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold uppercase tracking-wider text-[#64748b]">Next Milestone</span>
+<span class="text-xl font-bold text-[#0f172a]">Wk 5</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold uppercase tracking-wider text-[#64748b]">Rank</span>
+<span class="text-xl font-bold text-[#6366f1]">Expert</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Module Cards: Scrollable Row -->
+<section>
+<h2 class="text-[11px] font-bold uppercase tracking-[0.12em] text-[#64748b] mb-4">Active Modules</h2>
+<div class="flex overflow-x-auto gap-4 pb-4 no-scrollbar">
+<div class="flex-none w-[200px] light-card p-4 shadow-sm border-l-2 border-[#0ea5e9]">
+<span class="material-symbols-outlined text-[#0ea5e9] mb-3">architecture</span>
+<p class="text-sm font-bold text-[#0f172a]">Foundations</p>
+<p class="text-xs text-[#64748b] mt-1">Core principles and structural logic.</p>
+</div>
+<div class="flex-none w-[200px] light-card p-4 shadow-sm border-l-2 border-[#e2e8f0]">
+<span class="material-symbols-outlined text-[#64748b] mb-3">terminal</span>
+<p class="text-sm font-bold text-[#0f172a]">Advanced Syntax</p>
+<p class="text-xs text-[#64748b] mt-1">Deep dive into complex operations.</p>
+</div>
+<div class="flex-none w-[200px] light-card p-4 shadow-sm border-l-2 border-[#e2e8f0]">
+<span class="material-symbols-outlined text-[#64748b] mb-3">database</span>
+<p class="text-sm font-bold text-[#0f172a]">Data Schemas</p>
+<p class="text-xs text-[#64748b] mt-1">Architecting scalable repositories.</p>
+</div>
+</div>
+</section>
+<!-- Curriculum Timeline -->
+<section>
+<h2 class="text-[11px] font-bold uppercase tracking-[0.12em] text-[#64748b] mb-4">Curriculum Timeline</h2>
+<div class="grid grid-cols-4 gap-2">
+<button class="bg-[#0ea5e9] text-white py-3 text-[10px] font-bold uppercase tracking-tighter border-none">Week 1</button>
+<button class="bg-white text-[#64748b] py-3 text-[10px] font-bold uppercase tracking-tighter light-card shadow-sm">Week 2</button>
+<button class="bg-white text-[#64748b] py-3 text-[10px] font-bold uppercase tracking-tighter light-card shadow-sm">Week 3</button>
+<button class="bg-white text-[#64748b] py-3 text-[10px] font-bold uppercase tracking-tighter light-card shadow-sm">Week 4</button>
+</div>
+</section>
+<!-- Weekly Schedule -->
+<section class="space-y-2">
+<h2 class="text-[11px] font-bold uppercase tracking-[0.12em] text-[#64748b] mb-4">Weekly Schedule</h2>
+<div class="flex items-center justify-between p-4 bg-white shadow-sm border-l-2 border-[#0ea5e9]">
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#0ea5e9]">Monday</span>
+<span class="text-xs font-medium text-[#64748b]">Logic Fundamentals</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white shadow-sm border-l-2 border-[#0ea5e9]">
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#0ea5e9]">Tuesday</span>
+<span class="text-xs font-medium text-[#64748b]">Interface Drafting</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white shadow-sm border-l-2 border-[#e2e8f0]">
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#64748b]">Wednesday</span>
+<span class="text-xs font-medium text-[#64748b]">Review Session</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white shadow-sm border-l-2 border-[#e2e8f0]">
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#64748b]">Thursday</span>
+<span class="text-xs font-medium text-[#64748b]">Component Logic</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white shadow-sm border-l-2 border-[#e2e8f0]">
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#64748b]">Friday</span>
+<span class="text-xs font-medium text-[#64748b]">System Architecture</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white shadow-sm border-l-2 border-[#e2e8f0]">
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#64748b]">Saturday</span>
+<span class="text-xs font-medium text-[#64748b]">Case Study</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white shadow-sm border-l-2 border-[#e2e8f0]">
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#64748b]">Sunday</span>
+<span class="text-xs font-medium text-[#64748b]">Assessment</span>
+</div>
+</section>
+<!-- Action Buttons -->
+<section class="space-y-3 pt-4">
+<button class="w-full py-4 bg-[#0ea5e9] text-white font-extrabold uppercase tracking-widest text-sm light-card shadow-sm">
+                Get Started
+            </button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[#0a141e] h-16 flex justify-around items-center px-6 border-t-0 shadow-lg z-50">
+<div class="flex flex-col items-center justify-center text-[#bdc8d1]">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#38bdf8] border-t-2 border-[#38bdf8] pt-1">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-medium mt-1">Roadmap</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#bdc8d1]">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-medium mt-1">Progress</span>
+</div>
+</nav>
+</body></html>

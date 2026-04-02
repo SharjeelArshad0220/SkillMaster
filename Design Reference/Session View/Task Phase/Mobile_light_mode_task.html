@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=390, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Task Phase</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-on-surface": "#27313c",
+              "inverse-primary": "#00668a",
+              "on-error-container": "#ffdad6",
+              "primary-fixed-dim": "#7bd0ff",
+              "outline": "#87929a",
+              "primary-container": "#38bdf8",
+              "on-surface": "#0f172a",
+              "on-secondary-container": "#abb5cd",
+              "on-secondary": "#273143",
+              "surface-container-high": "#e2e8f0",
+              "background": "#F1F5F9",
+              "error": "#ffb4ab",
+              "on-tertiary": "#472a00",
+              "surface-bright": "#ffffff",
+              "surface-container": "#ffffff",
+              "surface-variant": "#f8fafc",
+              "tertiary-fixed-dim": "#ffb960",
+              "secondary": "#64748b",
+              "on-tertiary-fixed": "#2a1700",
+              "primary": "#0EA5E9",
+              "on-surface-variant": "#94a3b8",
+              "surface-container-highest": "#f1f5f9",
+              "on-secondary-fixed": "#111c2d",
+              "surface-container-lowest": "#ffffff",
+              "tertiary": "#f59e0b",
+              "on-tertiary-container": "#78350f",
+              "outline-variant": "#e2e8f0",
+              "on-error": "#690005",
+              "on-secondary-fixed-variant": "#3d475b",
+              "on-primary-fixed-variant": "#004c69",
+              "on-tertiary-fixed-variant": "#653e00",
+              "secondary-container": "#f1f5f9",
+              "tertiary-fixed": "#ffddb8",
+              "inverse-surface": "#0f172a",
+              "surface-tint": "#0ea5e9",
+              "on-primary-container": "#ffffff",
+              "surface": "#F1F5F9",
+              "secondary-fixed-dim": "#bdc6df",
+              "surface-dim": "#f1f5f9",
+              "primary-fixed": "#c4e7ff",
+              "secondary-fixed": "#d9e2fb",
+              "on-primary-fixed": "#001e2c",
+              "tertiary-container": "#fef3c7",
+              "surface-container-low": "#f8fafc",
+              "error-container": "#93000a",
+              "on-primary": "#ffffff",
+              "on-background": "#0f172a"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+            width: 390px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface">
+<!-- Top Navigation Bar -->
+<nav class="h-[56px] w-full sticky top-0 z-50 bg-[#FFFFFF] backdrop-blur-xl flex justify-between items-center px-6">
+<div class="flex items-center gap-2 text-lg font-bold tracking-tighter text-[#0f172a]">
+            Skill Master
+        </div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-secondary">
+                SA
+            </div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="px-6 py-8">
+<!-- Header Section -->
+<header class="mb-8">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-[0.12em] text-[#0EA5E9]">
+                    TASK PHASE
+                </span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-wider">
+                    Task
+                </span>
+</div>
+<h1 class="text-[18px] font-semibold text-[#0F172A] leading-tight mb-1">
+                Introduction to Components
+            </h1>
+<p class="text-[12px] font-normal text-[#94A3B8]">
+                Day 3 — Monday · Module 1 · Week 2
+            </p>
+</header>
+<!-- Task Card -->
+<section class="w-full bg-[#FFFFFF] rounded-[12px] border border-[#E2E8F0] p-6 shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
+<h2 class="text-[18px] font-semibold text-[#0F172A] mb-4">
+                Build Your First Component
+            </h2>
+<p class="text-[15px] font-normal text-[#334155] leading-relaxed mb-6">
+                Now that you understand what React components are, it is time to build one yourself. Create a functional React component that displays a welcome message with your name.
+            </p>
+<!-- Divider -->
+<div class="h-px w-full bg-[#E2E8F0] mb-6"></div>
+<!-- Answer Section -->
+<div class="space-y-4">
+<label class="block text-[11px] font-semibold uppercase tracking-[0.06em] text-[#0EA5E9]">
+                    YOUR ANSWER
+                </label>
+<div class="relative">
+<textarea class="w-full h-[180px] p-4 bg-[#FFFFFF] border border-[#CBD5E1] rounded-lg text-[14px] text-on-surface placeholder-[#94A3B8] focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none" placeholder="Write your React component code here. Explain your thinking as you go — the AI will evaluate both your code and your reasoning."></textarea>
+<div class="flex justify-end mt-2">
+<span class="text-[12px] font-normal text-[#94A3B8]">
+                            0 / 1000 characters
+                        </span>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full py-3 bg-[#0EA5E9] text-white rounded-lg text-[14px] font-semibold hover:opacity-90 transition-opacity active:scale-[0.98] mt-2">
+                    Submit Task
+                </button>
+<!-- Helper Text -->
+<p class="text-[12px] font-normal text-[#94A3B8] text-center mt-4">
+                    AI will evaluate your answer and provide personalised feedback.
+                </p>
+</div>
+</section>
+<!-- Spacer for Bottom -->
+<div class="h-12"></div>
+</main>
+</body></html>

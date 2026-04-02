@@ -1,0 +1,429 @@
+{
+  "skillName": "MERN Stack",
+  "level": "Beginner",
+  "totalModules": 4,
+  "estimatedWeeks": 4,
+  "dailyTime": "1-2 hours",
+  "modules": [
+    {
+      "moduleNumber": 1,
+      "title": "Frontend Essentials with React",
+      "weeks": [
+        {
+          "weekNumber": 1,
+          "days": [
+            {
+              "dayNumber": 1,
+              "dayName": "Monday",
+              "type": "Learning",
+              "title": "Modern React & JSX",
+              "lessonContent": {
+                "intro": {
+                  "cards": [
+                    "React is a JavaScript library for building user interfaces components.",
+                    "JSX allows us to write HTML-like code directly in our JavaScript files, making UI logic easier to reason about.",
+                    "React uses a 'Virtual DOM' to efficiently update only the parts of the page that change, avoiding expensive direct DOM manipulations."
+                  ],
+                  "miniExercise": {
+                    "question": "What is the primary purpose of JSX in React?",
+                    "options": [
+                      "To write CSS in JavaScript",
+                      "To write HTML-like structures in JavaScript",
+                      "To manage database connections",
+                      "To compile JavaScript into C++"
+                    ],
+                    "correctIndex": 1
+                  }
+                },
+                "intermediate": {
+                  "cards": [
+                    "Components are the building blocks of a React application. They are independent and reusable.",
+                    "Functional components are simply JavaScript functions that return JSX. They are the modern standard in React.",
+                    "Props (short for properties) allow you to pass data from a parent component down to a child component."
+                  ],
+                  "miniExercise": {
+                    "question": "How do you pass data from a parent component to a child in React?",
+                    "options": [
+                      "Using State",
+                      "Using Refs",
+                      "Using Props",
+                      "Using Cookies"
+                    ],
+                    "correctIndex": 2
+                  }
+                },
+                "deepDive": {
+                  "cards": [
+                    "React components must be 'pure' functions with respect to their props - they should not modify their inputs.",
+                    "Keys help React identify which items in a list have changed, been added, or removed during rendering.",
+                    "JSX elements are actually transformed into React.createElement() calls, which create plain JavaScript objects."
+                  ],
+                  "miniExercise": {
+                    "question": "What happens under the hood when you write <div /> in JSX?",
+                    "options": [
+                      "It calls document.createElement('div')",
+                      "It calls React.createElement('div')",
+                      "It immediately renders a DOM node",
+                      "It creates a CSS selector"
+                    ],
+                    "correctIndex": 1
+                  }
+                }
+              },
+              "task": {
+                "description": "Create a simple UserProfile component that accepts 'name' and 'bio' as props and displays them. Minimum 30 characters in your explanation.",
+                "expectedOutput": "A functional component UserProfile using props.name and props.bio."
+              },
+              "examQuestions": null
+            },
+            {
+              "dayNumber": 2,
+              "dayName": "Tuesday",
+              "type": "Learning",
+              "title": "State Management & Hooks",
+              "lessonContent": {
+                "intro": {
+                  "cards": [
+                    "State is data that changes over time within a component.",
+                    "The useState hook allows functional components to have their own local state.",
+                    "When state updates, React automatically re-renders the component to reflect the change."
+                  ],
+                  "miniExercise": {
+                    "question": "Which hook is used to add state to a functional component?",
+                    "options": ["useEffect", "useRouter", "useState", "useContext"],
+                    "correctIndex": 2
+                  }
+                },
+                "intermediate": {
+                  "cards": [
+                    "The setter function from useState is asynchronous - don't rely on immediate value changes in the same function.",
+                    "The 'Initialization' of state only happens on the first render.",
+                    "You should never modify state directly; always use the setter function."
+                  ],
+                  "miniExercise": {
+                    "question": "Is state update synchronous or asynchronous in React?",
+                    "options": ["Synchronous", "Asynchronous", "It depends on the browser", "None of above"],
+                    "correctIndex": 1
+                  }
+                },
+                "deepDive": {
+                  "cards": [
+                    "State should be 'lifted up' to the nearest common ancestor when multiple components need the same data.",
+                    "Lazy initialization can be used with useState by passing a function if the initial state is expensive to calculate.",
+                    "Functional updates (prev => prev + 1) ensure you are working with the most recent state value."
+                  ],
+                  "miniExercise": {
+                    "question": "When should you use a functional update with useState?",
+                    "options": [
+                      "When the new state depends on the previous state",
+                      "When you want to reset state to zero",
+                      "When the component is very large",
+                      "Only in class components"
+                    ],
+                    "correctIndex": 0
+                  }
+                }
+              },
+              "task": {
+                "description": "Build a simple Counter component with 'Increment' and 'Decrement' buttons using useState.",
+                "expectedOutput": "Component with state variable 'count' and two buttons updating it."
+              },
+              "examQuestions": null
+            },
+            {
+              "dayNumber": 3,
+              "dayName": "Wednesday",
+              "type": "Learning",
+              "title": "Side Effects & useEffect",
+              "lessonContent": {
+                "intro": {
+                  "cards": [
+                    "Side effects are actions that happen outside the scope of rendering (e.g., API calls, subscriptions).",
+                    "The useEffect hook allows you to perform these side effects in functional components.",
+                    "By default, useEffect runs after every render."
+                  ],
+                  "miniExercise": {
+                    "question": "What is an example of a side effect in a React component?",
+                    "options": ["Returning JSX", "Calculating a sum", "Fetching data from an API", "Passing props"],
+                    "correctIndex": 2
+                  }
+                },
+                "intermediate": {
+                  "cards": [
+                    "The dependency array (the second argument of useEffect) controls when the effect re-runs.",
+                    "An empty dependency array [] means the effect only runs once after the initial render.",
+                    "If a value used inside the effect is in the dependency array, the effect runs whenever that value changes."
+                  ],
+                  "miniExercise": {
+                    "question": "How do you make an effect run only once?",
+                    "options": [
+                      "Don't provide a dependency array",
+                      "Provide an empty dependency array []",
+                      "Put 'once' in the array",
+                      "Use useState instead"
+                    ],
+                    "correctIndex": 1
+                  }
+                },
+                "deepDive": {
+                  "cards": [
+                    "The cleanup function (returned from the effect) runs before the component unmounts and before the effect re-runs.",
+                    "Cleanup functions are crucial for preventing memory leaks (e.g., clearing timers or subscriptions).",
+                    "Effects are useful for 'synchronizing' your component with an external system."
+                  ],
+                  "miniExercise": {
+                    "question": "Where do you write cleanup logic in useEffect?",
+                    "options": [
+                      "In a separate hook",
+                      "In the return statement of the effect function",
+                      "At the top of the component",
+                      "In a try/catch block"
+                    ],
+                    "correctIndex": 1
+                  }
+                }
+              },
+              "task": {
+                "description": "Create a component that fetches a dummy JSON post and displays the title when it mounts.",
+                "expectedOutput": "useEffect with empty deps fetching and setting state."
+              },
+              "examQuestions": null
+            },
+            {
+              "dayNumber": 4,
+              "dayName": "Thursday",
+              "type": "Learning",
+              "title": "Handling Lists & Forms",
+              "lessonContent": {
+                "intro": {
+                  "cards": [
+                    "The .map() function is used to transform arrays of data into arrays of JSX elements.",
+                    "Forms in React are either 'Controlled' (React manages the input value) or 'Uncontrolled'.",
+                    "Controlled components are the recommended way to handle forms."
+                  ],
+                  "miniExercise": {
+                    "question": "Which array method is most commonly used to render lists in React?",
+                    "options": [".forEach()", ".filter()", ".map()", ".reduce()"],
+                    "correctIndex": 2
+                  }
+                },
+                "intermediate": {
+                  "cards": [
+                    "A 'key' prop is required when rendering lists to help React optimize updates.",
+                    "Keys should be unique among siblings and stable (ids are better than indexes).",
+                    "In controlled inputs, the `value` prop is bound to state, and `onChange` updates that state."
+                  ],
+                  "miniExercise": {
+                    "question": "What is the best choice for a list item's key?",
+                    "options": ["The index in the array", "A unique ID from the data", "A random number", "The item's name"],
+                    "correctIndex": 1
+                  }
+                },
+                "deepDive": {
+                  "cards": [
+                    "Using indexes as keys can cause bugs with reordering, filtering, and deleting items.",
+                    "Handling multiple inputs in a single state object can be done using the name attribute and [e.target.name] syntax.",
+                    "Form validation should happen before submission to provide immediate feedback to users."
+                  ],
+                  "miniExercise": {
+                    "question": "How can you handle multiple input fields in one onChange handler?",
+                    "options": [
+                      "By creating one handler per input",
+                      "Using the 'name' attribute and computed property names",
+                      "Using only uncontrolled components",
+                      "It's not possible in React"
+                    ],
+                    "correctIndex": 1
+                  }
+                }
+              },
+              "task": {
+                "description": "Create a Todo list where users can add items via a text input and see them in a list.",
+                "expectedOutput": "Array state mapped to JSX with a controlled input."
+              },
+              "examQuestions": null
+            },
+            {
+              "dayNumber": 5,
+              "dayName": "Friday",
+              "type": "Learning",
+              "title": "Styling with Tailwind CSS",
+              "lessonContent": {
+                "intro": {
+                  "cards": [
+                    "Tailwind CSS is a utility-first CSS framework.",
+                    "Utility classes like 'bg-blue-500' or 'p-4' are applied directly in the className attribute.",
+                    "It allows for rapid UI development without leaving your JSX."
+                  ],
+                  "miniExercise": {
+                    "question": "What does 'utility-first' mean in the context of Tailwind?",
+                    "options": [
+                      "Write CSS in separate files",
+                      "Use pre-built components like Modals",
+                      "Use small, single-purpose classes to build UIs",
+                      "Auto-generate CSS from images"
+                    ],
+                    "correctIndex": 2
+                  }
+                },
+                "intermediate": {
+                  "cards": [
+                    "Tailwind includes built-in support for responsive design using prefixes like 'md:' or 'lg:'.",
+                    "Hover and focus states are handled with prefixes like 'hover:' and 'focus:'.",
+                    "Customizing themes (colors, fonts) is done in the tailwind.config.js file."
+                  ],
+                  "miniExercise": {
+                    "question": "How do you apply a style only on medium-sized screens in Tailwind?",
+                    "options": ["media-md:style", "md:style", "screen-md:style", "@md:style"],
+                    "correctIndex": 1
+                  }
+                },
+                "deepDive": {
+                  "cards": [
+                    "Tailwind uses JIT (Just-In-Time) compilation to only generate the CSS you actually use.",
+                    "The '@apply' directive allows you to extract common patterns into custom CSS classes while still using Tailwind utilities.",
+                    "Design systems are enforced by using standard spacing and color scales provided by the config."
+                  ],
+                  "miniExercise": {
+                    "question": "What is the benefit of Tailwind's JIT mode?",
+                    "options": [
+                      "It makes the build slower",
+                      "It generates every possible class",
+                      "It renders CSS on the server only",
+                      "It results in much smaller CSS bundles"
+                    ],
+                    "correctIndex": 3
+                  }
+                }
+              },
+              "task": {
+                "description": "Style your Todo list using Tailwind. Use 'navy-mid' for background and 'accent' for the add button.",
+                "expectedOutput": "JSX with className using navy-mid and accent tokens."
+              },
+              "examQuestions": null
+            },
+            {
+              "dayNumber": 6,
+              "dayName": "Saturday",
+              "type": "Revision",
+              "title": "Week 1 Review",
+              "lessonContent": {
+                "intro": {
+                  "cards": [
+                    "This week we covered React basics: JSX, Components, and Props.",
+                    "We explored State and Side Effects using hooks like useState and useEffect.",
+                    "We learned list rendering, form handling, and styling with Tailwind."
+                  ],
+                  "miniExercise": null
+                },
+                "intermediate": {
+                  "cards": [
+                    "Remember that data flows down (via props) and events flow up.",
+                    "React re-renders on state or prop changes.",
+                    "Component lifecycle is managed via useEffect hooks."
+                  ],
+                  "miniExercise": null
+                },
+                "deepDive": {
+                  "cards": [
+                    "Re-evaluate your Todo list: Are you using unique keys? Is the state updated correctly?",
+                    "Check your Tailwind usage: Are you using the custom color palette correctly?",
+                    "Prepare for tomorrow's exam by reviewing the core hooks."
+                  ],
+                  "miniExercise": null
+                }
+              },
+              "task": null,
+              "examQuestions": null
+            },
+            {
+              "dayNumber": 7,
+              "dayName": "Sunday",
+              "type": "Exam",
+              "title": "Module 1 Week 1 Exam",
+              "lessonContent": null,
+              "task": null,
+              "examQuestions": [
+                {
+                  "question": "Virtual DOM improves performance by:",
+                  "options": [
+                    "Re-rendering the whole page",
+                    "Calculating minimal changes needed in the real DOM",
+                    "Replacing JavaScript with HTML",
+                    "Directly modifying the browser storage"
+                  ],
+                  "correctIndex": 1
+                },
+                {
+                  "question": "What is the result of using useState('Hello')?",
+                  "options": [
+                    "The string 'Hello'",
+                    "A function to update state",
+                    "An array containing 'Hello' and a setter function",
+                    "An object with a value property"
+                  ],
+                  "correctIndex": 2
+                },
+                {
+                  "question": "When does an effect with dependency array [count] run?",
+                  "options": [
+                    "Only on mount",
+                    "After every render",
+                    "Only when count changes",
+                    "After mount and whenever count changes"
+                  ],
+                  "correctIndex": 3
+                },
+                {
+                  "question": "Why are 'keys' important in lists?",
+                  "options": [
+                    "They provide CSS styling",
+                    "They help React identify which items changed",
+                    "They are required for accessibility",
+                    "They act as primary keys in the database"
+                  ],
+                  "correctIndex": 1
+                },
+                {
+                  "question": "Which of these is a valid Tailwind class for custom colors?",
+                  "options": ["bg-navy-mid", "text-custom-1", "border-primary", "p-accent"],
+                  "correctIndex": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleNumber": 2,
+      "title": "Backend Fundamentals (Node & Express)",
+      "weeks": [
+        {
+          "weekNumber": 1,
+          "days": []
+        }
+      ]
+    },
+    {
+      "moduleNumber": 3,
+      "title": "Database Mastery (MongoDB)",
+      "weeks": [
+        {
+          "weekNumber": 1,
+          "days": []
+        }
+      ]
+    },
+    {
+      "moduleNumber": 4,
+      "title": "Full-Stack Integration & AI",
+      "weeks": [
+        {
+          "weekNumber": 1,
+          "days": []
+        }
+      ]
+    }
+  ]
+}

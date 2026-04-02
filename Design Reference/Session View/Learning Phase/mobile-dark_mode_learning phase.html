@@ -1,0 +1,157 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "outline": "#87929a",
+            "on-secondary-container": "#abb5cd",
+            "tertiary-container": "#a8b2be",
+            "surface-bright": "#303a45",
+            "error-container": "#93000a",
+            "inverse-primary": "#00668a",
+            "primary-fixed": "#c4e7ff",
+            "on-surface-variant": "#bdc8d1",
+            "secondary-container": "#3d475b",
+            "on-tertiary-container": "#3b454e",
+            "surface-dim": "#0a141e",
+            "outline-variant": "#3e484f",
+            "surface-tint": "#7bd0ff",
+            "on-primary": "#00354a",
+            "tertiary-fixed-dim": "#bdc8d3",
+            "on-primary-fixed": "#001e2c",
+            "surface": "#0a141e",
+            "on-tertiary-fixed": "#131d25",
+            "secondary": "#bdc6df",
+            "primary-fixed-dim": "#7bd0ff",
+            "tertiary": "#c3cdd9",
+            "error": "#ffb4ab",
+            "inverse-surface": "#d9e3f2",
+            "background": "#0a141e",
+            "surface-container-highest": "#2c3641",
+            "on-error-container": "#ffdad6",
+            "primary-container": "#38bdf8",
+            "primary": "#8ed5ff",
+            "on-primary-container": "#004965",
+            "surface-container-lowest": "#050f19",
+            "on-primary-fixed-variant": "#004c69",
+            "on-error": "#690005",
+            "on-surface": "#d9e3f2",
+            "surface-variant": "#2c3641",
+            "surface-container-low": "#121c27",
+            "tertiary-fixed": "#dae3f0",
+            "inverse-on-surface": "#27313c",
+            "secondary-fixed-dim": "#bdc6df",
+            "on-background": "#d9e3f2",
+            "secondary-fixed": "#d9e2fb",
+            "surface-container": "#17202b",
+            "on-tertiary": "#28313b",
+            "surface-container-high": "#212b35",
+            "on-tertiary-fixed-variant": "#3e4852",
+            "on-secondary-fixed-variant": "#3d475b",
+            "on-secondary": "#273143",
+            "on-secondary-fixed": "#111c2d"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Space Grotesk"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Specific height constraints for mobile task */
+    .nav-h { height: 52px; }
+    .btn-h { height: 44px; }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#0F1923] text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar Implementation -->
+<nav class="w-full top-0 sticky z-50 bg-[#162032] border-b border-[#1E2F42] nav-h flex justify-between items-center px-4">
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold tracking-tighter text-[#38bdf8] font-headline">Skill Master</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-[#2c3641] rounded-full transition-all duration-200">
+<span class="material-symbols-outlined text-[20px]" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary-container text-[10px] font-bold font-label text-on-secondary-container tracking-wider">
+        SA
+      </div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="max-w-[390px] mx-auto pt-6 px-5 pb-12">
+<!-- Session Header -->
+<header class="mb-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[#38BDF8] font-label text-[11px] font-bold tracking-[0.1em] uppercase">LESSON PHASE</span>
+<span class="bg-[#121c27] text-[#38BDF8] font-label text-[10px] px-2 py-0.5 rounded border border-[#1E2F42] uppercase tracking-wider">Learning</span>
+</div>
+<h1 class="text-[18px] font-bold font-headline text-on-surface tracking-tight mb-1">Introduction to Components</h1>
+<p class="text-[#64748B] font-label text-[12px]">Day 3 — Monday · Module 1 · Week 2</p>
+</header>
+<!-- Progress Tracking -->
+<section class="mb-8">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label text-[12px] text-on-surface-variant font-medium">Part 1 of 3</span>
+<span class="font-label text-[12px] text-[#38BDF8] font-bold">33% complete</span>
+</div>
+<div class="w-full h-[6px] bg-[#2E3D52] rounded-full overflow-hidden">
+<div class="h-full bg-[#38BDF8] w-1/3 rounded-full"></div>
+</div>
+</section>
+<!-- Lesson Card -->
+<article class="bg-[#162032] border border-[#1E2F42] rounded-xl p-6 mb-8">
+<h2 class="text-[18px] font-bold font-headline text-on-surface mb-4">Core Principles</h2>
+<div class="space-y-4">
+<p class="text-[15px] leading-relaxed text-[#CBD5E1]">
+          In the realm of modern UI architecture, components represent the fundamental building blocks of visual logic. They are encapsulated units of design.
+        </p>
+<p class="text-[15px] leading-relaxed text-[#CBD5E1]">
+          Properly engineered components ensure scalability and maintain consistency across complex interfaces. Observe the following structural pattern:
+        </p>
+<!-- Code Block -->
+<div class="bg-[#0F1923] p-4 rounded-lg font-label text-[13px] text-[#38BDF8] overflow-x-auto border border-[#1E2F42] leading-5">
+<pre><code>&lt;Component&gt;
+  &lt;Logic class="arch" /&gt;
+  &lt;Surface depth="high" /&gt;
+&lt;/Component&gt;</code></pre>
+</div>
+<p class="text-[15px] leading-relaxed text-[#CBD5E1]">
+          Always prioritize functional clarity before aesthetic flourishes. A well-defined component survives the evolution of any design system.
+        </p>
+</div>
+</article>
+<!-- Action Row -->
+<section class="flex flex-col gap-3">
+<button class="btn-h w-full bg-primary-container text-on-primary-container font-headline font-bold rounded-lg flex items-center justify-center gap-2 hover:brightness-105 transition-all active:scale-[0.98]">
+        Next Part
+        <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="btn-h w-full bg-surface-container-high text-on-surface font-headline font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+        Previous Part
+      </button>
+</section>
+</main>
+<!-- Content Separation Logic (Subtle glow instead of borders for context) -->
+<div class="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0F1923] to-transparent pointer-events-none"></div>
+</body></html>

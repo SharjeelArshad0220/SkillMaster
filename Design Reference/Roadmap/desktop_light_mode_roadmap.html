@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Your Learning Roadmap</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#001e2c",
+                        "surface-variant": "#E2E8F0",
+                        "tertiary-fixed-dim": "#ffb960",
+                        "on-tertiary": "#472a00",
+                        "on-tertiary-container": "#613b00",
+                        "secondary-fixed-dim": "#a4cce6",
+                        "surface-container-lowest": "#FFFFFF",
+                        "on-secondary-fixed-variant": "#214b61",
+                        "surface-container-high": "#F8FAFC",
+                        "secondary-fixed": "#c4e7ff",
+                        "inverse-primary": "#00668a",
+                        "on-primary-fixed": "#001e2c",
+                        "secondary": "#0EA5E9",
+                        "on-primary-fixed-variant": "#004c69",
+                        "surface-container": "#FFFFFF",
+                        "surface-container-low": "#F1F5F9",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "tertiary-container": "#f1a02b",
+                        "surface-tint": "#0EA5E9",
+                        "on-surface": "#1E293B",
+                        "surface-container-highest": "#E2E8F0",
+                        "on-secondary": "#FFFFFF",
+                        "on-primary": "#FFFFFF",
+                        "on-background": "#1E293B",
+                        "outline": "#E2E8F0",
+                        "inverse-surface": "#1E293B",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-container": "#0EA5E920",
+                        "surface-dim": "#F1F5F9",
+                        "surface-bright": "#FFFFFF",
+                        "primary-fixed": "#c4e7ff",
+                        "outline-variant": "#E2E8F0",
+                        "primary-container": "#0EA5E9",
+                        "on-secondary-container": "#0369A1",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "inverse-on-surface": "#F1F5F9",
+                        "on-primary-container": "#FFFFFF",
+                        "error": "#EF4444",
+                        "background": "#F1F5F9",
+                        "tertiary-fixed": "#ffddb8",
+                        "primary": "#0EA5E9",
+                        "error-container": "#FEE2E2",
+                        "on-surface-variant": "#64748B",
+                        "tertiary": "#ffc176",
+                        "surface": "#F1F5F9",
+                        "on-error-container": "#93000a"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F1F5F9; color: #1E293B; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="bg-[#0a141e] h-[56px] w-full flex justify-between items-center px-6">
+<div class="text-xl font-bold tracking-tighter text-[#38bdf8] flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">architecture</span>
+            Skill Master
+        </div>
+<nav class="hidden md:flex gap-8 h-full items-center">
+<a class="text-[#bdc8d1] hover:text-[#38bdf8] transition-colors font-medium text-sm tracking-tight h-full flex items-center" href="#">Home</a>
+<a class="text-[#38bdf8] border-b-2 border-[#38bdf8] h-full flex items-center font-medium text-sm tracking-tight" href="#">Roadmap</a>
+<a class="text-[#bdc8d1] hover:text-[#38bdf8] transition-colors font-medium text-sm tracking-tight h-full flex items-center" href="#">Progress</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-[#212b35] flex items-center justify-center text-[#38bdf8] font-bold text-xs">SA</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-10 space-y-10">
+<!-- Header Section -->
+<section class="space-y-1">
+<h1 class="text-[26px] font-bold text-on-surface tracking-tight">Your Learning Roadmap</h1>
+<p class="text-[14px] font-normal text-on-surface-variant">Here is the structured plan based on your goal and preferences.</p>
+</section>
+<!-- 5-Stat Summary Card -->
+<section class="grid grid-cols-5 gap-0 bg-white border border-outline rounded-sm overflow-hidden divide-x divide-outline shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
+<div class="p-6 flex flex-col items-center justify-center text-center">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant mb-1">Total Modules</span>
+<span class="text-2xl font-extrabold text-on-surface">12</span>
+</div>
+<div class="p-6 flex flex-col items-center justify-center text-center">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant mb-1">Estimated Hours</span>
+<span class="text-2xl font-extrabold text-on-surface">48h</span>
+</div>
+<div class="p-6 flex flex-col items-center justify-center text-center">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant mb-1">Current Progress</span>
+<span class="text-2xl font-extrabold text-primary">24%</span>
+</div>
+<div class="p-6 flex flex-col items-center justify-center text-center">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant mb-1">Skill Level</span>
+<span class="text-2xl font-extrabold text-on-surface">Intermediate</span>
+</div>
+<div class="p-6 flex flex-col items-center justify-center text-center">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant mb-1">Completion Date</span>
+<span class="text-2xl font-extrabold text-on-surface">Oct 12</span>
+</div>
+</section>
+<!-- 4-Module Horizontal Row -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant">Course Structure</span>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-sm uppercase tracking-wider">Current</span>
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant text-[10px] font-bold rounded-sm uppercase tracking-wider">Learning</span>
+<span class="px-2 py-1 bg-surface-container-high text-outline text-[10px] font-bold rounded-sm uppercase tracking-wider">Locked</span>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<!-- Module 1 Active -->
+<div class="bg-[#0EA5E920] border-2 border-[#0EA5E9] p-5 rounded-sm flex flex-col justify-between h-32 relative">
+<div>
+<span class="text-[10px] font-bold text-primary uppercase">Module 01</span>
+<h3 class="font-bold text-on-surface mt-1">Foundations of Design</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant font-medium">4 Weeks</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="bg-white border border-outline p-5 rounded-sm flex flex-col justify-between h-32 opacity-80">
+<div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Module 02</span>
+<h3 class="font-bold text-on-surface mt-1">Technical Drafting</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant font-medium">3 Weeks</span>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+</div>
+<!-- Module 3 -->
+<div class="bg-white border border-outline p-5 rounded-sm flex flex-col justify-between h-32 opacity-80">
+<div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Module 03</span>
+<h3 class="font-bold text-on-surface mt-1">Systems Architecture</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant font-medium">5 Weeks</span>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+</div>
+<!-- Module 4 -->
+<div class="bg-white border border-outline p-5 rounded-sm flex flex-col justify-between h-32 opacity-80">
+<div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Module 04</span>
+<h3 class="font-bold text-on-surface mt-1">Final Capstone</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant font-medium">2 Weeks</span>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 4-Week Horizontal Row & Daily Detail -->
+<section class="grid grid-cols-12 gap-8">
+<!-- Left: Weeks List -->
+<div class="col-span-4 space-y-4">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant">Weekly Breakdown</span>
+<div class="space-y-2">
+<div class="bg-[#0EA5E9] text-white p-4 rounded-sm flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-3">
+<span class="text-lg font-bold">W1</span>
+<span class="text-sm font-semibold">Introduction &amp; Principles</span>
+</div>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+<div class="bg-white border border-outline text-on-surface p-4 rounded-sm flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<span class="text-lg font-bold text-on-surface-variant">W2</span>
+<span class="text-sm font-semibold">Visual Hierarchies</span>
+</div>
+</div>
+<div class="bg-white border border-outline text-on-surface p-4 rounded-sm flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<span class="text-lg font-bold text-on-surface-variant">W3</span>
+<span class="text-sm font-semibold">Color Theory &amp; Grid</span>
+</div>
+</div>
+<div class="bg-white border border-outline text-on-surface p-4 rounded-sm flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<span class="text-lg font-bold text-on-surface-variant">W4</span>
+<span class="text-sm font-semibold">Usability Frameworks</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Daily Rows -->
+<div class="col-span-8 space-y-4">
+<div class="flex justify-between items-end">
+<span class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant">Week 1 Curriculum</span>
+<button class="bg-[#0EA5E9] text-white px-6 py-2 text-sm font-bold rounded-sm hover:opacity-90 transition-all active:scale-95">Get Started</button>
+</div>
+<div class="bg-white border border-outline divide-y divide-outline rounded-sm">
+<div class="p-4 flex items-center gap-4 group">
+<div class="w-2 h-2 rounded-full bg-[#0EA5E9]"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">Day 1: Understanding the Grid System</h4>
+<p class="text-xs text-on-surface-variant">Learn about 8pt grids and modular spacing.</p>
+</div>
+<span class="text-[10px] font-bold text-primary bg-secondary-container px-2 py-0.5 rounded-full">ACTIVE</span>
+</div>
+<div class="p-4 flex items-center gap-4 opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">Day 2: The Core Principles of Alignment</h4>
+<p class="text-xs text-on-surface-variant">Technical exercise on architectural balance.</p>
+</div>
+</div>
+<div class="p-4 flex items-center gap-4 opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">Day 3: Typography as a Structural Tool</h4>
+<p class="text-xs text-on-surface-variant">Choosing font weights for information hierarchy.</p>
+</div>
+</div>
+<div class="p-4 flex items-center gap-4 opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">Day 4: Color Schematics and Contrast</h4>
+<p class="text-xs text-on-surface-variant">Building accessible color palettes from scratch.</p>
+</div>
+</div>
+<div class="p-4 flex items-center gap-4 opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">Day 5: Introduction to Wireframing</h4>
+<p class="text-xs text-on-surface-variant">Mapping low-fidelity user flows.</p>
+</div>
+</div>
+<div class="p-4 flex items-center gap-4 opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">Day 6: Prototyping Basics</h4>
+<p class="text-xs text-on-surface-variant">Linking components for interactive feedback.</p>
+</div>
+</div>
+<div class="p-4 flex items-center gap-4 opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">Day 7: Weekly Review &amp; Assessment</h4>
+<p class="text-xs text-on-surface-variant">Quiz on all week 1 architectural principles.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Simple Footer for Context -->
+<footer class="mt-20 border-t border-outline py-10 bg-white">
+<div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+<div class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant">
+                Skill Master © 2024 • Architectural Learning Systems
+            </div>
+<div class="flex gap-6">
+<a class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant hover:text-primary" href="#">Support</a>
+<a class="text-[11px] font-bold uppercase tracking-[0.12em] text-on-surface-variant hover:text-primary" href="#">Documentation</a>
+</div>
+</div>
+</footer>
+</body></html>

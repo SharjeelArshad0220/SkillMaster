@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Feedback Phase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#FFFFFF",
+                        "on-secondary-container": "#475569",
+                        "outline": "#E2E8F0",
+                        "primary": "#0EA5E9",
+                        "background": "#F1F5F9",
+                        "on-background": "#0F172A",
+                        "surface": "#FFFFFF",
+                        "primary-container": "#0EA5E9",
+                        "on-primary-container": "#FFFFFF",
+                        "secondary-container": "#F8FAFC",
+                        "outline-variant": "#E2E8F0",
+                        "success": "#16A34A"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+            color: #334155;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-transition {
+            transition: background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+<!-- TopNavBar Component -->
+<nav class="bg-white h-[56px] w-full flex items-center no-border tonal-transition flat no shadows sticky top-0 z-50">
+<div class="flex justify-between items-center px-6 w-full max-w-full">
+<div class="text-[16px] font-semibold text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="school" style="">school</span>
+<span class="" style="">Skill Master</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 font-medium font-['Plus_Jakarta_Sans'] text-[14px] leading-tight hover:text-sky-500 transition-colors duration-200" href="#" style="">Home</a>
+<a class="text-slate-600 font-medium font-['Plus_Jakarta_Sans'] text-[14px] leading-tight hover:text-sky-500 transition-colors duration-200" href="#" style="">Roadmap</a>
+<a class="text-slate-600 font-medium font-['Plus_Jakarta_Sans'] text-[14px] leading-tight hover:text-sky-500 transition-colors duration-200" href="#" style="">Progress</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:text-sky-500 transition-colors" style="">
+<span class="material-symbols-outlined" data-icon="light_mode" style="">light_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-[12px] font-bold text-slate-600 border border-slate-100" style="">
+                    SA
+                </div>
+</div>
+</div>
+</nav>
+<!-- Main Content Container -->
+<main class="max-w-[760px] mx-auto pt-12 pb-24 px-4">
+<!-- Session Header -->
+<header class="mb-10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold uppercase tracking-[0.12em] text-[#0EA5E9]" style="">FEEDBACK PHASE</span>
+<span class="bg-[rgba(14,165,233,0.12)] text-[#0EA5E9] text-[11px] font-semibold px-3 py-1 rounded-full" style="">Feedback</span>
+</div>
+<h1 class="text-[20px] font-semibold text-[#0F172A] mb-1" style="">Introduction to Components</h1>
+<p class="text-[13px] font-normal text-[#94A3B8]" style="">Day 3 — Monday · Module 1 · Week 2</p>
+</header>
+<!-- Feedback Card -->
+<section class="bg-white border border-[#E2E8F0] rounded-[12px] p-[36px] shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
+<!-- Outcome Indicator -->
+<div class="flex items-center gap-3 bg-[rgba(22,163,74,0.10)] border border-[rgba(22,163,74,0.25)] rounded-lg p-4 mb-8">
+<span class="material-symbols-outlined text-[#16A34A]" style='font-variation-settings: "FILL" 1;'>check_circle</span>
+<span class="text-[14px] font-semibold text-[#16A34A]" style="">Good work — your component structure is correct.</span>
+</div>
+<div class="h-[1px] bg-[#E2E8F0] w-full mb-8"></div>
+<!-- AI Feedback Section -->
+<div class="mb-10">
+<h3 class="text-[11px] font-bold text-[#0EA5E9] tracking-[0.06em] mb-4 uppercase" style="">AI FEEDBACK</h3>
+<div class="space-y-4 text-[15px] leading-relaxed text-[#334155]">
+<p class="" style="">Your implementation of the <code>Greeting</code> functional component demonstrates a solid understanding of React's fundamental syntax. By correctly capitalizing the function name, you ensure that React treats this as a component rather than a standard HTML tag.</p>
+<p class="" style="">The return statement properly encapsulates the JSX, providing a clean and readable output. This structural accuracy is vital as we move toward more complex architectural patterns like props and state management.</p>
+<p class="" style="">Excellent job maintaining a concise focus on the specific task requirements. This precision is what differentiates a proficient developer in a production environment.</p>
+</div>
+</div>
+<!-- Answer Recap Block -->
+<div class="mb-10">
+<h3 class="text-[11px] font-bold text-[#64748B] tracking-[0.06em] mb-3 uppercase" style="">YOUR SUBMISSION</h3>
+<div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-4">
+<code class="text-[13px] font-normal text-[#94A3B8] block leading-relaxed italic">
+                        "function Greeting() { return &lt;h1&gt;Hello, Skill Master!&lt;/h1&gt;; } — My component renders a heading with a greeting. I made the function name start with a capital letter as required by React."
+                    </code>
+</div>
+</div>
+<!-- Action Button -->
+<div class="flex justify-end pt-4">
+<button class="bg-[#0EA5E9] text-white px-8 py-3 rounded-lg text-[14px] font-semibold hover:opacity-90 transition-all active:scale-95 flex items-center gap-2" style="">
+                    Continue to Next Session
+                    <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward" style="">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Contextual Stats / Progress Indicator (Asymmetric Element) -->
+</main>
+<!-- Optional: Decorative architectural background element -->
+</body></html>

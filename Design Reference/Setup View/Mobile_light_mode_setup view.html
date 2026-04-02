@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Setup View - Learning Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-container": "#8d0012",
+                        "surface-container-lowest": "#050f19",
+                        "secondary": "#b6c8e0",
+                        "tertiary": "#ffbcb7",
+                        "secondary-fixed-dim": "#b6c8e0",
+                        "on-primary-fixed-variant": "#004c69",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-tertiary": "#68000a",
+                        "inverse-surface": "#d9e3f2",
+                        "error-container": "#93000a",
+                        "surface-bright": "#303a45",
+                        "inverse-on-surface": "#27313c",
+                        "on-error": "#690005",
+                        "outline-variant": "#3e484f",
+                        "on-primary": "#00354a",
+                        "surface-variant": "#2c3641",
+                        "surface-container-low": "#121c27",
+                        "on-primary-fixed": "#001e2c",
+                        "on-secondary": "#213245",
+                        "secondary-fixed": "#d2e4fd",
+                        "surface-tint": "#7bd0ff",
+                        "on-secondary-container": "#a5b7ce",
+                        "surface-dim": "#0a141e",
+                        "primary-fixed": "#c4e7ff",
+                        "surface-container": "#17202b",
+                        "surface": "#0a141e",
+                        "on-surface-variant": "#bdc8d1",
+                        "tertiary-fixed": "#ffdad7",
+                        "outline": "#87929a",
+                        "on-tertiary-fixed": "#410004",
+                        "on-surface": "#d9e3f2",
+                        "on-secondary-fixed": "#0a1d2f",
+                        "on-background": "#d9e3f2",
+                        "primary-container": "#38bdf8",
+                        "surface-container-high": "#212b35",
+                        "secondary-container": "#37485c",
+                        "inverse-primary": "#00668a",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "on-primary-container": "#004965",
+                        "background": "#0a141e",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#2c3641",
+                        "tertiary-container": "#ff938c",
+                        "primary": "#8ed5ff",
+                        "on-secondary-fixed-variant": "#37485c"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased text-[#0F172A]">
+<!-- Header Block -->
+<header class="px-5 pt-10 pb-6">
+<h1 class="text-[24px] font-bold leading-tight tracking-tight text-[#0F172A]">Set Up Your Learning Profile</h1>
+<p class="text-[13px] text-[#64748B] mt-1">Tell us about your goals so we can craft your journey.</p>
+</header>
+<!-- Form Card -->
+<main class="w-full bg-white border-t border-[#E2E8F0] pb-32">
+<!-- Section A: Learner Information -->
+<section class="p-6">
+<h2 class="text-[12px] font-extrabold tracking-widest text-[#0EA5E9] mb-5">LEARNER INFORMATION</h2>
+<div class="space-y-6">
+<!-- Full Name -->
+<div class="space-y-2">
+<label class="block text-[12px] font-semibold text-[#64748B]">Full Name</label>
+<input class="w-full h-12 px-4 bg-[#F8FAFC] border border-[#E2E8F0] rounded-none focus:ring-1 focus:ring-[#0EA5E9] focus:border-[#0EA5E9] text-[14px] outline-none transition-all" placeholder="e.g. Alex Rivera" type="text"/>
+</div>
+<!-- Your Role (Pills) -->
+<div class="space-y-3">
+<label class="block text-[12px] font-semibold text-[#64748B]">Your Role</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 border border-[#0EA5E9] bg-[#F0F9FF] text-[#0EA5E9] text-[13px] font-semibold">Student</button>
+<button class="px-4 py-2 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium">Professional</button>
+<button class="px-4 py-2 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium">Hobbyist</button>
+<button class="px-4 py-2 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium">Educator</button>
+</div>
+</div>
+<!-- Current Level (Pills) -->
+<div class="space-y-3">
+<label class="block text-[12px] font-semibold text-[#64748B]">Current Level</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium">Beginner</button>
+<button class="px-4 py-2 border border-[#0EA5E9] bg-[#F0F9FF] text-[#0EA5E9] text-[13px] font-semibold">Intermediate</button>
+<button class="px-4 py-2 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium">Advanced</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section B: Learning Goal -->
+<section class="p-6 border-t border-[#F1F5F9]">
+<h2 class="text-[12px] font-extrabold tracking-widest text-[#0EA5E9] mb-5">LEARNING GOAL</h2>
+<div class="space-y-6">
+<!-- What do you want to learn -->
+<div class="space-y-2">
+<label class="block text-[12px] font-semibold text-[#64748B]">What do you want to learn?</label>
+<input class="w-full h-12 px-4 bg-[#F8FAFC] border border-[#E2E8F0] rounded-none focus:ring-1 focus:ring-[#0EA5E9] focus:border-[#0EA5E9] text-[14px] outline-none" placeholder="e.g. Advanced Typography" type="text"/>
+</div>
+<!-- Why (textarea) -->
+<div class="space-y-2">
+<label class="block text-[12px] font-semibold text-[#64748B]">Why do you want to learn this?</label>
+<textarea class="w-full p-4 bg-[#F8FAFC] border border-[#E2E8F0] rounded-none focus:ring-1 focus:ring-[#0EA5E9] focus:border-[#0EA5E9] text-[14px] outline-none resize-none" placeholder="Describe your motivation..." rows="4"></textarea>
+</div>
+</div>
+</section>
+<!-- Section C: Learning Preferences -->
+<section class="p-6 border-t border-[#F1F5F9]">
+<h2 class="text-[12px] font-extrabold tracking-widest text-[#0EA5E9] mb-5">LEARNING PREFERENCES</h2>
+<div class="space-y-6">
+<!-- Daily Available Time -->
+<div class="space-y-2">
+<label class="block text-[12px] font-semibold text-[#64748B]">Daily Available Time</label>
+<select class="w-full h-12 px-4 bg-[#F8FAFC] border border-[#E2E8F0] rounded-none focus:ring-1 focus:ring-[#0EA5E9] focus:border-[#0EA5E9] text-[14px] outline-none appearance-none">
+<option>30 Minutes</option>
+<option selected="">1 Hour</option>
+<option>2 Hours</option>
+<option>4+ Hours</option>
+</select>
+</div>
+<!-- Preferred Pace -->
+<div class="space-y-2">
+<label class="block text-[12px] font-semibold text-[#64748B]">Preferred Pace</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="px-4 py-3 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium text-center">Fast-track</button>
+<button class="px-4 py-3 border border-[#0EA5E9] bg-[#F0F9FF] text-[#0EA5E9] text-[13px] font-semibold text-center">Balanced</button>
+</div>
+</div>
+<!-- Preferred Learning Style (Pills) -->
+<div class="space-y-3">
+<label class="block text-[12px] font-semibold text-[#64748B]">Preferred Learning Style</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium">Visual</button>
+<button class="px-4 py-2 border border-[#0EA5E9] bg-[#F0F9FF] text-[#0EA5E9] text-[13px] font-semibold">Practical</button>
+<button class="px-4 py-2 border border-[#E2E8F0] text-[#64748B] text-[13px] font-medium">Theoretical</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Action Area (Sticky Bottom) -->
+<footer class="fixed bottom-0 left-0 w-full p-6 bg-white border-t border-[#E2E8F0] z-50">
+<p class="text-[12px] text-[#94A3B8] text-center mb-4">Your roadmap will be generated using AI based on these inputs.</p>
+<div class="space-y-3">
+<!-- Generate Roadmap Button -->
+<button class="w-full h-[52px] bg-[#0EA5E9] text-white text-[14px] font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_awesome">auto_awesome</span>
+                Generate Roadmap
+            </button>
+<!-- Back Button -->
+<button class="w-full h-[52px] border border-[#CBD5E1] text-[#94A3B8] text-[14px] font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+                Back
+            </button>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master — Exam Phase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#E2E8F0",
+                        "tertiary-container": "#0EA5E9",
+                        "on-surface-variant": "#64748B",
+                        "primary-fixed": "rgba(14, 165, 233, 0.1)",
+                        "surface-container": "#FFFFFF",
+                        "primary-container": "#0EA5E9",
+                        "on-secondary-container": "#00374d",
+                        "surface-container-lowest": "#F8FAFC",
+                        "on-primary": "#FFFFFF",
+                        "primary": "#0EA5E9",
+                        "secondary": "#0EA5E9",
+                        "on-surface": "#0F172A",
+                        "on-secondary": "#FFFFFF",
+                        "surface-container-highest": "#F1F5F9",
+                        "tertiary": "#38BDF8",
+                        "background": "#F1F5F9",
+                        "outline-variant": "#E2E8F0",
+                        "secondary-container": "rgba(14,165,233,0.10)",
+                        "surface-container-low": "#F8FAFC",
+                        "surface": "#F1F5F9",
+                        "surface-container-high": "#F1F5F9",
+                        "on-background": "#0F172A"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface-container shadow-none border-b border-outline-variant">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 text-lg font-bold text-on-surface">
+<span class="text-[#0EA5E9] font-black tracking-tighter">Skill Master</span>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-medium text-sm hover:text-on-surface transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant font-medium text-sm hover:text-on-surface transition-colors" href="#">Roadmap</a>
+<a class="text-on-surface-variant font-medium text-sm hover:text-on-surface transition-colors" href="#">Progress</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-all">
+<span class="material-symbols-outlined">light_mode</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center text-xs font-bold text-on-surface-variant">
+                SA
+            </div>
+</div>
+</header>
+<!-- SideNavBar (Suppressed for focused exam mode as per shell rules, but including structural placeholder if needed by logic) -->
+<main class="pt-24 pb-20 px-6 max-w-[1200px] mx-auto">
+<!-- Session Header -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-1">
+<div class="flex items-center gap-3">
+<span class="text-[10px] font-extrabold tracking-[0.15em] uppercase text-[#0EA5E9]">EXAM PHASE</span>
+<span class="px-2 py-0.5 text-[10px] font-bold rounded-sm bg-[#0EA5E9]/10 text-[#0EA5E9]">Exam</span>
+</div>
+<h1 class="text-2xl md:text-[20px] font-bold text-on-surface tracking-tight">Weekly Exam — Week 1</h1>
+<p class="text-sm text-on-surface-variant">Sunday · Module 1 · End of Week 1</p>
+</div>
+<div class="w-full md:w-80 space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-[12px] font-medium text-on-surface-variant">Question 3 of 10</span>
+<span class="text-[12px] font-bold text-on-surface-variant">30% answered</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-[#0EA5E9]" style="width: 30%"></div>
+</div>
+</div>
+</div>
+<!-- Exam Content Area -->
+<div class="flex justify-center">
+<div class="w-full max-w-[760px] bg-surface-container border border-outline-variant shadow-sm overflow-hidden">
+<!-- Question Header -->
+<div class="p-8 pb-4">
+<span class="text-[11px] font-extrabold tracking-widest uppercase text-[#0EA5E9]">QUESTION 03</span>
+<h2 class="mt-4 text-[18px] font-semibold text-on-surface leading-snug">
+                        What happens if you name a React component with a lowercase first letter?
+                    </h2>
+</div>
+<!-- Options Zone -->
+<div class="px-8 py-4 space-y-3">
+<!-- Option A -->
+<button class="w-full flex items-center gap-4 p-5 text-left border border-outline-variant bg-surface-container hover:bg-surface-container-low transition-all group">
+<div class="flex-shrink-0 w-6 h-6 border-2 border-outline-variant flex items-center justify-center text-[11px] font-bold text-on-surface-variant group-hover:border-on-surface-variant">A</div>
+<span class="text-sm font-medium text-on-surface">React will automatically capitalize it during the build process.</span>
+</button>
+<!-- Option B (Selected) -->
+<button class="w-full flex items-center gap-4 p-5 text-left border-2 border-tertiary-container bg-secondary-container transition-all">
+<div class="flex-shrink-0 w-6 h-6 bg-tertiary-container flex items-center justify-center text-[11px] font-bold text-on-secondary">B</div>
+<span class="text-sm font-semibold text-on-surface">React treats it as a built-in HTML tag (like &lt;div&gt;) and may throw a warning or fail to render.</span>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+<!-- Option C -->
+<button class="w-full flex items-center gap-4 p-5 text-left border border-outline-variant bg-surface-container hover:bg-surface-container-low transition-all group">
+<div class="flex-shrink-0 w-6 h-6 border-2 border-outline-variant flex items-center justify-center text-[11px] font-bold text-on-surface-variant group-hover:border-on-surface-variant">C</div>
+<span class="text-sm font-medium text-on-surface">The component will render correctly but its state will be immutable.</span>
+</button>
+<!-- Option D -->
+<button class="w-full flex items-center gap-4 p-5 text-left border border-outline-variant bg-surface-container hover:bg-surface-container-low transition-all group">
+<div class="flex-shrink-0 w-6 h-6 border-2 border-outline-variant flex items-center justify-center text-[11px] font-bold text-on-surface-variant group-hover:border-on-surface-variant">D</div>
+<span class="text-sm font-medium text-on-surface">JSX will throw a compilation error immediately.</span>
+</button>
+</div>
+<!-- Card Footer / Navigation -->
+<div class="p-8 mt-4 border-t border-outline-variant bg-surface-container-low flex items-center justify-between">
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-surface-container border border-outline-variant text-sm font-bold text-on-surface hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-sm">west</span>
+                            Previous
+                        </button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-surface-container border border-outline-variant text-sm font-bold text-on-surface hover:bg-surface-container-highest transition-all">
+                            Next
+                            <span class="material-symbols-outlined text-sm">east</span>
+</button>
+</div>
+<span class="text-[12px] font-medium text-on-surface-variant">3 of 10 questions answered</span>
+</div>
+</div>
+</div>
+<!-- Submission Zone -->
+<div class="mt-12 max-w-[760px] mx-auto flex flex-col items-center text-center space-y-4">
+<button class="w-full md:w-auto px-12 py-4 text-on-primary text-sm font-extrabold uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all bg-[#0EA5E9]">
+                Submit Exam
+            </button>
+<p class="text-[12px] text-on-surface-variant font-medium">
+                You need <span class="font-bold text-[#0EA5E9]">80% or higher</span> to advance to the next week
+            </p>
+</div>
+</main>
+<!-- Contextual FAB Suppression: Hide FAB as it's a focus/exam screen -->
+</body></html>

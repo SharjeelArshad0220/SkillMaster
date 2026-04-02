@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=390, initial-scale=1.0" name="viewport"/>
+<title>Set Up Your Learning Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-container": "#8d0012",
+                        "surface-container-lowest": "#050f19",
+                        "secondary": "#b6c8e0",
+                        "tertiary": "#ffbcb7",
+                        "secondary-fixed-dim": "#b6c8e0",
+                        "on-primary-fixed-variant": "#004c69",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-tertiary": "#68000a",
+                        "inverse-surface": "#d9e3f2",
+                        "error-container": "#93000a",
+                        "surface-bright": "#303a45",
+                        "inverse-on-surface": "#27313c",
+                        "on-error": "#690005",
+                        "outline-variant": "#3e484f",
+                        "on-primary": "#00354a",
+                        "surface-variant": "#2c3641",
+                        "surface-container-low": "#121c27",
+                        "on-primary-fixed": "#001e2c",
+                        "on-secondary": "#213245",
+                        "secondary-fixed": "#d2e4fd",
+                        "surface-tint": "#7bd0ff",
+                        "on-secondary-container": "#a5b7ce",
+                        "surface-dim": "#0a141e",
+                        "primary-fixed": "#c4e7ff",
+                        "surface-container": "#17202b",
+                        "surface": "#0a141e",
+                        "on-surface-variant": "#bdc8d1",
+                        "tertiary-fixed": "#ffdad7",
+                        "outline": "#87929a",
+                        "on-tertiary-fixed": "#410004",
+                        "on-surface": "#d9e3f2",
+                        "on-secondary-fixed": "#0a1d2f",
+                        "on-background": "#d9e3f2",
+                        "primary-container": "#38bdf8",
+                        "surface-container-high": "#212b35",
+                        "secondary-container": "#37485c",
+                        "inverse-primary": "#00668a",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "on-primary-container": "#004965",
+                        "background": "#0a141e",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#2c3641",
+                        "tertiary-container": "#ff938c",
+                        "primary": "#8ed5ff",
+                        "on-secondary-fixed-variant": "#37485c"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0F1923;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #D9E3F2;
+            width: 390px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-dim selection:bg-primary-container selection:text-on-primary-container">
+<!-- Page Title Block -->
+<header class="px-5 pt-10 pb-8">
+<h1 class="text-[24px] font-bold text-on-surface leading-tight tracking-tight">Set Up Your Learning Profile</h1>
+<p class="text-[13px] text-outline mt-1 font-normal">Define your journey to get a personalized AI curriculum.</p>
+</header>
+<!-- Form Card -->
+<main class="w-full bg-[#162032] border-t border-[#1E2F42]">
+<div class="p-6 space-y-10">
+<!-- Section A: LEARNER INFORMATION -->
+<section class="space-y-6">
+<h2 class="text-[12px] font-bold tracking-[0.1em] text-primary-container uppercase">LEARNER INFORMATION</h2>
+<div class="space-y-4">
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-2 ml-1">Full Name</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface text-[14px] px-4 py-3 focus:ring-0 focus:border-primary transition-colors placeholder:text-outline/50" placeholder="e.g. Alex Rivera" type="text"/>
+</div>
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-3 ml-1">Your Role</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 bg-primary-container text-on-primary-fixed text-[13px] font-semibold rounded-full">Student</button>
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Professional</button>
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Hobbyist</button>
+</div>
+</div>
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-3 ml-1">Current Level</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Beginner</button>
+<button class="px-4 py-2 bg-primary-container text-on-primary-fixed text-[13px] font-semibold rounded-full">Intermediate</button>
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Advanced</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section B: LEARNING GOAL -->
+<section class="space-y-6">
+<h2 class="text-[12px] font-bold tracking-[0.1em] text-primary-container uppercase">LEARNING GOAL</h2>
+<div class="space-y-4">
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-2 ml-1">What do you want to learn</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface text-[14px] px-4 py-3 focus:ring-0 focus:border-primary transition-colors placeholder:text-outline/50" placeholder="e.g. Modern UI Design with Tailwind" type="text"/>
+</div>
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-2 ml-1">Why</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface text-[14px] px-4 py-3 focus:ring-0 focus:border-primary transition-colors placeholder:text-outline/50 resize-none" placeholder="Explain your motivation..." rows="3"></textarea>
+</div>
+</div>
+</section>
+<!-- Section C: LEARNING PREFERENCES -->
+<section class="space-y-6">
+<h2 class="text-[12px] font-bold tracking-[0.1em] text-primary-container uppercase">LEARNING PREFERENCES</h2>
+<div class="space-y-4">
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-2 ml-1">Daily Available Time</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface text-[14px] px-4 py-3 focus:ring-0 focus:border-primary transition-colors placeholder:text-outline/50" placeholder="e.g. 1-2 hours" type="text"/>
+</div>
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-3 ml-1">Preferred Pace</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Leisurely</button>
+<button class="px-4 py-2 bg-primary-container text-on-primary-fixed text-[13px] font-semibold rounded-full">Balanced</button>
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Intensive</button>
+</div>
+</div>
+<div>
+<label class="block text-[12px] font-medium text-on-surface-variant mb-3 ml-1">Preferred Learning Style</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 bg-primary-container text-on-primary-fixed text-[13px] font-semibold rounded-full">Visual</button>
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Hands-on</button>
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface-variant text-[13px] font-medium rounded-full hover:bg-surface-variant transition-colors">Reading</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Area -->
+<footer class="pt-4 pb-10 space-y-4">
+<p class="text-[11px] text-outline text-center px-4 leading-relaxed">
+                    By generating a roadmap, you agree to our AI processing your goals to create a custom curriculum.
+                </p>
+<div class="space-y-3">
+<button class="w-full bg-primary-container text-on-primary-fixed h-[52px] font-bold text-[14px] flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                        Generate Roadmap
+                    </button>
+<button class="w-full bg-transparent border border-[#2E3D52] text-outline h-[52px] font-semibold text-[14px] flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                        Back
+                    </button>
+</div>
+</footer>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Sign Up</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#a5b7ce",
+              "inverse-surface": "#d9e3f2",
+              "on-background": "#d9e3f2",
+              "surface": "#0a141e",
+              "error-container": "#93000a",
+              "surface-container-highest": "#2c3641",
+              "primary-container": "#38bdf8",
+              "on-tertiary-fixed-variant": "#930013",
+              "on-surface": "#d9e3f2",
+              "primary-fixed": "#c4e7ff",
+              "outline": "#87929a",
+              "surface-tint": "#7bd0ff",
+              "surface-container-lowest": "#050f19",
+              "surface-container-high": "#212b35",
+              "on-primary": "#00354a",
+              "primary-fixed-dim": "#7bd0ff",
+              "on-secondary-fixed": "#0a1d2f",
+              "surface-bright": "#303a45",
+              "on-secondary": "#213245",
+              "on-error-container": "#ffdad6",
+              "outline-variant": "#3e484f",
+              "on-primary-container": "#004965",
+              "primary": "#8ed5ff",
+              "secondary-fixed": "#d2e4fd",
+              "secondary": "#b6c8e0",
+              "on-tertiary": "#68000a",
+              "tertiary-fixed": "#ffdad7",
+              "surface-container-low": "#121c27",
+              "on-error": "#690005",
+              "on-tertiary-fixed": "#410004",
+              "background": "#0a141e",
+              "surface-dim": "#0a141e",
+              "secondary-fixed-dim": "#b6c8e0",
+              "surface-variant": "#2c3641",
+              "error": "#ffb4ab",
+              "on-primary-fixed-variant": "#004c69",
+              "secondary-container": "#37485c",
+              "tertiary": "#ffbcb7",
+              "tertiary-fixed-dim": "#ffb3ad",
+              "tertiary-container": "#ff938c",
+              "inverse-primary": "#00668a",
+              "on-tertiary-container": "#8d0012",
+              "on-primary-fixed": "#001e2c",
+              "on-surface-variant": "#bdc8d1",
+              "surface-container": "#17202b",
+              "on-secondary-fixed-variant": "#37485c",
+              "inverse-on-surface": "#27313c"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top Zone (35% Height) -->
+<header class="h-[309px] w-full bg-[#162032] flex flex-col items-center justify-center space-y-4">
+<div class="w-9 h-9 bg-primary-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-[#0f1923]" style="font-variation-settings: 'FILL' 1;">architecture</span>
+</div>
+<div class="text-center">
+<h1 class="text-white text-[22px] font-semibold tracking-tight">Skill Master</h1>
+<p class="text-[#64748b] text-[12px] mt-1">AI-powered personalized learning</p>
+</div>
+</header>
+<!-- Bottom Zone (65% Height) -->
+<main class="flex-grow bg-[#0f1923] px-6 py-7">
+<!-- Auth Tabs -->
+<nav class="flex w-full mb-8 border-b border-outline-variant/20">
+<button class="flex-1 pb-4 text-[14px] font-medium text-[#64748b] text-center">
+                Login
+            </button>
+<button class="flex-1 pb-4 text-[14px] font-semibold text-primary-container border-b-2 border-primary-container text-center">
+                Join
+            </button>
+</nav>
+<!-- Form Section -->
+<form class="flex flex-col space-y-4">
+<!-- Full Name -->
+<div class="flex flex-col space-y-2">
+<label class="text-white text-[12px] font-medium tracking-wide">Full Name</label>
+<input class="w-full bg-[#0f1923] border border-[#2e3d52] rounded-none py-3 px-4 text-[14px] text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-0 transition-colors" placeholder="Enter your full name" type="text"/>
+</div>
+<!-- Email -->
+<div class="flex flex-col space-y-2">
+<label class="text-white text-[12px] font-medium tracking-wide">Email</label>
+<input class="w-full bg-[#0f1923] border border-[#2e3d52] rounded-none py-3 px-4 text-[14px] text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-0 transition-colors" placeholder="your@email.com" type="email"/>
+</div>
+<!-- Password -->
+<div class="flex flex-col space-y-2">
+<label class="text-white text-[12px] font-medium tracking-wide">Password</label>
+<div class="relative">
+<input class="w-full bg-[#0f1923] border border-[#2e3d52] rounded-none py-3 pl-4 pr-10 text-[14px] text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-0 transition-colors" placeholder="Create a password" type="password"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[20px] cursor-pointer">visibility</span>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="flex flex-col space-y-2">
+<label class="text-white text-[12px] font-medium tracking-wide">Confirm Password</label>
+<div class="relative">
+<input class="w-full bg-[#0f1923] border border-[#2e3d52] rounded-none py-3 pl-4 pr-10 text-[14px] text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-0 transition-colors" placeholder="Repeat your password" type="password"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[20px] cursor-pointer">visibility</span>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-10 bg-primary-container text-[#0f1923] text-[14px] font-bold uppercase tracking-wider rounded-none hover:bg-primary transition-colors flex items-center justify-center mt-4" type="submit">
+                Create Account
+            </button>
+</form>
+<!-- Footer Helper -->
+<div class="mt-8 text-center">
+<p class="text-[#64748b] text-[13px]">
+                Already have an account? <a class="text-primary-container font-medium" href="#">Log In</a>
+</p>
+</div>
+</main>
+<!-- Shared Bottom Nav (Relevance Check: Suppressed for Transactional/Focused Sign-Up Page) -->
+<!-- As per instructions, navigation shell is suppressed for transactional screens like sign-up -->
+</body></html>

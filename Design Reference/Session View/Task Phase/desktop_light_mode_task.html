@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Task Phase</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-on-surface": "#27313c",
+                        "inverse-primary": "#00668a",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "outline": "#87929a",
+                        "primary-container": "#38bdf8",
+                        "on-surface": "#0f172a",
+                        "on-secondary-container": "#64748b",
+                        "on-secondary": "#273143",
+                        "surface-container-high": "#e2e8f0",
+                        "background": "#F1F5F9",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#472a00",
+                        "surface-bright": "#ffffff",
+                        "surface-container": "#FFFFFF",
+                        "surface-variant": "#f8fafc",
+                        "tertiary-fixed-dim": "#ffb960",
+                        "secondary": "#475569",
+                        "on-tertiary-fixed": "#2a1700",
+                        "primary": "#0EA5E9",
+                        "on-surface-variant": "#94a3b8",
+                        "surface-container-highest": "#f1f5f9",
+                        "on-secondary-fixed": "#111c2d",
+                        "surface-container-lowest": "#FFFFFF",
+                        "tertiary": "#f59e0b",
+                        "on-tertiary-container": "#78350f",
+                        "outline-variant": "#e2e8f0",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#3d475b",
+                        "on-primary-fixed-variant": "#004c69",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "secondary-container": "#f1f5f9",
+                        "tertiary-fixed": "#fef3c7",
+                        "inverse-surface": "#d9e3f2",
+                        "surface-tint": "#0ea5e9",
+                        "on-primary-container": "#004965",
+                        "surface": "#F1F5F9",
+                        "secondary-fixed-dim": "#bdc6df",
+                        "surface-dim": "#f1f5f9",
+                        "primary-fixed": "#c4e7ff",
+                        "secondary-fixed": "#d9e2fb",
+                        "on-primary-fixed": "#001e2c",
+                        "tertiary-container": "#fef3c7",
+                        "surface-container-low": "#f8fafc",
+                        "error-container": "#93000a",
+                        "on-primary": "#FFFFFF",
+                        "on-background": "#0f172a"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F1F5F9; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-shadow { box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    </style>
+</head>
+<body class="min-h-screen">
+<!-- Top Navigation Bar (Shared Component Logic) -->
+<!-- Applying Shared Components JSON Execution: style_bg_color, style_component_shape, style_shell_layout, style_brand_logo -->
+<header class="h-[56px] w-full sticky top-0 z-50 bg-white/80 backdrop-blur-xl transition-all border-b border-transparent">
+<div class="flex justify-between items-center px-6 w-full max-w-screen-2xl mx-auto h-full">
+<div class="flex items-center gap-2 text-lg font-bold tracking-tighter text-slate-900">
+<span class="material-symbols-outlined text-primary" data-icon="school">school</span>
+                Skill Master
+            </div>
+<nav class="hidden md:flex items-center gap-8">
+<!-- Navigation links from JSON. Note: Requirement specified "no nav links active" for this state -->
+<a class="text-slate-400 hover:text-slate-900 transition-colors font-['Plus_Jakarta_Sans'] text-sm tracking-tight font-medium" href="#">Home</a>
+<a class="text-slate-400 hover:text-slate-900 transition-colors font-['Plus_Jakarta_Sans'] text-sm tracking-tight font-medium" href="#">Roadmap</a>
+<a class="text-slate-400 hover:text-slate-900 transition-colors font-['Plus_Jakarta_Sans'] text-sm tracking-tight font-medium" href="#">Progress</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-slate-100 rounded-lg transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold text-xs">
+                    SA
+                </div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="max-w-screen-2xl mx-auto px-6 py-12 flex flex-col items-center">
+<!-- Header Section -->
+<div class="w-full max-w-[760px] mb-8">
+<div class="flex items-center justify-between mb-4">
+<div class="flex flex-col gap-1">
+<span class="text-[#0EA5E9] text-[10px] font-[700] uppercase tracking-[0.12em] font-label">
+                        TASK PHASE
+                    </span>
+<h1 class="text-[#0F172A] text-[20px] font-[600] font-headline">
+                        Introduction to Components
+                    </h1>
+</div>
+<span class="px-3 py-1 bg-[#fef3c7] text-[#78350f] rounded-full text-[11px] font-bold uppercase tracking-wider">
+                    Task
+                </span>
+</div>
+<div class="flex items-center gap-2 text-[#94A3B8] text-[13px] font-[400] font-body">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+                Day 3 — Monday · Module 1 · Week 2
+            </div>
+</div>
+<!-- Task Card -->
+<div class="w-full max-w-[760px] bg-white border border-[#E2E8F0] rounded-[12px] p-[36px] custom-shadow">
+<!-- Card Heading -->
+<div class="mb-4">
+<h2 class="text-[#0F172A] text-[18px] font-[600] font-headline mb-4">
+                    Build Your First Component
+                </h2>
+<p class="text-[#334155] text-[15px] font-[400] leading-relaxed font-body">
+                    Now that you understand what React components are, it is time to build one yourself. Create a functional React component that displays a welcome message with your name.
+                </p>
+</div>
+<!-- Divider -->
+<div class="h-px w-full bg-[#E2E8F0] my-8"></div>
+<!-- Answer Section -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<label class="text-[#0EA5E9] text-[11px] font-[600] uppercase tracking-[0.06em] font-label">
+                        YOUR ANSWER
+                    </label>
+</div>
+<div class="relative">
+<textarea class="w-full h-[200px] bg-white border border-[#CBD5E1] rounded-[8px] p-4 text-[#334155] text-[15px] font-body placeholder:text-[#94A3B8] focus:ring-2 focus:ring-[#0EA5E9]/20 focus:border-[#0EA5E9] outline-none transition-all resize-none" placeholder="Write your React component code here. Explain your thinking as you go — the AI will evaluate both your code and your reasoning."></textarea>
+<div class="absolute bottom-4 right-4 text-[#94A3B8] text-[12px] font-[400] font-body">
+                        0 / 1000 characters
+                    </div>
+</div>
+<!-- Action Section -->
+<div class="flex flex-col gap-6 mt-4">
+<div class="flex justify-end">
+<button class="bg-[#0EA5E9] hover:bg-[#0284c7] text-white px-8 py-2.5 rounded-[8px] text-[14px] font-[600] transition-all transform active:scale-95 shadow-lg shadow-sky-500/10">
+                            Submit Task
+                        </button>
+</div>
+<div class="flex items-center justify-center gap-2 text-[#94A3B8] text-[12px] font-[400] font-body">
+<span class="material-symbols-outlined text-[16px]" data-icon="auto_awesome">auto_awesome</span>
+                        AI will evaluate your answer and provide personalised feedback.
+                    </div>
+</div>
+</div>
+</div>
+<!-- Footer Visual Hint (Optional context) -->
+<div class="mt-12 text-[#94A3B8] text-[11px] font-label uppercase tracking-widest text-center opacity-50">
+            Precision Architect System v2.4
+        </div>
+</main>
+</body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master — Exam Phase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#121c27",
+                        "tertiary-container": "#38BDF8",
+                        "on-surface-variant": "#bdc8d1",
+                        "primary-fixed": "rgba(56, 189, 248, 0.1)",
+                        "surface-container": "#0a141e",
+                        "primary-container": "#38BDF8",
+                        "on-secondary-container": "#E0F2FE",
+                        "surface-container-lowest": "#050f19",
+                        "on-primary": "#050f19",
+                        "primary": "#38BDF8",
+                        "secondary": "#38BDF8",
+                        "on-surface": "#F1F5F9",
+                        "on-secondary": "#050f19",
+                        "surface-container-highest": "#1a2632",
+                        "tertiary": "#7DD3FC",
+                        "background": "#050f19",
+                        "outline-variant": "rgba(255,255,255,0.08)",
+                        "secondary-container": "rgba(56, 189, 248, 0.1)",
+                        "surface-container-low": "#0a141e",
+                        "surface": "#050f19",
+                        "surface-container-high": "#121c27",
+                        "on-background": "#F1F5F9"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["Manrope", "sans-serif"],
+                        "mono": ["Space Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "8px",
+                        "lg": "12px",
+                        "xl": "16px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-depth-elevation { box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased font-body min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-[#0a141e] border-b border-white/5">
+<div class="flex justify-between items-center w-full px-5 py-4">
+<div class="text-lg font-bold tracking-tighter text-[#38bdf8]">
+                Skill Master
+            </div>
+<div class="flex items-center gap-3">
+<button class="p-1.5 text-slate-400 hover:bg-white/5 rounded-lg transition-all">
+<span class="material-symbols-outlined text-xl">light_mode</span>
+</button>
+<div class="h-8 w-8 bg-surface-container-highest flex items-center justify-center text-xs font-mono font-bold text-sky-400 rounded-lg border border-white/5">
+                    SA
+                </div>
+</div>
+</div>
+</header>
+<main class="flex-1 pt-24 pb-32 px-4 max-w-lg mx-auto w-full">
+<!-- Progress Header -->
+<div class="mb-8 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-[9px] font-mono font-bold tracking-[0.2em] uppercase text-primary">EXAM PHASE</span>
+<span class="px-1.5 py-0.5 text-[9px] font-mono font-bold bg-primary/10 text-primary border border-primary/20 rounded-sm">MODULE 01</span>
+</div>
+<span class="text-[10px] font-mono font-bold text-primary">30% COMPLETE</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 30%"></div>
+</div>
+<h1 class="text-xl font-extrabold text-on-surface tracking-tight font-headline">Weekly Exam — Week 1</h1>
+</div>
+<!-- Main Exam Container -->
+<div class="bg-surface-container border border-outline-variant rounded-lg tonal-depth-elevation overflow-hidden">
+<!-- Question Header -->
+<div class="p-6 pb-2">
+<span class="text-[10px] font-mono font-bold tracking-widest uppercase text-primary">ANALYSIS POINT 03</span>
+<h2 class="mt-4 text-base font-bold text-on-surface leading-snug font-headline">
+                    What happens if you name a React component with a lowercase first letter?
+                </h2>
+</div>
+<!-- Options Zone -->
+<div class="p-6 space-y-3">
+<!-- Option A -->
+<button class="w-full flex items-start gap-3 p-4 text-left border border-outline-variant bg-surface-container-low hover:bg-surface-container-high transition-all group rounded-lg">
+<div class="flex-shrink-0 w-6 h-6 rounded border border-outline-variant flex items-center justify-center text-[10px] font-mono font-bold text-on-surface-variant group-hover:bg-primary/10 group-hover:text-primary transition-all">A</div>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface leading-tight">React will automatically capitalize it during the build process.</span>
+</button>
+<!-- Option B (Selected) -->
+<button class="w-full flex items-start gap-3 p-4 text-left border-2 border-primary bg-secondary-container transition-all rounded-lg relative">
+<div class="flex-shrink-0 w-6 h-6 rounded bg-primary flex items-center justify-center text-[10px] font-mono font-bold text-on-primary">B</div>
+<span class="text-sm font-bold text-on-surface leading-tight pr-6">React treats it as a built-in HTML tag (like &lt;div&gt;) and may throw a warning or fail to render.</span>
+<div class="absolute top-4 right-4">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+<!-- Option C -->
+<button class="w-full flex items-start gap-3 p-4 text-left border border-outline-variant bg-surface-container-low hover:bg-surface-container-high transition-all group rounded-lg">
+<div class="flex-shrink-0 w-6 h-6 rounded border border-outline-variant flex items-center justify-center text-[10px] font-mono font-bold text-on-surface-variant group-hover:bg-primary/10 group-hover:text-primary transition-all">C</div>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface leading-tight">The component will render correctly but its state will be immutable.</span>
+</button>
+<!-- Option D -->
+<button class="w-full flex items-start gap-3 p-4 text-left border border-outline-variant bg-surface-container-low hover:bg-surface-container-high transition-all group rounded-lg">
+<div class="flex-shrink-0 w-6 h-6 rounded border border-outline-variant flex items-center justify-center text-[10px] font-mono font-bold text-on-surface-variant group-hover:bg-primary/10 group-hover:text-primary transition-all">D</div>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface leading-tight">JSX will throw a compilation error immediately.</span>
+</button>
+</div>
+<!-- Navigation Controls (Inside Container) -->
+<div class="p-6 pt-2 border-t border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[10px] font-mono font-bold text-on-surface-variant uppercase tracking-widest">3 / 10 ANSWERED</span>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-surface-container border border-outline-variant rounded-lg text-xs font-bold text-on-surface active:scale-95 transition-all">
+<span class="material-symbols-outlined text-base">west</span>
+                        PREVIOUS
+                    </button>
+<button class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-surface-container border border-outline-variant rounded-lg text-xs font-bold text-on-surface active:scale-95 transition-all">
+                        NEXT
+                        <span class="material-symbols-outlined text-base">east</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Submission Zone (Outside Container) -->
+<div class="mt-8 flex flex-col items-center text-center space-y-4">
+<button class="w-full py-5 text-on-primary text-[13px] font-black uppercase tracking-[0.2em] bg-primary rounded-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
+                Submit Assessment
+            </button>
+<div class="space-y-1">
+<p class="text-[10px] font-mono text-on-surface-variant uppercase">
+                    MINIMUM THRESHOLD: <span class="font-bold text-primary">80% ACCURACY</span> REQUIRED
+                </p>
+<p class="text-[9px] text-slate-500 font-medium">Session recorded for technical certification.</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Unified Mobile Style) -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#0a141e] border-t border-white/5 px-6 h-16 flex items-center justify-around">
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-2xl">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">architecture</span>
+<span class="text-[10px] font-bold">Exam</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-2xl">insights</span>
+<span class="text-[10px] font-medium">Progress</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</nav>
+</body></html>

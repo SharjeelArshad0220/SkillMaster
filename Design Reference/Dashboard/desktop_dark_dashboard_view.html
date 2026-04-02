@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-container": "#f1a02b",
+                        "primary-fixed": "#c4e7ff",
+                        "surface-variant": "#2c3641",
+                        "secondary-fixed-dim": "#a4cce6",
+                        "secondary": "#a4cce6",
+                        "tertiary-fixed-dim": "#ffb960",
+                        "surface": "#0a141e",
+                        "surface-tint": "#7bd0ff",
+                        "on-primary-fixed-variant": "#004c69",
+                        "on-tertiary-container": "#613b00",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "inverse-on-surface": "#27313c",
+                        "primary": "#8ed5ff",
+                        "on-secondary-fixed": "#001e2c",
+                        "inverse-surface": "#d9e3f2",
+                        "surface-container-highest": "#2c3641",
+                        "error-container": "#93000a",
+                        "on-secondary": "#023449",
+                        "surface-container-high": "#212b35",
+                        "on-background": "#d9e3f2",
+                        "on-secondary-container": "#92bad4",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffddb8",
+                        "primary-container": "#38bdf8",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "surface-dim": "#0a141e",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "surface-container": "#17202b",
+                        "outline-variant": "#3e484f",
+                        "on-primary": "#00354a",
+                        "on-secondary-fixed-variant": "#214b61",
+                        "secondary-fixed": "#c4e7ff",
+                        "tertiary": "#ffc176",
+                        "surface-container-low": "#121c27",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-primary": "#00668a",
+                        "background": "#0a141e",
+                        "on-primary-fixed": "#001e2c",
+                        "on-surface": "#d9e3f2",
+                        "surface-container-lowest": "#050f19",
+                        "outline": "#87929a",
+                        "secondary-container": "#214b61",
+                        "surface-bright": "#303a45",
+                        "on-surface-variant": "#bdc8d1",
+                        "on-tertiary": "#472a00",
+                        "on-primary-container": "#004965"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0F1923;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #d9e3f2;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Blueprint Ethos Overrides */
+        .technical-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+        .surface-well {
+            background-color: #162032;
+            border: 1px solid #1E2F42;
+        }
+        .active-session-border {
+            border: 1.5px solid #38bdf8;
+            box-shadow: 0 0 0 4px rgba(56,189,248,0.08);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+<!-- TopNavBar Shell -->
+<header class="bg-[#162032] border-b border-[#1E2F42] flex justify-between items-center w-full px-8 py-4 h-16 fixed top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold uppercase tracking-[0.12em] text-[#38bdf8]">Skill Master</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-[#38bdf8] border-b-2 border-[#38bdf8] pb-1 font-bold font-plus-jakarta text-[0.875rem] leading-[1.6] tracking-normal transition-colors duration-200" href="#">Home</a>
+<a class="text-[#bdc8d1] font-medium font-plus-jakarta text-[0.875rem] leading-[1.6] tracking-normal hover:text-[#38bdf8] transition-colors duration-200" href="#">Roadmap</a>
+<a class="text-[#bdc8d1] font-medium font-plus-jakarta text-[0.875rem] leading-[1.6] tracking-normal hover:text-[#38bdf8] transition-colors duration-200" href="#">Progress</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#bdc8d1] hover:text-[#38bdf8] transition-colors duration-200 flex items-center">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-[0.75rem] font-bold text-on-surface-variant">
+                SA
+            </div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-8 pt-32 pb-20">
+<!-- Header Section -->
+<header class="mb-12">
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-[28px] font-bold text-white mb-1">Dashboard</h1>
+<p class="text-[14px] text-[#64748B] mb-4">Pick up where you left off.</p>
+</div>
+<div class="mb-5">
+<span class="technical-label text-[#64748B]">Context: </span>
+<span class="text-[12px] font-semibold text-[#64748B]">Current Skill: MERN Stack</span>
+</div>
+</div>
+</header>
+<!-- SECTION 1: CURRENT POINT SUMMARY -->
+<section class="mb-12">
+<h2 class="technical-label text-[#bdc8d1] mb-6">Current Point</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="surface-well p-5 rounded-sm">
+<p class="technical-label text-[#64748B] mb-2">Current Module</p>
+<p class="text-xl font-bold text-white">Module 1</p>
+</div>
+<div class="surface-well p-5 rounded-sm">
+<p class="technical-label text-[#64748B] mb-2">Current Week</p>
+<p class="text-xl font-bold text-white">Week 2</p>
+</div>
+<div class="surface-well p-5 rounded-sm">
+<p class="technical-label text-[#64748B] mb-2">Current Day</p>
+<p class="text-xl font-bold text-white">Day 3</p>
+</div>
+<div class="surface-well p-5 rounded-sm">
+<p class="technical-label text-[#64748B] mb-2">Revision Queue</p>
+<div class="flex items-center gap-2">
+<p class="text-xl font-bold text-white">2 Topics</p>
+<span class="material-symbols-outlined text-[#38bdf8] text-sm" data-icon="priority_high">priority_high</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: CURRENT SESSION -->
+<section class="mb-12">
+<h2 class="technical-label text-[#bdc8d1] mb-6">Current Session</h2>
+<div class="surface-well active-session-border rounded-sm p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left Content -->
+<div class="lg:col-span-8">
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-2 py-0.5 bg-surface-container-high text-[#38bdf8] technical-label border border-outline-variant/20">Learning</span>
+<span class="px-2 py-0.5 bg-surface-container-high text-[#bdc8d1] technical-label border border-outline-variant/20">Day 3</span>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container technical-label">Ready to Continue</span>
+</div>
+<h3 class="text-3xl font-extrabold text-white mb-2 leading-tight">Introduction to Components</h3>
+<p class="text-[12px] font-bold text-[#64748B] uppercase tracking-wider mb-6">Day 3 — Monday · Module 1 · Week 2</p>
+<p class="text-[#bdc8d1] leading-[1.6] max-w-2xl mb-8">
+                        Continue with the basics of React components, focusing on functional vs class components and how the rendering cycle operates within the virtual DOM.
+                    </p>
+<button class="bg-[#38bdf8] text-[#0F1923] px-8 py-3 font-bold text-[0.875rem] rounded-sm hover:opacity-90 transition-opacity flex items-center gap-2">
+                        Continue Session
+                        <span class="material-symbols-outlined text-[1.2rem]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Right Content -->
+<div class="lg:col-span-4 lg:border-l border-[#1E2F42] lg:pl-12 flex flex-col justify-center">
+<p class="technical-label text-[#64748B] mb-1">Estimated Time</p>
+<p class="text-5xl font-extrabold text-[#38bdf8]">45 min</p>
+</div>
+</div>
+</section>
+<!-- SECTION 3: REVISION QUEUE -->
+<section>
+<h2 class="technical-label text-[#bdc8d1] mb-6">Revision Queue</h2>
+<div class="surface-well rounded-sm divide-y divide-[#1E2F42]">
+<!-- Item 1 -->
+<div class="px-6 py-5 flex justify-between items-center group hover:bg-[#1E2F42]/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container-lowest flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-[#38bdf8]" data-icon="history_edu">history_edu</span>
+</div>
+<div>
+<p class="text-[1rem] font-bold text-white">React Props</p>
+<p class="technical-label text-[#64748B]">Week 1 Review</p>
+</div>
+</div>
+<button class="text-[#64748B] hover:text-[#38bdf8] transition-colors flex items-center gap-2">
+<span class="technical-label">Start Review</span>
+<span class="material-symbols-outlined text-[1rem]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Item 2 -->
+<div class="px-6 py-5 flex justify-between items-center group hover:bg-[#1E2F42]/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container-lowest flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-[#38bdf8]" data-icon="description">description</span>
+</div>
+<div>
+<p class="text-[1rem] font-bold text-white">JSX Basics</p>
+<p class="technical-label text-[#64748B]">Exam Review</p>
+</div>
+</div>
+<button class="text-[#64748B] hover:text-[#38bdf8] transition-colors flex items-center gap-2">
+<span class="technical-label">Start Review</span>
+<span class="material-symbols-outlined text-[1rem]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Item 3 -->
+<div class="px-6 py-5 flex justify-between items-center group hover:bg-[#1E2F42]/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container-lowest flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-[#38bdf8]" data-icon="account_tree">account_tree</span>
+</div>
+<div>
+<p class="text-[1rem] font-bold text-white">Component Structure</p>
+<p class="technical-label text-[#64748B]">Week 2 Focus</p>
+</div>
+</div>
+<button class="text-[#64748B] hover:text-[#38bdf8] transition-colors flex items-center gap-2">
+<span class="technical-label">Start Review</span>
+<span class="material-symbols-outlined text-[1rem]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Note (Blueprint Notation Style) -->
+<footer class="max-w-7xl mx-auto px-8 pb-10">
+<div class="border-t border-[#1E2F42]/40 pt-6 flex justify-between">
+<p class="technical-label text-[#64748B]">© 2024 SKILL MASTER PROTOCOL</p>
+<p class="technical-label text-[#64748B]">V 1.0.4-BLUEPRINT</p>
+</div>
+</footer>
+</body></html>

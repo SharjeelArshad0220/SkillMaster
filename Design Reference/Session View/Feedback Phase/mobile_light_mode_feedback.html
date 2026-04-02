@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Feedback Phase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f0f4f9",
+              "on-secondary-container": "#111c2d",
+              "outline": "#71787e",
+              "on-tertiary-container": "#2a1700",
+              "primary": "#00668a",
+              "inverse-on-surface": "#eff1f4",
+              "surface-bright": "#f8f9fc",
+              "surface-container-lowest": "#ffffff",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#2a1700",
+              "inverse-surface": "#2e3135",
+              "background": "#f8f9fc",
+              "on-secondary-fixed": "#111c2d",
+              "on-primary-fixed": "#001e2c",
+              "primary-fixed-dim": "#7bd0ff",
+              "on-primary-container": "#001e2c",
+              "secondary-fixed": "#d9e2fb",
+              "on-error-container": "#410002",
+              "surface-container-low": "#f8f9fc",
+              "tertiary-container": "#ffddb8",
+              "surface-dim": "#d9e3f2",
+              "surface-tint": "#00668a",
+              "on-background": "#191c1e",
+              "tertiary": "#825500",
+              "on-secondary": "#ffffff",
+              "on-tertiary-fixed-variant": "#653e00",
+              "primary-fixed": "#c4e7ff",
+              "surface-container-highest": "#e1e2e6",
+              "tertiary-fixed": "#ffddb8",
+              "on-surface": "#191c1e",
+              "on-secondary-fixed-variant": "#3d475b",
+              "secondary": "#555f71",
+              "on-primary": "#ffffff",
+              "secondary-fixed-dim": "#bdc6df",
+              "inverse-primary": "#7bd0ff",
+              "surface-container-high": "#e7e9ed",
+              "surface-variant": "#dee3eb",
+              "on-tertiary": "#ffffff",
+              "error": "#ba1a1a",
+              "error-container": "#ffdad6",
+              "on-primary-fixed-variant": "#004c69",
+              "secondary-container": "#d9e2fb",
+              "surface": "#f8f9fc",
+              "tertiary-fixed-dim": "#ffb960",
+              "primary-container": "#c4e7ff",
+              "on-surface-variant": "#41484d",
+              "outline-variant": "#c1c7ce"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center">
+<!-- Mobile Viewport Container -->
+<div class="w-[390px] min-h-screen flex flex-col bg-surface shadow-xl overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="h-[56px] w-full flex items-center justify-between px-6 bg-white border-b border-outline-variant/30 sticky top-0 z-50">
+<div class="flex items-center gap-2 text-[16px] font-bold text-on-surface">
+<span class="material-symbols-outlined text-primary">architecture</span>
+<span>Skill Master</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[12px] font-bold text-on-primary-container">
+                    SA
+                </div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 px-5 py-8 space-y-8">
+<!-- Session Header -->
+<header class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-bold tracking-[0.12em] text-primary uppercase">FEEDBACK PHASE</span>
+<span class="px-2.5 py-1 rounded-full bg-primary-container text-on-primary-container text-[10px] font-bold tracking-wider uppercase">Feedback</span>
+</div>
+<div class="space-y-1">
+<h1 class="text-[20px] font-bold text-on-surface leading-tight">Introduction to Components</h1>
+<p class="text-[12px] font-medium text-on-surface-variant">Day 3 — Monday · Module 1 · Week 2</p>
+</div>
+</header>
+<!-- Feedback Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/50 p-6 shadow-sm space-y-6">
+<!-- Outcome Indicator -->
+<div class="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+<div class="w-6 h-6 flex items-center justify-center rounded-full bg-green-600">
+<span class="material-symbols-outlined text-white text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="text-green-800 text-[14px] font-semibold leading-snug">Good work — your component structure is correct.</span>
+</div>
+<div class="h-[1px] bg-outline-variant/30 w-full"></div>
+<!-- AI Feedback Section -->
+<div class="space-y-4">
+<h3 class="text-[11px] font-bold tracking-[0.06em] text-primary uppercase">AI FEEDBACK</h3>
+<div class="space-y-3 text-[14px] leading-relaxed text-on-surface-variant">
+<p>Your modular approach to this component demonstrates a strong understanding of reusability. By separating the data fetching logic from the presentation layer, you've ensured that the component remains testable and scalable.</p>
+<p>The implementation of atomic design principles is evident in your sub-component structure. This will significantly reduce technical debt as the application grows in complexity.</p>
+<p>For future iterations, consider implementing a memoization strategy for the calculated values to further optimize rendering performance during rapid state updates.</p>
+</div>
+</div>
+<!-- Answer Recap Block -->
+<div class="space-y-3 pt-2">
+<h3 class="text-[11px] font-bold tracking-[0.06em] text-primary uppercase">YOUR SUBMISSION</h3>
+<div class="bg-surface-container border border-outline-variant/50 rounded-lg p-4">
+<pre class="text-[12px] font-mono text-on-surface-variant whitespace-pre-wrap break-words leading-relaxed">const Button = ({ label, primary }) =&gt; {
+  return (
+    &lt;button className={primary ? 'bg-blue' : 'bg-gray'}&gt;
+      {label}
+    &lt;/button&gt;
+  );
+};</pre>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-[48px] bg-primary text-white rounded-xl text-[14px] font-bold shadow-md hover:bg-primary/90 active:scale-[0.98] transition-all duration-200">
+                    Continue to Next Session
+                </button>
+</section>
+</main>
+<!-- Spacer for Bottom -->
+<div class="h-8"></div>
+</div>
+</body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Exam Phase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#E2E8F0",
+                        "tertiary-container": "#0EA5E9",
+                        "on-surface-variant": "#64748B",
+                        "primary-fixed": "rgba(14, 165, 233, 0.1)",
+                        "surface-container": "#FFFFFF",
+                        "primary-container": "#0EA5E9",
+                        "on-secondary-container": "#00374d",
+                        "surface-container-lowest": "#F8FAFC",
+                        "on-primary": "#FFFFFF",
+                        "primary": "#0EA5E9",
+                        "secondary": "#0EA5E9",
+                        "on-surface": "#0F172A",
+                        "on-secondary": "#FFFFFF",
+                        "surface-container-highest": "#F1F5F9",
+                        "tertiary": "#38BDF8",
+                        "background": "#F1F5F9",
+                        "outline-variant": "#E2E8F0",
+                        "secondary-container": "rgba(14,165,233,0.10)",
+                        "surface-container-low": "#F8FAFC",
+                        "surface": "#F1F5F9",
+                        "surface-container-high": "#F1F5F9",
+                        "on-background": "#0F172A"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="text-on-surface bg-surface antialiased">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white border-b border-outline-variant">
+<div class="flex items-center gap-2 text-lg font-bold text-on-surface">
+<span class="font-black tracking-tighter text-[#0EA5E9]">Skill Master</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">light_mode</span>
+</button>
+<div class="w-8 h-8 flex items-center justify-center text-on-surface-variant font-bold text-xs rounded-full bg-surface-container-highest">
+            SA
+        </div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-16 pb-32">
+<!-- Session Info -->
+<section class="px-6 pt-8 pb-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-extrabold tracking-[0.15em] text-[#0EA5E9] uppercase">EXAM PHASE</span>
+<span class="bg-[#0EA5E9]/10 text-[#0EA5E9] text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase">Exam</span>
+</div>
+<h1 class="text-[20px] font-bold text-on-surface tracking-tight">Weekly Exam — Week 1</h1>
+<p class="text-[12px] text-on-surface-variant font-medium">Sunday · Module 1 · End of Week 1</p>
+</div>
+</section>
+<!-- Main Container -->
+<div class="mx-6 bg-white border border-outline-variant shadow-sm overflow-hidden">
+<!-- Progress Header Inside Container -->
+<div class="p-5 border-b border-outline-variant bg-surface-container-low">
+<div class="flex justify-between items-end mb-2">
+<span class="text-[11px] font-extrabold tracking-widest uppercase text-[#0EA5E9]">QUESTION 03</span>
+<span class="text-[11px] font-bold text-on-surface-variant">30% answered</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant overflow-hidden rounded-full">
+<div class="h-full bg-[#0EA5E9] transition-all duration-500" style="width: 30%;"></div>
+</div>
+</div>
+<!-- Question Content -->
+<div class="p-6">
+<h2 class="text-lg font-semibold text-on-surface leading-snug mb-6">
+                What happens if you name a React component with a lowercase first letter?
+            </h2>
+<div class="flex flex-col gap-3">
+<!-- Option A -->
+<button class="w-full flex items-center gap-4 p-4 text-left border border-outline-variant bg-white hover:bg-surface-container-low transition-all group">
+<div class="flex-shrink-0 w-6 h-6 border-2 border-outline-variant flex items-center justify-center text-[11px] font-bold text-on-surface-variant group-hover:border-on-surface-variant">A</div>
+<span class="text-sm font-medium text-on-surface">React will automatically capitalize it during the build process.</span>
+</button>
+<!-- Option B (Selected) -->
+<button class="w-full flex items-center gap-4 p-4 text-left border-2 border-tertiary-container bg-secondary-container transition-all">
+<div class="flex-shrink-0 w-6 h-6 bg-tertiary-container flex items-center justify-center text-[11px] font-bold text-white">B</div>
+<span class="text-sm font-semibold text-on-surface">React treats it as a built-in HTML tag (like &lt;div&gt;) and may throw a warning or fail to render.</span>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+<!-- Option C -->
+<button class="w-full flex items-center gap-4 p-4 text-left border border-outline-variant bg-white hover:bg-surface-container-low transition-all group">
+<div class="flex-shrink-0 w-6 h-6 border-2 border-outline-variant flex items-center justify-center text-[11px] font-bold text-on-surface-variant group-hover:border-on-surface-variant">C</div>
+<span class="text-sm font-medium text-on-surface">The component will render correctly but its state will be immutable.</span>
+</button>
+<!-- Option D -->
+<button class="w-full flex items-center gap-4 p-4 text-left border border-outline-variant bg-white hover:bg-surface-container-low transition-all group">
+<div class="flex-shrink-0 w-6 h-6 border-2 border-outline-variant flex items-center justify-center text-[11px] font-bold text-on-surface-variant group-hover:border-on-surface-variant">D</div>
+<span class="text-sm font-medium text-on-surface">JSX will throw a compilation error immediately.</span>
+</button>
+</div>
+</div>
+<!-- Navigation Inside Container -->
+<div class="p-6 border-t border-outline-variant bg-surface-container-low flex flex-col gap-4">
+<div class="flex gap-2">
+<button class="flex-1 flex items-center justify-center gap-2 py-3 bg-white border border-outline-variant text-xs font-bold text-on-surface hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-sm">west</span>
+                    PREVIOUS
+                </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-3 bg-white border border-outline-variant text-xs font-bold text-on-surface hover:bg-surface-container-highest transition-all">
+                    NEXT
+                    <span class="material-symbols-outlined text-sm">east</span>
+</button>
+</div>
+<p class="text-center text-[11px] font-medium text-on-surface-variant">3 of 10 questions answered</p>
+</div>
+</div>
+<!-- Submission Outside Container -->
+<section class="px-6 mt-8 flex flex-col items-center gap-4">
+<button class="w-full text-white font-extrabold py-4 rounded-sm tracking-widest text-sm uppercase active:scale-[0.98] transition-all bg-[#0EA5E9]">
+            Submit Assessment
+        </button>
+<p class="text-[11px] text-on-surface-variant font-medium text-center">
+            You need <span class="font-bold text-[#0EA5E9]">80% or higher</span> to advance to the next week
+        </p>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full h-16 bg-white border-t border-outline-variant grid grid-cols-4 md:hidden">
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-[#0EA5E9]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">quiz</span>
+<span class="text-[10px] font-bold">Exam</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[10px] font-bold">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</a>
+</nav>
+</body></html>

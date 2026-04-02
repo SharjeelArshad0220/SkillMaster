@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skill Master - Feedback Phase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#17202b",
+                        "on-secondary-container": "#abb5cd",
+                        "outline": "#87929a",
+                        "on-tertiary-container": "#613b00",
+                        "primary": "#8ed5ff",
+                        "inverse-on-surface": "#27313c",
+                        "surface-bright": "#303a45",
+                        "surface-container-lowest": "#050f19",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-surface": "#d9e3f2",
+                        "background": "#0a141e",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-primary-fixed": "#001e2c",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "on-primary-container": "#004965",
+                        "secondary-fixed": "#d9e2fb",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-low": "#121c27",
+                        "tertiary-container": "#f1a02b",
+                        "surface-dim": "#0a141e",
+                        "surface-tint": "#7bd0ff",
+                        "on-background": "#d9e3f2",
+                        "tertiary": "#ffc176",
+                        "on-secondary": "#273143",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-fixed": "#c4e7ff",
+                        "surface-container-highest": "#2c3641",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-surface": "#d9e3f2",
+                        "on-secondary-fixed-variant": "#3d475b",
+                        "secondary": "#bdc6df",
+                        "on-primary": "#00354a",
+                        "secondary-fixed-dim": "#bdc6df",
+                        "inverse-primary": "#00668a",
+                        "surface-container-high": "#212b35",
+                        "surface-variant": "#2c3641",
+                        "on-tertiary": "#472a00",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004c69",
+                        "secondary-container": "#3d475b",
+                        "surface": "#0a141e",
+                        "tertiary-fixed-dim": "#ffb960",
+                        "primary-container": "#38bdf8",
+                        "on-surface-variant": "#bdc8d1",
+                        "outline-variant": "#3e484f"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0a141e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-transition {
+            background-color: #162032;
+        }
+        .no-border {
+            border: none !important;
+        }
+        .letter-spacing-wide {
+            letter-spacing: 0.12em;
+        }
+        .letter-spacing-sm {
+            letter-spacing: 0.06em;
+        }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar Component -->
+<nav class="h-[56px] w-full flex items-center bg-white dark:bg-[#162032] no-border tonal-transition sticky top-0 z-50">
+<div class="flex justify-between items-center px-6 w-full max-w-full">
+<div class="flex items-center gap-8">
+<div class="text-[16px] font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-sky-400 dark:text-[#38BDF8]">architecture</span>
+                    Skill Master
+                </div>
+<div class="hidden md:flex gap-6">
+<a class="font-['Plus_Jakarta_Sans'] text-[14px] leading-tight text-slate-600 dark:text-slate-400 font-medium hover:text-sky-500 dark:hover:text-[#38BDF8] transition-colors duration-200" href="#">Home</a>
+<a class="font-['Plus_Jakarta_Sans'] text-[14px] leading-tight text-slate-600 dark:text-slate-400 font-medium hover:text-sky-500 dark:hover:text-[#38BDF8] transition-colors duration-200" href="#">Roadmap</a>
+<a class="font-['Plus_Jakarta_Sans'] text-[14px] leading-tight text-slate-600 dark:text-slate-400 font-medium hover:text-sky-500 dark:hover:text-[#38BDF8] transition-colors duration-200" href="#">Progress</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:text-sky-500 dark:hover:text-[#38BDF8] transition-all active:scale-95">light_mode</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-[12px] font-bold text-sky-400 border border-outline-variant/20">
+                    SA
+                </div>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<main class="w-full max-w-[1440px] mx-auto flex flex-col items-center">
+<!-- Session Header Section -->
+<header class="w-full bg-[#0F1923] pt-12 pb-8 flex flex-col items-center">
+<div class="w-full max-w-[760px] px-6">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[10px] font-[700] uppercase letter-spacing-wide text-[#38BDF8]">FEEDBACK PHASE</span>
+<span class="px-3 py-1 bg-[#38BDF8]/10 text-[#38BDF8] text-[11px] font-[600] rounded-full border border-[#38BDF8]/20">Feedback</span>
+</div>
+<h1 class="text-[20px] font-[600] text-white mb-2">Introduction to Components</h1>
+<p class="text-[13px] font-[400] text-[#64748B]">Day 3 — Monday · Module 1 · Week 2</p>
+</div>
+</header>
+<!-- Feedback Content Canvas -->
+<section class="w-full max-w-[760px] px-6 py-12">
+<!-- Main Feedback Card -->
+<div class="bg-[#162032] border border-[#1E2F42] rounded-[12px] p-[36px] shadow-[0_1px_4px_rgba(0,0,0,0.12)]">
+<!-- Outcome Indicator -->
+<div class="flex items-center gap-3 p-4 bg-[#22C55E]/10 border border-[#22C55E]/30 rounded-lg mb-8">
+<span class="material-symbols-outlined text-[#22C55E]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-[14px] font-[600] text-[#22C55E]">Good work — your component structure is correct.</span>
+</div>
+<!-- Divider -->
+<div class="h-px w-full bg-[#2E3D52] mb-8"></div>
+<!-- AI Feedback Section -->
+<div class="mb-10">
+<label class="block text-[11px] font-[700] text-[#38BDF8] letter-spacing-sm mb-4 uppercase">AI FEEDBACK</label>
+<div class="space-y-4 text-[15px] leading-relaxed text-[#CBD5E1] font-[400]">
+<p>Your implementation of the <code>Greeting</code> functional component demonstrates a clear understanding of React fundamentals. You correctly identified that component names must be PascalCase to distinguish them from standard HTML tags, which is critical for the React reconciler to function properly.</p>
+<p>The use of the <code>h1</code> element within the return statement follows semantic HTML practices. Your component is clean, predictable, and modular, making it easy to reuse within a larger application architecture.</p>
+<p>For your next iteration, consider how you might pass dynamic data into this component using <code>props</code>. This would allow the greeting to be personalized based on user data, further enhancing the component's utility.</p>
+</div>
+</div>
+<!-- Answer Recap Block -->
+<div class="mb-10">
+<label class="block text-[11px] font-[700] text-[#87929a] letter-spacing-sm mb-4 uppercase">YOUR SUBMISSION</label>
+<div class="bg-[#0F1923] border border-[#2E3D52] rounded-[8px] p-4">
+<p class="text-[13px] font-[400] text-[#64748B] font-mono leading-relaxed">
+                            function Greeting() { return &lt;h1&gt;Hello, Skill Master!&lt;/h1&gt;; } — My component renders a heading with a greeting. I made the function name start with a capital letter as required by React.
+                        </p>
+</div>
+</div>
+<!-- Action Button Row -->
+<div class="flex justify-end">
+<button class="bg-[#38BDF8] text-[#0F1923] px-8 py-3 rounded-lg text-[14px] font-[600] hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#38BDF8]/10">
+                        Continue to Next Session
+                    </button>
+</div>
+</div>
+<!-- Contextual Note (Macro-spacing demonstration) -->
+</section>
+</main>
+<!-- Footer Meta (Optional for Blueprint aesthetic) -->
+</body></html>
