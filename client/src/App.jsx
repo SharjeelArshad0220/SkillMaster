@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "./context/AuthContext";
 import { AppProvider } from "./context/AppContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/"  element={<Navigate to="/learn" replace />} />
             <Route path="*"  element={<NotFoundPage />} />
           </Routes>
+          <Analytics />
         </AppProvider>
       </AuthProvider>
     </BrowserRouter>

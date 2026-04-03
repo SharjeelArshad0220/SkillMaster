@@ -1,0 +1,12 @@
+# Documentation and References
+Design Reference/
+PLAN.md
+DISCREPANCY_ANALYSIS.md
+PROJECT_SYSTEM_EXPLAINER.md
+
+# Common ignores (recommended)
+node_modules/
+.env
+dist/
+build/
+.DS_Store
