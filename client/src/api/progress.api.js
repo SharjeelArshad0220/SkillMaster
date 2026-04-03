@@ -1,23 +1,73 @@
 import api from "./axiosInstance";
 
+const PROGRESS_KEY = "sm_user_progress";
+
+const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+/**
+ * UTILITY: Gets progress from localStorage or initializes default.
+ */
+const getStoredProgress = (roadmapId) => {
+  const stored = localStorage.getItem(PROGRESS_KEY);
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    if (parsed.roadmapId === roadmapId) return parsed;
+  }
+  
+  // Default Initial State
+  return {
+    roadmapId,
+    currentModule: 1,
+    currentWeek: 1,
+    currentDay: "Monday",
+    completedTasks: [],
+    weakTopics: [],
+    examScores: [],
+    lastUpdated: new Date().toISOString()
+  };
+};
+
+const saveStoredProgress = (progress) => {
+  progress.lastUpdated = new Date().toISOString();
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+};
+
 /**
  * MOCK: Updates user progress after completing a session.
- * @param {string} roadmapId 
- * @param {string} dayId 
- * @param {string} status 'passed' | 'failed'
  */
 export const updateProgress = async (roadmapId, dayId, status) => {
-  // REAL CALL:
-  // const res = await api.post("/progress/update", { roadmapId, dayId, status });
-  // return res.data;
+  await new Promise((resolve) => setTimeout(resolve, 600)); // Simulate latency
+  
+  const prog = getStoredProgress(roadmapId);
+  const currentIdx = DAYS.indexOf(prog.currentDay);
+  
+  let nextDay = prog.currentDay;
+  let nextWeek = prog.currentWeek;
+  let nextModule = prog.currentModule;
 
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  // Simple sequential advancement for non-exam days
+  if (currentIdx < 6) { // Monday through Saturday
+    nextDay = DAYS[currentIdx + 1];
+  } else {
+    // Sunday (Exam) is handled by updateExamResult
+  }
+
+  prog.currentDay = nextDay;
+  prog.currentWeek = nextWeek;
+  prog.currentModule = nextModule;
+  
+  if (dayId && !prog.completedTasks.includes(dayId)) {
+    prog.completedTasks.push(dayId);
+  }
+
+  saveStoredProgress(prog);
+
   return {
     success: true,
-    newDay: "Tuesday", // Mock advancement logic
-    newWeek: 1,
-    newModule: 1,
-    roadmapComplete: false,
+    progress: prog,
+    newDay: nextDay,
+    newWeek: nextWeek,
+    newModule: nextModule
   };
 };
 
@@ -25,17 +75,37 @@ export const updateProgress = async (roadmapId, dayId, status) => {
  * MOCK: Records an exam result and updates weak topics.
  */
 export const updateExamResult = async (roadmapId, dayId, score, passed, weakTopics) => {
-  // REAL CALL:
-  // const res = await api.post("/progress/exam", { roadmapId, dayId, score, passed, weakTopics });
-  // return res.data;
+  await new Promise((resolve) => setTimeout(resolve, 800));
+  
+  const prog = getStoredProgress(roadmapId);
+  
+  prog.examScores.push({ dayId, score, passed, date: new Date().toISOString() });
+  prog.weakTopics = [...new Set([...prog.weakTopics, ...weakTopics])];
 
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  if (passed) {
+    // Advance to next week
+    if (prog.currentWeek < 4) {
+      prog.currentWeek += 1;
+      prog.currentDay = "Monday";
+    } else {
+      // Advance to next module
+      prog.currentModule += 1;
+      prog.currentWeek = 1;
+      prog.currentDay = "Monday";
+    }
+  } else {
+    // Pedagogical Penalty: Go back to Saturday (Revision)
+    prog.currentDay = "Saturday";
+  }
+
+  saveStoredProgress(prog);
+
   return {
     success: true,
     passed,
     score,
-    newDay: passed ? "Monday" : "Saturday",
-    weakTopics,
+    progress: prog,
+    newDay: prog.currentDay
   };
 };
 
@@ -43,20 +113,8 @@ export const updateExamResult = async (roadmapId, dayId, score, passed, weakTopi
  * MOCK: Retrieves the full progress object for a roadmap.
  */
 export const getProgress = async (roadmapId) => {
-  // REAL CALL:
-  // const res = await api.get(`/progress/${roadmapId}`);
-  // return res.data;
-
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await new Promise((resolve) => setTimeout(resolve, 400));
   return {
-    progress: {
-      roadmapId,
-      currentModule: 1,
-      currentWeek: 1,
-      currentDay: "Monday",
-      completedTasks: [],
-      weakTopics: [],
-      examScores: [],
-    },
+    progress: getStoredProgress(roadmapId)
   };
 };

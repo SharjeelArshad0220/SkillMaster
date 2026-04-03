@@ -18,7 +18,7 @@ export default function Footer() {
         </span>
 
         <span className="text-xs text-gray-400 dark:text-muted font-sans">
-          {progress
+          {progress?.currentDay 
             ? `Module ${progress.currentModule} · Week ${progress.currentWeek} · Day ${progress.currentDay}`
             : "—"
           }

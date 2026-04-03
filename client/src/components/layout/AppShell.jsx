@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import BottomTabBar from "./BottomTabBar";
+import ErrorBoundary from "../ui/ErrorBoundary";
 
 export default function AppShell() {
   return (
@@ -12,7 +13,9 @@ export default function AppShell() {
       {/* Main Content — Scrollable within viewport */}
       <main className="flex-1 mt-14 mb-16 md:mb-0 overflow-y-auto">
         <div className="h-full">
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </div>
       </main>
 

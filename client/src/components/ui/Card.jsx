@@ -3,10 +3,10 @@ export default function Card({ children, className = "", onClick }) {
     <div 
       onClick={onClick}
       className={`
-        bg-navy-mid light:bg-white 
-        border border-navy-light light:border-gray-200 
-        rounded-xl overflow-hidden
-        ${onClick ? "cursor-pointer hover:border-accent transition-all active:scale-[0.99]" : ""}
+        bg-white dark:bg-navy-mid 
+        border border-gray-100 dark:border-navy-light 
+        rounded-2xl overflow-hidden shadow-md dark:shadow-none
+        ${onClick ? "cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 active:scale-[0.98]" : ""}
         ${className}
       `}
     >
@@ -14,3 +14,4 @@ export default function Card({ children, className = "", onClick }) {
     </div>
   );
 }
+

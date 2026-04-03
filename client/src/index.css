@@ -11,7 +11,11 @@
 }
 @layer utilities {
   .blueprint-grid {
-    background-image: radial-gradient(circle at 1px 1px, #1E2F42 1px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, #E2E8F0 1px, transparent 0); /* Light mode dots */
+    background-size: 32px 32px;
+  }
+  .dark .blueprint-grid {
+    background-image: radial-gradient(circle at 1px 1px, #1E2F42 1.5px, transparent 0); /* Dark mode dots */
     background-size: 40px 40px;
   }
 }

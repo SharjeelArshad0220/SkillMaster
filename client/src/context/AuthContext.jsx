@@ -45,10 +45,12 @@ export function AuthProvider({ children }) {
   const logout = () => {
     clearToken();
     localStorage.removeItem("sm_user");
-    localStorage.removeItem("sm_roadmap"); // clear roadmap too
-    localStorage.removeItem("sm_progress");
+    localStorage.removeItem("sm_roadmap_id"); // Clear roadmap persistence
+    localStorage.removeItem("sm_roadmap");    // Compatibility with v2 spec
+    localStorage.removeItem("sm_progress");   // Compatibility with v2 spec
     setUser(null);
   };
+
 
   return (
     <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
