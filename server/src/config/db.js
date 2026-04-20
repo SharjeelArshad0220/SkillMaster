@@ -1,4 +1,10 @@
 import mongoose from 'mongoose';
+/*
+* This code is used to connect to the MongoDB database.
+*
+*/
+import dns from 'node:dns';
+dns.setServers(['8.8.8.8', '8.8.4.4']); // Google's DNS
 
 const connectDB = async () => {
   try {
