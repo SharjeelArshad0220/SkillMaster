@@ -1,0 +1,217 @@
+import { useState } from 'react';
+import Button from '../../../components/ui/Button';
+import { submitTask } from '../../../api/session.api';
+
+/**
+ * Handles both text-based tasks and MCQ tasks.
+ * Props:
+ *   task       - { type: "text"|"mcq", description?, questions? }
+ *   dayId      - string
+ *   roadmapId  - string
+ *   onComplete - called with { feedback, outcome, score?, passed? }
+ */
+export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
+  const [textAnswer, setTextAnswer] = useState('');
+  const [mcqAnswers, setMcqAnswers] = useState({});  // { questionIndex: selectedIndex }
+  const [currentQ, setCurrentQ] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Text task submit
+  const handleTextSubmit = async () => {
+    if (textAnswer.trim().length < 20) {
+      setError('Answer must be at least 20 characters');
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await submitTask(dayId, {
+        roadmapId,
+        type: 'text',
+        taskAnswer: textAnswer,
+        mcqAnswers: null,
+      });
+      onComplete({ feedback: result.feedback, outcome: result.outcome });
+    } catch (err) {
+      console.error('Text submission failed:', err);
+      setError('Failed to submit task. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // MCQ task submit — called after all questions answered
+  const handleMcqSubmit = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Build array format backend expects
+      const answersArray = task.questions.map((_, idx) => ({
+        questionIndex: idx,
+        selectedIndex: mcqAnswers[idx] ?? -1,
+      }));
+      const result = await submitTask(dayId, {
+        roadmapId,
+        type: 'mcq',
+        taskAnswer: null,
+        mcqAnswers: answersArray,
+      });
+      onComplete({
+        feedback: result.feedback,
+        outcome: result.outcome,
+        score: result.score,
+        passed: result.passed,
+      });
+    } catch (err) {
+      console.error('MCQ submission failed:', err);
+      setError('Failed to submit task. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- NO TASK CASE (e.g. Revision Days) ---
+  if (!task) {
+    return (
+      <div className="bg-white dark:bg-navy-mid
+                      border border-gray-200 dark:border-navy-light
+                      rounded-xl p-8 shadow-sm animate-fade-in text-center">
+        <div className="w-16 h-16 bg-pass/10 dark:bg-pass/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-pass/20">
+          <svg className="w-8 h-8 text-pass" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          Session Completed!
+        </h3>
+        <p className="text-[15px] text-gray-600 dark:text-slate leading-[1.65] mb-8">
+          You've successfully finished this topic's learning material.
+        </p>
+        <Button 
+          variant="primary" 
+          onClick={() => onComplete({ feedback: 'You have completed the session successfully.', outcome: 'positive' })}
+        >
+          Finish Session
+        </Button>
+      </div>
+    );
+  }
+
+  // --- TEXT TASK UI ---
+  if (task.type === 'text') {
+    return (
+      <div className="bg-white dark:bg-navy-mid
+                      border border-gray-200 dark:border-navy-light
+                      rounded-xl p-8 shadow-sm animate-fade-in">
+        <p className="text-[11px] font-bold uppercase tracking-[0.06em]
+                      text-accent-dk dark:text-accent mb-3">TASK</p>
+        <p className="text-[15px] text-gray-700 dark:text-slate leading-[1.65] mb-6">
+          {task.description}
+        </p>
+        <div className="border-t border-gray-100 dark:border-divider pt-6">
+          <p className="text-[11px] font-bold uppercase tracking-[0.06em]
+                        text-accent-dk dark:text-accent mb-3">YOUR ANSWER</p>
+          <textarea
+            className="w-full h-[200px] px-4 py-3 rounded-lg text-sm font-sans
+                       bg-white dark:bg-navy
+                       border border-gray-300 dark:border-divider
+                       text-gray-900 dark:text-white
+                       placeholder:text-gray-300 dark:placeholder:text-muted
+                       focus:border-accent-dk dark:focus:border-accent
+                       focus:outline-none focus:ring-0 resize-none"
+            placeholder="Write your answer here. Minimum 20 characters."
+            value={textAnswer}
+            onChange={(e) => setTextAnswer(e.target.value)}
+          />
+          <div className="flex justify-between items-center mt-2 mb-6">
+            <span />
+            <span className={`text-xs ${textAnswer.length < 20
+              ? 'text-fail'
+              : 'text-gray-400 dark:text-muted'}`}>
+              {textAnswer.length} / 1000
+            </span>
+          </div>
+          {error && <p className="text-xs text-fail mb-4">{error}</p>}
+          <Button
+            variant="primary"
+            loading={loading}
+            disabled={textAnswer.trim().length < 20}
+            onClick={handleTextSubmit}
+            fullWidth
+          >
+            {loading ? 'Getting Feedback...' : 'Submit Task'}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- MCQ TASK UI ---
+  if (task.type === 'mcq') {
+    const question = task.questions[currentQ];
+    const allAnswered = Object.keys(mcqAnswers).length === task.questions.length;
+
+    return (
+      <div className="bg-white dark:bg-navy-mid
+                      border border-gray-200 dark:border-navy-light
+                      rounded-xl p-8 shadow-sm animate-fade-in">
+        <div className="flex justify-between text-xs text-gray-400 dark:text-muted mb-6">
+          <span>Question {currentQ + 1} of {task.questions.length}</span>
+          <span>{Object.keys(mcqAnswers).length} answered</span>
+        </div>
+
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+          {question.question}
+        </h3>
+
+        <div className="flex flex-col gap-3 mb-8">
+          {question.options.map((opt, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setMcqAnswers(prev => ({ ...prev, [currentQ]: i }))}
+              className={`flex items-center gap-4 h-14 px-5 rounded-[10px]
+                          border-[1.5px] text-sm font-medium text-left transition-all
+                ${mcqAnswers[currentQ] === i
+                  ? 'bg-sky-50 dark:bg-accent/10 border-accent-dk dark:border-accent text-gray-900 dark:text-white'
+                  : 'bg-white dark:bg-navy border-gray-200 dark:border-divider text-gray-700 dark:text-slate'
+                }`}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          {currentQ > 0 && (
+            <Button variant="secondary" onClick={() => setCurrentQ(q => q - 1)}>
+              ← Previous
+            </Button>
+          )}
+          {currentQ < task.questions.length - 1 ? (
+            <Button
+              variant="primary"
+              disabled={mcqAnswers[currentQ] === undefined}
+              onClick={() => setCurrentQ(q => q + 1)}
+            >
+              Next Question →
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              loading={loading}
+              disabled={!allAnswered}
+              onClick={handleMcqSubmit}
+            >
+              {loading ? 'Submitting...' : 'Submit All Answers'}
+            </Button>
+          )}
+        </div>
+        {error && <p className="text-xs text-fail mt-4">{error}</p>}
+      </div>
+    );
+  }
+
+  return null;
+}
