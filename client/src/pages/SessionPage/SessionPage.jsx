@@ -133,6 +133,7 @@ export default function SessionPage() {
             feedback={feedbackData.feedback}
             outcome={feedbackData.outcome}
             dayId={dayId}
+            resources={feedbackData?.resources}
             roadmapId={roadmapId}
           />
         )}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import MiniExercise from './MiniExercise';
 import Button from '../../../components/ui/Button';
 
@@ -79,9 +80,21 @@ export default function LessonPhase({ parts, onComplete }) {
             {activePart.partTitle}
           </p>
           <div className="flex-1 overflow-y-auto pr-3 mb-6 custom-scrollbar">
-            <p className="text-[15px] text-justify text-gray-600 dark:text-slate leading-[1.75]">
-              {activeCard.content}
-            </p>
+                <div className="
+                        prose prose-sm max-w-none
+                        prose-p:text-gray-600 prose-p:dark:text-slate prose-p:leading-relaxed prose-p:my-2
+                        prose-strong:text-gray-900 prose-strong:dark:text-white prose-strong:font-semibold
+                        prose-code:text-accent-dk prose-code:dark:text-accent 
+                        prose-code:bg-gray-100 prose-code:dark:bg-navy-light
+                        prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
+                        prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                        prose-pre:bg-navy-light prose-pre:dark:bg-navy 
+                        prose-pre:border prose-pre:border-gray-200 prose-pre:dark:border-divider
+                        prose-pre:rounded-lg prose-pre:text-[13px] prose-pre:overflow-x-auto
+                        prose-pre:code:bg-transparent prose-pre:code:p-0
+                        prose-headings:text-gray-900 prose-headings:dark:text-white">
+              <ReactMarkdown>{activeCard.content}</ReactMarkdown>
+            </div>
           </div>
           <div className="flex justify-between mt-auto shrink-0 pt-4 border-t border-gray-100 dark:border-divider">
             {cardIndex > 0 && (

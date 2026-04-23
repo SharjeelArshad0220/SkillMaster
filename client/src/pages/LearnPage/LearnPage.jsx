@@ -4,28 +4,6 @@ import StatCard from "../../components/ui/StatCard";
 import Badge from "../../components/ui/Badge";
 import Button from "../../components/ui/Button";
 
-// const getCurrentSession = (roadmapJson, progress) => {
-//   if (!roadmapJson || !progress) return null;
-//   const DAY_MAP = { Monday:1, Tuesday:2, Wednesday:3, Thursday:4, Friday:5, Saturday:6, Sunday:7 };
-//   const dayNumber = DAY_MAP[progress.currentDay];
-//   const mod = roadmapJson.modules?.find(m => m.moduleNumber === progress.currentModule);
-//   const week = mod?.weeks?.find(w => w.weekNumber === progress.currentWeek);
-//   const day = week?.days?.find(d => d.dayNumber === dayNumber);
-//   if (!mod || !week || !day) return null;
-//   return {
-//     dayId: `m${progress.currentModule}-w${progress.currentWeek}-d${dayNumber}`,
-//     title: day.title,
-//     type: day.type,
-//     dayName: day.dayName,
-//     dayNumber,
-//     moduleNumber: progress.currentModule,
-//     weekNumber: progress.currentWeek,
-//     moduleTitle: mod.title,
-//     weekTitle: week.title,
-//   };
-// };
-// ==========================
-
 const getCurrentSession = (roadmapJson, progress) => {
   if (!roadmapJson || !progress) return null;
   const DAY_MAP = { Monday:1, Tuesday:2, Wednesday:3, Thursday:4, Friday:5, Saturday:6, Sunday:7 };

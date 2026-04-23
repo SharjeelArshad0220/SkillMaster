@@ -17,12 +17,21 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://skillmaster.vercel.app",      // your Vercel URL — update after deploy
+  "https://skillmaster.ai",              // your custom domain — add when you have it
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://skillmaster.ai',
-    'https://skill-master.vercel.app'
-  ]
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 }));
 
 // Health Check Route

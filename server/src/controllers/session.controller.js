@@ -42,8 +42,6 @@ const guardSessionContent = (type, content) => {
       throw new Error('INVALID_SESSION_CONTENT');
     }
   }
-
-  console.log(`[Session Guard] PASS: ${type} session structure valid`);
 };
 
 export const getSession = async (req, res) => {
@@ -203,10 +201,14 @@ export const submitTask = async (req, res) => {
           topicsList,
           userAnswer: taskAnswer
         });
-
         const outcomeMatch = aiResponse.match(/OUTCOME:\s*(positive|needs_improvement)/i);
-        outcome = outcomeMatch ? outcomeMatch[1].toLowerCase() : "needs_improvement";
-        feedback = aiResponse.replace(/OUTCOME:.*/im, '').trim();
+        const outcome = outcomeMatch ? outcomeMatch[1].toLowerCase() : 'needs_improvement';
+        const resourcesMatch = aiResponse.match(/RESOURCES:\n([\s\S]*?)$/im);
+        const resources = resourcesMatch ? resourcesMatch[1].trim() : null;
+        const feedback = aiResponse
+          .replace(/OUTCOME:.*$/im, '')
+          .replace(/RESOURCES:[\s\S]*$/im, '')
+          .trim();
       }
       catch (feedbackErr) {
         console.error("Task feedback generation failed (non-fatal):", feedbackErr.message);
@@ -220,7 +222,7 @@ export const submitTask = async (req, res) => {
       session.completedAt = new Date();
       await session.save();
 
-      return res.status(200).json({ feedback, outcome });
+      return res.status(200).json({ feedback, outcome, resources });
     }
     else if (task.type === "mcq") {
       const { mcqAnswers } = req.body;

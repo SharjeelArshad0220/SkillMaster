@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import Button from '../../../components/ui/Button';
 import { advanceProgress } from '../../../api/progress.api';
 import { useApp } from '../../../context/AppContext';
@@ -12,7 +13,7 @@ import { useApp } from '../../../context/AppContext';
  *   dayId      - string
  *   roadmapId  - string
  */
-export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId }) {
+export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, resources }) {
   const navigate = useNavigate();
   const { refreshProgress } = useApp();
   const [advancing, setAdvancing] = useState(false);
@@ -80,7 +81,21 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId }) {
           </p>
         ))}
       </div>
-
+      {resources && (
+        <div className="mt-6 pt-5 border-t border-gray-100 dark:border-divider">
+          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted mb-3">
+            EXPLORE FURTHER
+          </p>
+          <div className="
+      prose prose-sm max-w-none
+      prose-a:text-accent-dk prose-a:dark:text-accent prose-a:no-underline 
+      prose-a:hover:underline prose-p:text-gray-500 prose-p:dark:text-muted
+      prose-p:text-sm prose-p:leading-relaxed
+    ">
+            <ReactMarkdown>{resources}</ReactMarkdown>
+          </div>
+        </div>
+      )}
       <Button variant="primary" loading={advancing} onClick={handleContinue} fullWidth>
         Continue to Next Session
       </Button>
