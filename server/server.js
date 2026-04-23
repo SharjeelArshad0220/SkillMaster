@@ -19,7 +19,7 @@ const app = express();
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:5173",
-  "skill-master-teamforever.vercel.app",      // your Vercel URL — update after deploy
+  "skill-master-xi.vercel.app",      // your Vercel URL — update after deploy
   "https://skillmaster.ai",              // your custom domain — add when you have it
 ];
 
