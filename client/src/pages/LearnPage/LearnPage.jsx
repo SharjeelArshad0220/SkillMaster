@@ -41,35 +41,50 @@ const getCurrentSession = (roadmapJson, progress) => {
  * Main landing page for authenticated users. Shows stats, current session, and revision queue.
  */
 export default function LearnPage() {
-  const { roadmapJson, progress, isGenerating } = useApp();
+  const { roadmapJson, progress, roadmapLoading } = useApp();
   const navigate = useNavigate();
-  // Loading or generating state
-  if (isGenerating) {
+
+  // STATE 1: Still loading
+  if (roadmapLoading) {
     return (
-      <div className="max-w-[900px] mx-auto px-5 py-20 text-center font-sans">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Generating your roadmap...</h2>
-        <p className="text-sm text-gray-500 dark:text-muted">This may take a minute.</p>
+      <div className="max-w-[900px] mx-auto px-5 py-8 font-sans">
+        <div className="flex flex-col items-center justify-center py-24 gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-accent-dk dark:border-accent
+                          border-t-transparent animate-spin" />
+          <p className="text-sm text-gray-400 dark:text-muted">Loading your dashboard...</p>
+        </div>
       </div>
     );
   }
 
-  // Handle case where no roadmap is active
+  // STATE 2: Confirmed no roadmap (loading done, roadmapJson is null)
   if (!roadmapJson || !progress) {
     return (
-      <div className="max-w-[900px] mx-auto px-5 py-20 text-center font-sans">
-        <div className="w-16 h-16 bg-gray-100 dark:bg-navy-mid rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-8 h-8 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
+      <div className="max-w-[900px] mx-auto px-5 py-8 font-sans">
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-navy-mid
+                          flex items-center justify-center">
+            <svg className="w-6 h-6 text-gray-400 dark:text-muted" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13
+                       C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13
+                       C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13
+                       C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <div className="text-center">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+              No learning roadmap yet
+            </h3>
+            <p className="text-sm text-gray-400 dark:text-muted max-w-[300px]">
+              Set up your learning profile to generate a personalised roadmap.
+            </p>
+          </div>
+          <Button variant="primary" onClick={() => navigate('/setup')}>
+            Create My Roadmap
+          </Button>
         </div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No active roadmap</h2>
-        <p className="text-sm text-gray-500 dark:text-muted mb-8 max-w-sm mx-auto">
-          Welcome to Skill Master! You haven't set up a learning path yet. 
-          Create your personalized roadmap to start learning.
-        </p>
-        <Button variant="primary" onClick={() => navigate("/setup")}>
-          Create Roadmap
-        </Button>
       </div>
     );
   }

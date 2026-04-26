@@ -3,6 +3,12 @@ import ReactMarkdown from 'react-markdown';
 import Button from '../../../components/ui/Button';
 import { submitTask } from '../../../api/session.api';
 
+const extractErrorMessage = (err) => {
+  if (err?.response?.data?.error) return err.response.data.error;
+  if (err?.code === 'ERR_NETWORK') return 'Cannot connect to server. Check your connection.';
+  return 'Submission failed. Please try again.';
+};
+
 /**
  * Handles both text-based tasks and MCQ tasks.
  * Props:
@@ -36,7 +42,7 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
       onComplete({ feedback: result.feedback, outcome: result.outcome });
     } catch (err) {
       console.error('Text submission failed:', err);
-      setError('Failed to submit task. Please try again.');
+      setError(extractErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -66,7 +72,7 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
       });
     } catch (err) {
       console.error('MCQ submission failed:', err);
-      setError('Failed to submit task. Please try again.');
+      setError(extractErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -128,7 +134,10 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
                        focus:outline-none focus:ring-0 resize-none"
             placeholder="Write your answer here. Minimum 20 characters."
             value={textAnswer}
-            onChange={(e) => setTextAnswer(e.target.value)}
+            onChange={(e) => {
+              setTextAnswer(e.target.value);
+              if (error) setError(null);
+            }}
           />
           <div className="flex justify-between items-center mt-2 mb-6">
             <span />
@@ -138,7 +147,21 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
               {textAnswer.length} / 1000
             </span>
           </div>
-          {error && <p className="text-xs text-fail mb-4">{error}</p>}
+          {error && (
+            <div className="flex items-start gap-2.5 p-3 rounded-lg
+                            bg-red-50 dark:bg-fail/10
+                            border border-red-200 dark:border-fail/30
+                            mb-4">
+              <svg className="w-4 h-4 text-fail flex-shrink-0 mt-0.5" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667
+                         1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464
+                         0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <p className="text-sm text-fail leading-snug">{error}</p>
+            </div>
+          )}
           <Button
             variant="primary"
             loading={loading}
@@ -181,7 +204,10 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
             <button
               key={i}
               type="button"
-              onClick={() => setMcqAnswers(prev => ({ ...prev, [currentQ]: i }))}
+              onClick={() => {
+                setMcqAnswers(prev => ({ ...prev, [currentQ]: i }));
+                if (error) setError(null);
+              }}
               className={`flex items-center gap-4 h-14 px-5 rounded-[10px]
                           border-[1.5px] text-sm font-medium text-left transition-all
                 ${mcqAnswers[currentQ] === i
@@ -221,7 +247,21 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
             </Button>
           )}
         </div>
-        {error && <p className="text-xs text-fail mt-4">{error}</p>}
+        {error && (
+          <div className="flex items-start gap-2.5 p-3 rounded-lg
+                          bg-red-50 dark:bg-fail/10
+                          border border-red-200 dark:border-fail/30
+                          mt-4">
+            <svg className="w-4 h-4 text-fail flex-shrink-0 mt-0.5" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667
+                       1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464
+                       0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <p className="text-sm text-fail leading-snug">{error}</p>
+          </div>
+        )}
       </div>
     );
   }

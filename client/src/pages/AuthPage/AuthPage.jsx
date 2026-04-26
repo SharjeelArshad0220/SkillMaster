@@ -3,11 +3,21 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
+const extractErrorMessage = (err, fallback = 'Something went wrong. Please try again.') => {
+  // Server sends { error: "message" } — this is what we want
+  if (err?.response?.data?.error) return err.response.data.error;
+  // Network completely down
+  if (err?.code === 'ERR_NETWORK') return 'Cannot connect to server. Check your connection.';
+  // Fallback
+  return fallback;
+};
+
 export default function AuthPage() {
   const { user, login, signup } = useAuth();
   const navigate = useNavigate();
   const [mode, setMode] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,6 +25,12 @@ export default function AuthPage() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+
+  const handleModeSwitch = (newMode) => {
+    setMode(newMode);
+    setError(null);
+    setErrors({});
+  };
 
   if (user) return <Navigate to="/learn" replace />;
 
@@ -41,6 +57,7 @@ export default function AuthPage() {
     if (!validate()) return;
 
     setIsLoading(true);
+    setError(null);
     setErrors({});
     try {
       if (mode === "login") {
@@ -52,7 +69,16 @@ export default function AuthPage() {
         navigate("/setup");
       }
     } catch (err) {
-      setErrors({ server: err.response?.data?.message || "Authentication failed" });
+      if (mode === "login") {
+        setError(extractErrorMessage(err, 'Login failed. Please check your credentials.'));
+      } else {
+        const message = extractErrorMessage(err, 'Account creation failed. Please try again.');
+        if (message.toLowerCase().includes('email')) {
+          setErrors(prev => ({ ...prev, email: message }));
+        } else {
+          setError(message);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +142,7 @@ export default function AuthPage() {
             <div className="flex border-b border-gray-200 dark:border-divider mb-8">
               <button 
                 type="button"
-                onClick={() => setMode("login")}
+                onClick={() => handleModeSwitch("login")}
                 className={`px-6 py-3 text-sm font-semibold transition-colors
                   ${mode === "login" 
                     ? "text-gray-900 dark:text-white border-b-2 border-accent-dk dark:border-accent" 
@@ -126,7 +152,7 @@ export default function AuthPage() {
               </button>
               <button 
                 type="button"
-                onClick={() => setMode("signup")}
+                onClick={() => handleModeSwitch("signup")}
                 className={`px-6 py-3 text-sm font-medium transition-colors
                   ${mode === "signup" 
                     ? "text-gray-900 dark:text-white border-b-2 border-accent-dk dark:border-accent" 
@@ -143,7 +169,21 @@ export default function AuthPage() {
               {renderInput("Password", "password", "password", "••••••••")}
               {mode === "signup" && renderInput("Confirm Password", "confirmPassword", "password", "••••••••")}
 
-              {errors.server && <p className="text-xs text-fail text-center">{errors.server}</p>}
+              {error && (
+                <div className="flex items-start gap-2.5 p-3 rounded-lg
+                                bg-red-50 dark:bg-fail/10
+                                border border-red-200 dark:border-fail/30
+                                mb-4">
+                  <svg className="w-4 h-4 text-fail flex-shrink-0 mt-0.5" fill="none"
+                       viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667
+                             1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464
+                             0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p className="text-sm text-fail leading-snug">{error}</p>
+                </div>
+              )}
 
               <button 
                 disabled={isLoading}
@@ -167,7 +207,7 @@ export default function AuthPage() {
                 {mode === "login" ? "Don't have an account? " : "Already have an account? "}
                 <button 
                   type="button"
-                  onClick={() => setMode(mode === "login" ? "signup" : "login")}
+                  onClick={() => handleModeSwitch(mode === "login" ? "signup" : "login")}
                   className="text-accent-dk dark:text-accent font-medium hover:underline"
                 >
                   {mode === "login" ? "Sign Up" : "Log In"}
@@ -200,7 +240,7 @@ export default function AuthPage() {
           <div className="flex border-b border-gray-200 dark:border-divider mb-8">
             <button 
               type="button"
-              onClick={() => setMode("login")}
+              onClick={() => handleModeSwitch("login")}
               className={`px-6 py-3 text-sm font-semibold transition-colors
                 ${mode === "login" 
                   ? "text-gray-900 dark:text-white border-b-2 border-accent-dk dark:border-accent" 
@@ -210,7 +250,7 @@ export default function AuthPage() {
             </button>
             <button 
               type="button"
-              onClick={() => setMode("signup")}
+              onClick={() => handleModeSwitch("signup")}
               className={`px-6 py-3 text-sm font-medium transition-colors
                 ${mode === "signup" 
                   ? "text-gray-900 dark:text-white border-b-2 border-accent-dk dark:border-accent" 
@@ -226,7 +266,21 @@ export default function AuthPage() {
             {renderInput("Password", "password", "password", "••••••••")}
             {mode === "signup" && renderInput("Confirm Password", "confirmPassword", "password", "••••••••")}
 
-            {errors.server && <p className="text-xs text-fail text-center">{errors.server}</p>}
+            {error && (
+              <div className="flex items-start gap-2.5 p-3 rounded-lg
+                              bg-red-50 dark:bg-fail/10
+                              border border-red-200 dark:border-fail/30
+                              mb-4">
+                <svg className="w-4 h-4 text-fail flex-shrink-0 mt-0.5" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667
+                           1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464
+                           0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p className="text-sm text-fail leading-snug">{error}</p>
+              </div>
+            )}
 
             <button 
               disabled={isLoading}
@@ -250,7 +304,7 @@ export default function AuthPage() {
               {mode === "login" ? "Don't have an account? " : "Already have an account? "}
               <button 
                 type="button"
-                onClick={() => setMode(mode === "login" ? "signup" : "login")}
+                onClick={() => handleModeSwitch(mode === "login" ? "signup" : "login")}
                 className="text-accent-dk dark:text-accent font-medium hover:underline"
               >
                 {mode === "login" ? "Sign Up" : "Log In"}

@@ -9,32 +9,31 @@ export function AppProvider({ children }) {
   const [roadmapId, setRoadmapId] = useState(null);
   const [roadmapJson, setRoadmapJson] = useState(null);
   const [progress, setProgress] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [roadmapLoading, setRoadmapLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      const fetchActive = async () => {
-        setLoading(true);
-        try {
-          const data = await getActiveRoadmap();
-          if (data.roadmapId) {
-            setRoadmapId(data.roadmapId);
-            setRoadmapJson(data.roadmapJson);
-            setProgress(data.progress);
-          }
-        } catch (err) {
-          console.error("Failed to fetch active roadmap", err);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchActive();
-    } else {
-      // Clear data when user logs out or is null
+    if (!user) {
       setRoadmapId(null);
       setRoadmapJson(null);
       setProgress(null);
+      setRoadmapLoading(false);
+      return;
     }
+    setRoadmapLoading(true);
+    getActiveRoadmap()
+      .then((data) => {
+        if (data.roadmapId) {
+          setRoadmapId(data.roadmapId);
+          setRoadmapJson(data.roadmapJson);
+          setProgress(data.progress);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load active roadmap:', err);
+      })
+      .finally(() => {
+        setRoadmapLoading(false);
+      });
   }, [user]);
 
   const setRoadmapData = (id, json, prog) => {
@@ -54,7 +53,7 @@ export function AppProvider({ children }) {
 
   return (
     <AppContext.Provider value={{
-      roadmapId, roadmapJson, progress, loading,
+      roadmapId, roadmapJson, progress, roadmapLoading,
       setRoadmapData, refreshProgress
     }}>
       {children}

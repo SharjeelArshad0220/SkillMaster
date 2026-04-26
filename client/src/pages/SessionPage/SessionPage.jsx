@@ -48,7 +48,7 @@ export default function SessionPage() {
       })
       .catch((err) => {
         console.error('Failed to load session:', err);
-        setError('Failed to load session. Please try again.');
+        setError(err?.response?.data?.error || 'There was a problem loading this session.');
         setPhase(PHASES.ERROR);
       });
   }, [dayId, roadmapId]);
@@ -74,12 +74,60 @@ export default function SessionPage() {
     [PHASES.RESULT]:   'RESULT',
   };
 
+  // ── Full-screen loading ──────────────────────────────────────────────────
+  if (phase === PHASES.LOADING) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-navy font-sans
+                      flex flex-col items-center justify-center gap-4">
+        <div className="w-10 h-10 rounded-full border-2 border-accent-dk dark:border-accent
+                        border-t-transparent animate-spin" />
+        <p className="text-sm text-gray-400 dark:text-muted">Preparing your session...</p>
+        <p className="text-xs text-gray-300 dark:text-muted opacity-60">
+          First visit may take up to 15 seconds
+        </p>
+      </div>
+    );
+  }
+
+  // ── Full-screen error ────────────────────────────────────────────────────
+  if (phase === PHASES.ERROR) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-navy font-sans
+                      flex flex-col items-center justify-center gap-4 px-5">
+        <div className="w-12 h-12 rounded-full bg-red-50 dark:bg-fail/10
+                        flex items-center justify-center">
+          <svg className="w-6 h-6 text-fail" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                  d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div className="text-center max-w-[320px]">
+          <p className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+            Session could not load
+          </p>
+          <p className="text-sm text-gray-400 dark:text-muted leading-relaxed">
+            {error || 'There was a problem loading this session.'}
+          </p>
+        </div>
+        <div className="flex gap-3 mt-2">
+          <Button variant="secondary" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+          <Button variant="primary" onClick={() => navigate('/learn')}>
+            Back to Dashboard
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-navy font-sans">
       {/* Main Container */}
       <div className="max-w-[900px] mx-auto px-5 py-6">
-        {/* Session header resolved in the card limit */}
-        {session && phase !== PHASES.LOADING && phase !== PHASES.ERROR && (
+        {/* Session header */}
+        {session && (
           <div className="bg-white dark:bg-navy-mid
                           border border-gray-200 dark:border-navy-light
                           rounded-xl p-5 mb-4 flex flex-row items-center justify-between shadow-sm">
@@ -91,24 +139,6 @@ export default function SessionPage() {
               {session.title || session.content?.parts?.[0]?.partTitle || 'Session'}
             </p>
             <Badge variant={session.type?.toLowerCase()}>{session.type}</Badge>
-          </div>
-        )}
-
-        {phase === PHASES.LOADING && (
-          <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <LoadingSpinner size="lg" />
-            <p className="text-sm text-gray-400 dark:text-muted">
-              Preparing your session...
-            </p>
-          </div>
-        )}
-
-        {phase === PHASES.ERROR && (
-          <div className="text-center py-24">
-            <p className="text-sm text-fail mb-4">{error}</p>
-            <Button variant="primary" onClick={() => navigate('/learn')}>
-              Back to Dashboard
-            </Button>
           </div>
         )}
 

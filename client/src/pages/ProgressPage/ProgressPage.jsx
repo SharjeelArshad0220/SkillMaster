@@ -1,69 +1,139 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from "../../context/AppContext";
 import { getStats } from "../../api/progress.api";
 import StatCard from "../../components/ui/StatCard";
+import Button from "../../components/ui/Button";
 
 /**
  * Milestone F2 — Progress Page
  * Displays the user's learning record, performance stats, and revision queue.
  */
 export default function ProgressPage() {
-  const { roadmapId, roadmapJson, progress } = useApp();
+  const { roadmapId, roadmapJson, progress, roadmapLoading } = useApp();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
 
-  // Fetch stats from server on mount
+  // Fetch stats from server whenever roadmapId becomes available
   useEffect(() => {
-    if (roadmapId) {
-      getStats(roadmapId)
-        .then(data => setStats(data))
-        .catch(err => console.error('Failed to fetch stats:', err));
+    if (!roadmapId) {
+      setLoading(false);
+      return;
     }
+    setLoading(true);
+    setError(null);
+    getStats(roadmapId)
+      .then(data => setStats(data))
+      .catch(err => {
+        const message = err?.response?.data?.error || 'Failed to load progress data.';
+        setError(message);
+      })
+      .finally(() => setLoading(false));
   }, [roadmapId]);
 
-  // Handle case where no roadmap is active
-  if (!roadmapJson || !progress || !stats) {
+  // ── LOADING ──────────────────────────────────────────────────────────────
+  if (roadmapLoading || loading) {
     return (
-      <div className="max-w-[900px] mx-auto px-5 py-20 text-center font-sans">
-        <div className="w-16 h-16 bg-gray-100 dark:bg-navy-mid rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-8 h-8 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-        </div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No progress data</h2>
-        <p className="text-sm text-gray-500 dark:text-muted mb-8 max-w-sm mx-auto">
-          You need an active roadmap to see your learning progress.
+      <div className="max-w-[900px] mx-auto px-5 py-8 font-sans">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Progress</h1>
+        <p className="text-sm text-gray-500 dark:text-muted mt-1 mb-8">
+          Your learning record, performance, and growth.
         </p>
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-accent-dk dark:border-accent
+                          border-t-transparent animate-spin" />
+          <p className="text-sm text-gray-400 dark:text-muted">Loading your progress...</p>
+        </div>
       </div>
     );
   }
 
-  const latestResultColor = stats?.latestResult === "Passed" ? "text-pass" : stats?.latestResult === "Failed" ? "text-fail" : "text-muted";
+  // ── NO ROADMAP ────────────────────────────────────────────────────────────
+  if (!roadmapId) {
+    return (
+      <div className="max-w-[900px] mx-auto px-5 py-8 font-sans">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Progress</h1>
+        <p className="text-sm text-gray-500 dark:text-muted mt-1 mb-8">
+          Your learning record, performance, and growth.
+        </p>
+        <div className="flex flex-col items-center justify-center py-16 gap-4">
+          <div className="text-center">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+              Nothing to show yet
+            </h3>
+            <p className="text-sm text-gray-400 dark:text-muted max-w-[280px]">
+              Complete your setup and start learning to see your progress here.
+            </p>
+          </div>
+          <Button variant="primary" onClick={() => navigate('/setup')}>
+            Create My Roadmap
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── FETCH ERROR ───────────────────────────────────────────────────────────
+  if (error) {
+    return (
+      <div className="max-w-[900px] mx-auto px-5 py-8 font-sans">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Progress</h1>
+        <div className="flex flex-col items-center justify-center py-16 gap-4 mt-8">
+          <div className="w-12 h-12 rounded-full bg-red-50 dark:bg-fail/10
+                          flex items-center justify-center">
+            <svg className="w-6 h-6 text-fail" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                    d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div className="text-center">
+            <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+              Could not load progress
+            </p>
+            <p className="text-sm text-gray-400 dark:text-muted">{error}</p>
+          </div>
+          <Button variant="secondary" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── DATA READY ────────────────────────────────────────────────────────────
+  const latestResultColor =
+    stats?.latestResult === "Passed" ? "text-pass"
+    : stats?.latestResult === "Failed" ? "text-fail"
+    : "text-muted";
 
   const summaryRows = [
-    { label: "Lessons Completed", value: stats?.lessonsCompleted ?? '—' },
-    { label: "Revision Sessions", value: stats?.revisionSessions ?? '—' },
-    { label: "Exams Attempted", value: stats?.examsAttempted ?? '—' },
-    { label: "Exams Passed", value: stats?.examsPassed ?? '—' },
+    { label: "Lessons Completed",  value: stats?.lessonsCompleted  ?? '—' },
+    { label: "Revision Sessions",  value: stats?.revisionSessions  ?? '—' },
+    { label: "Exams Attempted",    value: stats?.examsAttempted    ?? '—' },
+    { label: "Exams Passed",       value: stats?.examsPassed       ?? '—' },
   ];
 
   const outcomeRows = [
-    { 
-      label: "Last Completed", 
-      value: stats?.lastCompletedTitle ?? '—'
+    {
+      label: "Last Completed",
+      value: stats?.lastCompletedTitle ?? '—',
     },
-    { 
-      label: "Latest Session", 
-      value: stats?.lastSessionOutcome?.toUpperCase() ?? '—', 
-      statusColor: stats?.lastSessionOutcome === "completed" ? "text-pass" : "text-muted" 
+    {
+      label: "Latest Session",
+      value: stats?.lastSessionOutcome?.toUpperCase() ?? '—',
+      statusColor: stats?.lastSessionOutcome === "completed" ? "text-pass" : "text-muted",
     },
-    { 
-      label: "Latest Exam", 
+    {
+      label: "Latest Exam",
       value: stats?.latestExamScore != null
         ? `${stats.latestExamScore}% — ${stats.latestExamPassed ? 'Passed' : 'Needs Revision'}`
         : '—',
       statusColor: stats?.latestExamScore != null
         ? (stats.latestExamPassed ? "text-pass" : "text-warn")
-        : "text-muted"
+        : "text-muted",
     },
   ];
 
@@ -85,18 +155,18 @@ export default function ProgressPage() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           <StatCard label="COMPLETED SESSIONS" value={stats?.completedSessions ?? '—'} />
-          <StatCard 
-            label="MODULES COMPLETED" 
+          <StatCard
+            label="MODULES COMPLETED"
             value={
               <span className="flex items-baseline gap-1">
                 {stats?.modulesCompleted?.split('/')?.[0] ?? '0'}
                 <span className="text-sm font-medium text-gray-400 dark:text-muted">/ {stats?.modulesCompleted?.split('/')?.[1] ?? '0'}</span>
               </span>
-            } 
+            }
           />
-          <StatCard 
-            label="LATEST RESULT" 
-            value={<span className={latestResultColor}>{stats?.latestResult ?? 'N/A'}</span>} 
+          <StatCard
+            label="LATEST RESULT"
+            value={<span className={latestResultColor}>{stats?.latestResult ?? 'N/A'}</span>}
           />
           <StatCard label="REVISION TOPICS" value={stats?.revisionTopicsCount ?? '—'} />
         </div>
@@ -108,7 +178,7 @@ export default function ProgressPage() {
           <span className="text-[10px] font-bold text-accent-dk dark:text-accent tracking-[0.12em] uppercase">Learning Record</span>
           <div className="h-[1px] flex-grow bg-gray-100 dark:bg-divider"></div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Learning Summary Panel */}
           <div className="bg-white dark:bg-navy-mid border border-gray-200 dark:border-navy-light rounded-xl overflow-hidden shadow-sm">
@@ -182,4 +252,3 @@ export default function ProgressPage() {
     </div>
   );
 }
-

@@ -17,6 +17,7 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
   const navigate = useNavigate();
   const { refreshProgress } = useApp();
   const [advancing, setAdvancing] = useState(false);
+  const [advanceWarning, setAdvanceWarning] = useState(false);
 
   const handleContinue = async () => {
     setAdvancing(true);
@@ -25,8 +26,10 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
       await refreshProgress();
     } catch (err) {
       console.error('Failed to advance progress:', err);
+      setAdvanceWarning(true);
       // Non-fatal — still navigate
     } finally {
+      setAdvancing(false);
       navigate('/learn');
     }
   };
@@ -98,6 +101,21 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
     ">
             <ReactMarkdown>{resources}</ReactMarkdown>
           </div>
+        </div>
+      )}
+      {advanceWarning && (
+        <div className="flex items-center gap-2 p-3 rounded-lg
+                        bg-yellow-50 dark:bg-warn/10
+                        border border-yellow-200 dark:border-warn/30
+                        mb-4">
+          <svg className="w-4 h-4 text-warn flex-shrink-0" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-xs text-warn">
+            Progress sync failed — your session is saved but position may not update immediately.
+          </p>
         </div>
       )}
       <Button variant="primary" loading={advancing} onClick={handleContinue} fullWidth>

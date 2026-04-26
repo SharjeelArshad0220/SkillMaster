@@ -6,7 +6,7 @@ import Button from "../../components/ui/Button";
 import { HiCheckCircle, HiLockClosed, HiArrowRight, HiMap } from "react-icons/hi2";
 
 export default function RoadmapPage() {
-  const { roadmapJson, progress } = useApp();
+  const { roadmapJson, progress, roadmapLoading } = useApp();
   const navigate = useNavigate();
 
   const [activeModuleIdx, setActiveModuleIdx] = useState(
@@ -16,23 +16,37 @@ export default function RoadmapPage() {
     () => Math.max(0, (progress?.currentWeek ?? 1) - 1)
   );
 
+  // STATE 1: Still loading
+  if (roadmapLoading) {
+    return (
+      <div className="max-w-[900px] mx-auto px-5 py-10 font-sans">
+        <div className="flex flex-col items-center justify-center py-24 gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-accent-dk dark:border-accent
+                          border-t-transparent animate-spin" />
+          <p className="text-sm text-gray-400 dark:text-muted">Loading roadmap...</p>
+        </div>
+      </div>
+    );
+  }
 
-  // Edge Case: No roadmap generated
+  // STATE 2: Confirmed no roadmap (loading done, roadmapJson is null)
   if (!roadmapJson) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center font-sans blueprint-grid">
-        <div className="w-20 h-20 rounded-3xl bg-white dark:bg-navy-mid flex items-center justify-center mb-8 border border-gray-200 dark:border-divider shadow-xl">
-          <HiMap className="w-10 h-10 text-accent-dk dark:text-accent" />
+      <div className="max-w-[900px] mx-auto px-5 py-10 font-sans">
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <div className="w-20 h-20 rounded-3xl bg-white dark:bg-navy-mid flex items-center justify-center border border-gray-200 dark:border-divider shadow-xl">
+            <HiMap className="w-10 h-10 text-accent-dk dark:text-accent" />
+          </div>
+          <p className="text-base font-semibold text-gray-900 dark:text-white">
+            No roadmap found
+          </p>
+          <p className="text-sm text-gray-400 dark:text-muted">
+            Return to setup to generate your learning roadmap.
+          </p>
+          <Button variant="primary" onClick={() => navigate('/setup')}>
+            Go to Setup
+          </Button>
         </div>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight text-shadow-sm">
-          Destiny Awaits
-        </h2>
-        <p className="text-base text-gray-500 dark:text-muted max-w-sm mb-10 leading-relaxed">
-          You haven't charted your course yet. Set up your learning profile to generate a personalized roadmap tailored to your goals.
-        </p>
-        <Button size="lg" onClick={() => navigate("/setup")} className="px-10 shadow-lg shadow-accent/20">
-          Begin Journey
-        </Button>
       </div>
     );
   }
