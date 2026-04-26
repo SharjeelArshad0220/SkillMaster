@@ -56,7 +56,7 @@ export default function LessonPhase({ parts, onComplete }) {
   return (
     <div className="animate-fade-in">
       {/* Progress bar */}
-      <div className="mb-8">
+      <div className="mb-4">
         <div className="flex justify-between text-[11px] font-bold uppercase tracking-widest
                         text-gray-400 dark:text-muted mb-2.5">
           <span>Part {partIndex + 1} of {parts.length}</span>
@@ -74,24 +74,26 @@ export default function LessonPhase({ parts, onComplete }) {
         /* Card display */
         <div className="bg-white dark:bg-navy-mid
                         border border-gray-200 dark:border-navy-light
-                        rounded-xl p-8 md:p-10 shadow-sm flex flex-col h-[55vh]">
+                        rounded-xl p-6 md:p-8 shadow-sm flex flex-col">
           <p className="text-[10px] font-bold uppercase tracking-[0.12em]
                         text-accent-dk dark:text-accent mb-4 shrink-0">
             {activePart.partTitle}
           </p>
-          <div className="flex-1 overflow-y-auto pr-3 mb-6 custom-scrollbar">
+          <div className="flex-1 mb-6 overflow-x-auto">
                 <div className="
                         prose prose-sm max-w-none
                         prose-p:text-gray-600 prose-p:dark:text-slate prose-p:leading-relaxed prose-p:my-2
                         prose-strong:text-gray-900 prose-strong:dark:text-white prose-strong:font-semibold
-                        prose-code:text-accent-dk prose-code:dark:text-accent 
-                        prose-code:bg-gray-100 prose-code:dark:bg-navy-light
+                        prose-ul:text-gray-600 prose-ul:dark:text-slate
+                        prose-li:text-gray-600 prose-li:dark:text-slate prose-li:my-0.5
+                        prose-code:text-gray-900 prose-code:dark:text-accent
+                        prose-code:bg-gray-100 prose-code:dark:bg-navy
                         prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
                         prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
-                        prose-pre:bg-navy-light prose-pre:dark:bg-navy 
+                        prose-pre:bg-gray-100 prose-pre:dark:bg-navy
                         prose-pre:border prose-pre:border-gray-200 prose-pre:dark:border-divider
-                        prose-pre:rounded-lg prose-pre:text-[13px] prose-pre:overflow-x-auto
-                        prose-pre:code:bg-transparent prose-pre:code:p-0
+                        prose-pre:rounded-lg prose-pre:text-[13px] prose-pre:overflow-x-auto prose-pre:my-3
+                        prose-pre:code:bg-transparent prose-pre:code:p-0 prose-pre:code:text-gray-900 prose-pre:code:dark:text-accent
                         prose-headings:text-gray-900 prose-headings:dark:text-white">
               <ReactMarkdown>{activeCard.content}</ReactMarkdown>
             </div>

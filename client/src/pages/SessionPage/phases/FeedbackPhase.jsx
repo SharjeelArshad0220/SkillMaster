@@ -74,12 +74,16 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
       {/* AI Feedback Body */}
       <p className="text-[11px] font-bold uppercase tracking-[0.06em]
                     text-accent-dk dark:text-accent mb-4">AI FEEDBACK</p>
-      <div className="space-y-4 border-l-2 border-gray-100 dark:border-divider pl-6 ml-2 mb-10">
-        {paragraphs.map((para, i) => (
-          <p key={i} className="text-[15px] text-gray-600 dark:text-slate leading-[1.75]">
-            {para}
-          </p>
-        ))}
+      <div className="prose prose-sm max-w-none mb-10
+                      prose-p:text-gray-600 prose-p:dark:text-slate prose-p:leading-[1.7] prose-p:my-2
+                      prose-code:text-gray-900 prose-code:dark:text-accent
+                      prose-code:bg-gray-100 prose-code:dark:bg-navy
+                      prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
+                      prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                      prose-strong:font-semibold prose-strong:text-gray-900 prose-strong:dark:text-white
+                      prose-ul:text-gray-600 prose-ul:dark:text-slate
+                      prose-li:my-0.5">
+        <ReactMarkdown>{feedback}</ReactMarkdown>
       </div>
       {resources && (
         <div className="mt-6 pt-5 border-t border-gray-100 dark:border-divider">

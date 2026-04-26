@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import Button from '../../../components/ui/Button';
 
 /**
@@ -34,9 +35,15 @@ export default function MiniExercise({ exercise, onComplete, onAdvance, isLastPa
         </p>
       </div>
 
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 leading-snug">
-        {exercise.question}
-      </h3>
+      <div className="text-lg font-semibold text-gray-900 dark:text-white mb-6 leading-snug
+                      prose prose-sm max-w-none
+                      prose-strong:text-gray-900 prose-strong:dark:text-white prose-strong:font-semibold
+                      prose-code:text-gray-900 prose-code:dark:text-accent
+                      prose-code:bg-gray-100 prose-code:dark:bg-navy
+                      prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
+                      prose-code:font-mono prose-code:before:content-none prose-code:after:content-none">
+        <ReactMarkdown>{exercise.question}</ReactMarkdown>
+      </div>
 
       <div className="flex flex-col gap-3">
         {exercise.options.map((opt, i) => (
@@ -66,7 +73,9 @@ export default function MiniExercise({ exercise, onComplete, onAdvance, isLastPa
                 <div className="w-2.5 h-2.5 rounded-full bg-accent-dk dark:bg-accent" />
               )}
             </div>
-            {opt}
+            <ReactMarkdown components={{ p: ({ children }) => <span>{children}</span> }}>
+              {opt}
+            </ReactMarkdown>
           </button>
         ))}
       </div>
@@ -77,9 +86,14 @@ export default function MiniExercise({ exercise, onComplete, onAdvance, isLastPa
           <p className={`text-sm font-bold mb-1 ${selected === exercise.correctIndex ? 'text-pass' : 'text-fail'}`}>
             {selected === exercise.correctIndex ? 'Correct!' : 'Not quite.'}
           </p>
-          <p className="text-sm text-gray-600 dark:text-slate leading-relaxed">
-            {exercise.explanation}
-          </p>
+          <div className="prose prose-sm max-w-none text-gray-600 dark:text-slate
+                          prose-code:text-gray-900 prose-code:dark:text-accent
+                          prose-code:bg-gray-100 prose-code:dark:bg-navy
+                          prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
+                          prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                          prose-strong:font-semibold prose-strong:text-gray-900 prose-strong:dark:text-white">
+            <ReactMarkdown>{exercise.explanation}</ReactMarkdown>
+          </div>
         </div>
       )}
 

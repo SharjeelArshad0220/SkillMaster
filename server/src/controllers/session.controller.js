@@ -232,8 +232,9 @@ export const submitTask = async (req, res) => {
       let correct = 0;
       const total = task.questions.length;
       const report = task.questions.map((q, idx) => {
-        const selectedIndex = mcqAnswers[idx];
-        const isCorrect = selectedIndex === q.correctIndex;
+        const answerObj = mcqAnswers.find(a => a.questionIndex === idx);
+        const selectedIndex = answerObj?.selectedIndex ?? -1;
+        const isCorrect = selectedIndex === q.correctIndex && selectedIndex !== -1;
         if (isCorrect) correct++;
         return {
           questionText: q.question,
@@ -257,9 +258,15 @@ export const submitTask = async (req, res) => {
           isMcq: true,
           score,
           report,
+          totalQuestions: total,
+          correctCount: correct,
           outcome
         });
-        feedback = aiResponse.replace(/OUTCOME:.*/im, '').trim();
+        const outcomeMatch = aiResponse.match(/OUTCOME:\s*(positive|needs_improvement)/i);
+        outcomeStr = outcomeMatch ? outcomeMatch[1].toLowerCase() : outcome;
+        feedback = aiResponse
+          .replace(/OUTCOME:.*$/im, '')
+          .trim();
       } catch (feedbackErr) {
         console.error("MCQ task feedback generation failed (non-fatal):", feedbackErr.message);
       }

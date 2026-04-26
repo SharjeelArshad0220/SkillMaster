@@ -266,7 +266,7 @@ const generateContent = async ({ prompt, systemInstruction, schema, isJson = tru
         systemInstruction,
         responseMimeType: isJson ? 'application/json' : 'text/plain',
         temperature: isJson ? 0.8: 0.5,
-        maxOutputTokens: isJson ? 65536 : 512,
+        maxOutputTokens: isJson ? 65536 : 4096,
         
       };
 
@@ -423,12 +423,39 @@ TEACH THIS SESSION WITH THESE CONSTRAINTS:
 };
 
 export const generateFeedback = (data) => {
-  const prompt = `Evaluate this learner's task submission:
+  let prompt = '';
+
+  if (data.isMcq) {
+    const wrongAnswers = data.report.filter(r => !r.isCorrect);
+    const correctCount = data.correctCount || data.report.filter(r => r.isCorrect).length;
+    const totalQuestions = data.totalQuestions || data.report.length;
+    const score = data.score || Math.round((correctCount / totalQuestions) * 100);
+
+    prompt = `You are evaluating a learner's MCQ task performance.
+
+Score: ${score}% (${correctCount} of ${totalQuestions} correct)
+
+Questions answered incorrectly:
+${wrongAnswers.map((r, i) =>
+  `${i + 1}. ${r.questionText}\n   Learner chose: ${r.options[r.selectedIndex] ?? 'No answer'}\n   Correct answer: ${r.options[r.correctIndex]}`
+).join('\n\n')}
+
+Provide feedback in exactly 3 paragraphs:
+1. What the learner understood correctly (based on their correct answers)
+2. What concepts need more work (specific to the wrong answers above)
+3. One concrete study recommendation for the weakest topic
+
+End with exactly one line: OUTCOME: ${data.outcome}
+
+Keep total response under 400 words. Be specific, not generic.`;
+  } else {
+    prompt = `Evaluate this learner's task submission:
 Task description: ${data.description}
 Topics this task covers: ${data.topicsList}
 Learner's answer: ${data.userAnswer}
 
 `;
+  }
 
   return generateContent({
     prompt,

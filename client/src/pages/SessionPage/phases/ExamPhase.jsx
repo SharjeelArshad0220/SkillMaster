@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import Button from '../../../components/ui/Button';
 import { submitExam } from '../../../api/session.api';
 
@@ -64,9 +65,14 @@ export default function ExamPhase({ questions = [], dayId, roadmapId, onComplete
         {/* Red top accent */}
         <div className="absolute top-0 left-0 w-full h-1 bg-fail" />
 
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-8 leading-snug">
-          {question.question}
-        </h3>
+        <div className="text-lg font-semibold text-gray-900 dark:text-white mb-8 leading-snug
+                        prose prose-sm max-w-none
+                        prose-code:text-gray-900 prose-code:dark:text-accent
+                        prose-code:bg-gray-100 prose-code:dark:bg-navy
+                        prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
+                        prose-code:font-mono prose-code:before:content-none prose-code:after:content-none">
+          <ReactMarkdown>{question.question}</ReactMarkdown>
+        </div>
 
         <div className="flex flex-col gap-3 mb-8">
           {question.options.map((opt, i) => (
@@ -88,7 +94,9 @@ export default function ExamPhase({ questions = [], dayId, roadmapId, onComplete
                   <div className="w-2.5 h-2.5 rounded-full bg-fail" />
                 )}
               </div>
-              {opt}
+              <ReactMarkdown components={{ p: ({ children }) => <span>{children}</span> }}>
+                {opt}
+              </ReactMarkdown>
             </button>
           ))}
         </div>

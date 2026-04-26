@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import Button from '../../../components/ui/Button';
 import { submitTask } from '../../../api/session.api';
 
@@ -106,9 +107,14 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
                       rounded-xl p-8 shadow-sm animate-fade-in">
         <p className="text-[11px] font-bold uppercase tracking-[0.06em]
                       text-accent-dk dark:text-accent mb-3">TASK</p>
-        <p className="text-[15px] text-gray-700 dark:text-slate leading-[1.65] mb-6">
-          {task.description}
-        </p>
+        <div className="prose prose-sm max-w-none text-gray-700 dark:text-slate leading-[1.65] mb-6
+                        prose-code:text-gray-900 prose-code:dark:text-accent
+                        prose-code:bg-gray-100 prose-code:dark:bg-navy
+                        prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
+                        prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                        prose-strong:font-semibold">
+          <ReactMarkdown>{task.description}</ReactMarkdown>
+        </div>
         <div className="border-t border-gray-100 dark:border-divider pt-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.06em]
                         text-accent-dk dark:text-accent mb-3">YOUR ANSWER</p>
@@ -161,9 +167,14 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
           <span>{Object.keys(mcqAnswers).length} answered</span>
         </div>
 
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-          {question.question}
-        </h3>
+        <div className="text-lg font-semibold text-gray-900 dark:text-white mb-6
+                        prose prose-sm max-w-none
+                        prose-code:text-gray-900 prose-code:dark:text-accent
+                        prose-code:bg-gray-100 prose-code:dark:bg-navy
+                        prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
+                        prose-code:font-mono prose-code:before:content-none prose-code:after:content-none">
+          <ReactMarkdown>{question.question}</ReactMarkdown>
+        </div>
 
         <div className="flex flex-col gap-3 mb-8">
           {question.options.map((opt, i) => (
@@ -178,7 +189,9 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
                   : 'bg-white dark:bg-navy border-gray-200 dark:border-divider text-gray-700 dark:text-slate'
                 }`}
             >
-              {opt}
+              <ReactMarkdown components={{ p: ({ children }) => <span>{children}</span> }}>
+                {opt}
+              </ReactMarkdown>
             </button>
           ))}
         </div>

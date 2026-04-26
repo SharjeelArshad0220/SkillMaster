@@ -77,12 +77,12 @@ export default function SessionPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-navy font-sans">
       {/* Main Container */}
-      <div className="max-w-[760px] mx-auto px-5 py-8">
+      <div className="max-w-[900px] mx-auto px-5 py-6">
         {/* Session header resolved in the card limit */}
         {session && phase !== PHASES.LOADING && phase !== PHASES.ERROR && (
           <div className="bg-white dark:bg-navy-mid
                           border border-gray-200 dark:border-navy-light
-                          rounded-xl p-5 mb-8 flex flex-row items-center justify-between shadow-sm">
+                          rounded-xl p-5 mb-4 flex flex-row items-center justify-between shadow-sm">
             <p className="text-[11px] font-bold uppercase tracking-[0.15em]
                           text-accent-dk dark:text-accent">
               {phaseLabels[phase] || ''}
