@@ -194,6 +194,7 @@ export const submitTask = async (req, res) => {
 
       let feedback = "Your submission has been received and recorded.";
       let outcome = "needs_improvement";
+      let resources = null;
 
       try {
         const aiResponse = await generateFeedback({
@@ -201,12 +202,19 @@ export const submitTask = async (req, res) => {
           topicsList,
           userAnswer: taskAnswer
         });
+        
         const outcomeMatch = aiResponse.match(/OUTCOME:\s*(positive|needs_improvement)/i);
-        const outcome = outcomeMatch ? outcomeMatch[1].toLowerCase() : 'needs_improvement';
-        const resourcesMatch = aiResponse.match(/RESOURCES:\n([\s\S]*?)$/im);
-        const resources = resourcesMatch ? resourcesMatch[1].trim() : null;
-        const feedback = aiResponse
-          .replace(/OUTCOME:.*$/im, '')
+        outcome = outcomeMatch ? outcomeMatch[1].toLowerCase() : 'needs_improvement';
+        
+        // Extract RESOURCES section with flexible whitespace handling
+        const resourcesMatch = aiResponse.match(/RESOURCES:\s*([\s\S]*?)$/im);
+        if (resourcesMatch) {
+          const resourcesContent = resourcesMatch[1].trim();
+          resources = resourcesContent.length > 0 ? resourcesContent : null;
+        }
+        
+        feedback = aiResponse
+          .replace(/OUTCOME:\s*(positive|needs_improvement)/im, '')
           .replace(/RESOURCES:[\s\S]*$/im, '')
           .trim();
       }
@@ -252,6 +260,7 @@ export const submitTask = async (req, res) => {
 
       let feedback = passed ? "Excellent work! You've passed the task." : "You've completed the task. Review the topics and try again if needed.";
       let outcomeStr = outcome;
+      let resources = null;
 
       try {
         const aiResponse = await generateFeedback({
@@ -262,10 +271,20 @@ export const submitTask = async (req, res) => {
           correctCount: correct,
           outcome
         });
+        
         const outcomeMatch = aiResponse.match(/OUTCOME:\s*(positive|needs_improvement)/i);
         outcomeStr = outcomeMatch ? outcomeMatch[1].toLowerCase() : outcome;
+        
+        // Extract RESOURCES section with flexible whitespace handling
+        const resourcesMatch = aiResponse.match(/RESOURCES:\s*([\s\S]*?)$/im);
+        if (resourcesMatch) {
+          const resourcesContent = resourcesMatch[1].trim();
+          resources = resourcesContent.length > 0 ? resourcesContent : null;
+        }
+        
         feedback = aiResponse
           .replace(/OUTCOME:.*$/im, '')
+          .replace(/RESOURCES:[\s\S]*$/im, '')
           .trim();
       } catch (feedbackErr) {
         console.error("MCQ task feedback generation failed (non-fatal):", feedbackErr.message);
@@ -277,7 +296,7 @@ export const submitTask = async (req, res) => {
       session.completedAt = new Date();
       await session.save();
 
-      return res.status(200).json({ feedback, outcome: outcomeStr, score, passed });
+      return res.status(200).json({ feedback, outcome: outcomeStr, score, passed, resources });
     } else {
       return res.status(400).json({ error: "Unknown task type" });
     }

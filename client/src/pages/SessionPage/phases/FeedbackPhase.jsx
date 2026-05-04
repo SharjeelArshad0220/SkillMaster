@@ -88,18 +88,55 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
                       prose-li:my-0.5">
         <ReactMarkdown>{feedback}</ReactMarkdown>
       </div>
-      {resources && (
-        <div className="mt-6 pt-5 border-t border-gray-100 dark:border-divider">
-          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted mb-3">
-            EXPLORE FURTHER
+
+      {resources && resources.trim() && resources.toLowerCase() !== '(no additional resources needed for this topic)' && (
+        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-divider">
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-accent-dk dark:text-accent mb-4">
+            RESOURCES
           </p>
-          <div className="
-      prose prose-sm max-w-none
-      prose-a:text-accent-dk prose-a:dark:text-accent prose-a:no-underline 
-      prose-a:hover:underline prose-p:text-gray-500 prose-p:dark:text-muted
-      prose-p:text-sm prose-p:leading-relaxed
-    ">
-            <ReactMarkdown>{resources}</ReactMarkdown>
+          <div className="space-y-2">
+            {resources
+              .split('\n')
+              .filter((line) => line.trim().length > 0)
+              .map((line, idx) => {
+                // Extract URL from markdown link format: [title](url) or plain URL
+                const markdownMatch = line.match(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/);
+                const plainUrlMatch = line.match(/(https?:\/\/[^\s]+)/);
+                
+                if (markdownMatch) {
+                  const [, title, url] = markdownMatch;
+                  return (
+                    <a
+                      key={idx}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-sm text-accent-dk dark:text-accent hover:underline leading-relaxed"
+                    >
+                      {line}
+                    </a>
+                  );
+                } else if (plainUrlMatch) {
+                  const url = plainUrlMatch[1];
+                  return (
+                    <a
+                      key={idx}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-sm text-accent-dk dark:text-accent hover:underline leading-relaxed"
+                    >
+                      {line}
+                    </a>
+                  );
+                }
+                
+                return (
+                  <p key={idx} className="text-sm text-gray-600 dark:text-slate leading-relaxed">
+                    {line}
+                  </p>
+                );
+              })}
           </div>
         </div>
       )}

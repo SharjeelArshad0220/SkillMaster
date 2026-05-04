@@ -39,7 +39,11 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
         taskAnswer: textAnswer,
         mcqAnswers: null,
       });
-      onComplete({ feedback: result.feedback, outcome: result.outcome });
+      onComplete({
+        feedback: result.feedback,
+        outcome: result.outcome,
+        resources: result.resources,
+      });
     } catch (err) {
       console.error('Text submission failed:', err);
       setError(extractErrorMessage(err));
@@ -69,6 +73,7 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
         outcome: result.outcome,
         score: result.score,
         passed: result.passed,
+        resources: result.resources,
       });
     } catch (err) {
       console.error('MCQ submission failed:', err);
