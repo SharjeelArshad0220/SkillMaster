@@ -145,17 +145,6 @@ Client submits: POST /api/session/m1-w1-d1/exam
 | **User passwords selected: false** | Passwords excluded from all queries unless explicitly requested with `.select('+password')`. Prevents accidental data leaks. | Include password in all queries → risk of returning hashed password in API responses |
 | **Roadmap.userId index + Session.userId, dayId index** | Queries like "find all sessions for user on day X" are instant. User-isolation is enforced at query time. | No indexes → full table scans on every progress check, slow at scale |
 
-## Environment Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `MONGO_URI` | MongoDB connection string (Atlas or local) | `mongodb+srv://user:pass@cluster.mongodb.net/skillmaster` |
-| `JWT_SECRET` | Secret key for signing/verifying JWT tokens. Must be 32+ characters. | `59tQg4KLeMwd9k9RdLOVaJvoF5icsMVzx4avV1p40+w=` |
-| `GEMINI_API_KEY` | Google Gemini API key for AI content generation | `AIzaSyDDVxWOJzBu0hsfeCjgSQCvp6rZDdaT-S8` |
-| `PORT` | Port on which server listens (default: 5000) | `5000` |
-
-**Note:** All variables are required for server to function. Create a `.env` file in the root of the `server/` directory.
-
 ## Scripts
 
 ### Development

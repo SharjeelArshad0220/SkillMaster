@@ -1,7 +1,7 @@
 import Roadmap from '../models/Roadmap.model.js';
 import Session from '../models/Session.model.js';
 import Progress from '../models/Progress.model.js';
-import { generateLessonContent, generateFeedback } from '../services/gemini.service.js';
+import { generateLessonContent, generateFeedback } from '../services/ai.service.js';
 import { parseDayId, getDayFromRoadmap, calculateNextPosition, buildDayId } from '../utils/dayHelpers.js';
 /*
 **

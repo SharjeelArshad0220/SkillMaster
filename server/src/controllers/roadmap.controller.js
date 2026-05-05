@@ -1,6 +1,6 @@
 import Roadmap from '../models/Roadmap.model.js';
 import Progress from '../models/Progress.model.js';
-import { generateRoadmapSkeleton } from '../services/gemini.service.js';
+import { generateRoadmapSkeleton } from '../services/ai.service.js';
 
 export const generateRoadmap = async (req, res) => {
   try {
