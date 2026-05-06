@@ -90,11 +90,11 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
       </div>
 
       {resources && resources.trim() && resources.toLowerCase() !== '(no additional resources needed for this topic)' && (
-        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-divider">
-          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-accent-dk dark:text-accent mb-4">
-            RESOURCES
+        <div className="mt-6 pt-4 border-t border-gray-100 dark:border-divider">
+          <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-muted dark:text-slate mb-3">
+            Resources
           </p>
-          <div className="space-y-2">
+          <div className="flex flex-wrap gap-2">
             {resources
               .split('\n')
               .filter((line) => line.trim().length > 0)
@@ -111,9 +111,14 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block text-sm text-accent-dk dark:text-accent hover:underline leading-relaxed"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md
+                                 bg-accent/5 text-accent-dk dark:bg-accent/10 dark:text-accent
+                                 hover:bg-accent/10 dark:hover:bg-accent/15 transition-colors"
                     >
-                      {line}
+                      {title}
+                      <svg className="w-3.5 h-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
                     </a>
                   );
                 } else if (plainUrlMatch) {
@@ -124,15 +129,20 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block text-sm text-accent-dk dark:text-accent hover:underline leading-relaxed"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md
+                                 bg-accent/5 text-accent-dk dark:bg-accent/10 dark:text-accent
+                                 hover:bg-accent/10 dark:hover:bg-accent/15 transition-colors break-all"
                     >
-                      {line}
+                      View Resource
+                      <svg className="w-3.5 h-3.5 opacity-60 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
                     </a>
                   );
                 }
                 
                 return (
-                  <p key={idx} className="text-sm text-gray-600 dark:text-slate leading-relaxed">
+                  <p key={idx} className="inline text-xs text-muted dark:text-slate">
                     {line}
                   </p>
                 );
