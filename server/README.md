@@ -2,15 +2,15 @@
 
 ## Purpose
 
-This is an Express.js backend that powers Skill Master, an AI-driven learning platform. It orchestrates AI-generated learning roadmaps, generates personalized lesson content and exam questions using Google Gemini, tracks user progress through structured learning paths, and manages authentication with JWT tokens. The server acts as the single source of truth for all user data, learning content, and progress tracking.
+This is an Express.js backend that powers Skill Master, an AI-driven learning platform. It orchestrates AI-generated learning roadmaps, generates personalized lesson content and exam questions using Groq's Llama models, tracks user progress through structured learning paths, and manages authentication with JWT tokens. The server acts as the single source of truth for all user data, learning content, and progress tracking.
 
 ## Directory Structure
 
 ```
 server/
 ├── server.js                 # Entry point; initializes Express, connects DB, mounts routes
-├── package.json              # Dependencies: Express, Mongoose, Gemini AI, JWT, bcrypt
-├── .env                      # Environment variables (MongoDB URI, JWT secret, Gemini API key)
+├── package.json              # Dependencies: Express, Mongoose, Groq AI, JWT, bcrypt
+├── .env                      # Environment variables (MongoDB URI, JWT secret, Groq API key)
 ├── .gitignore                # Version control exclusions
 │
 └── src/
@@ -39,7 +39,7 @@ server/
     │   └── progress.routes.js      # /api/progress endpoints
     │
     ├── services/
-    │   ├── gemini.service.js       # AI content generation (roadmaps, lessons, feedback)
+    │   ├── ai.service.js           # AI content generation (roadmaps, lessons, feedback)
     │   └── stats.service.js        # Analytics and performance calculations
     │
     └── utils/
@@ -64,7 +64,7 @@ JWT Middleware (requireAuth) — validates Bearer token
    [Business Logic Split]
       │
       ├─→ Database Query (Mongoose)     └─→ External Service
-      │    (User, Roadmap,                  (Gemini API for
+      │    (User, Roadmap,                  (Groq API for
       │     Session, Progress)              AI content)
       │
       └─→ Database Write (if needed)    └─→ Cache Check
@@ -94,8 +94,8 @@ Client requests: GET /api/session/m1-w1-d1
   │    │
   │    └─ If NOT found:
   │         │
-  │         ├─→ Call Gemini Service to generate content
-  │         │    (two-call pipeline for lessons: Pro thinks → Flash formats)
+         ├─→ Call AI Service to generate content
+         │    (Groq Llama 70b for lessons, 8b for roadmap & feedback)
   │         │
   │         ├─→ Validate content with guardSessionContent()
   │         │    (ensure structure matches expected schema)
@@ -136,9 +136,9 @@ Client submits: POST /api/session/m1-w1-d1/exam
 
 | Decision | Why | Alternative |
 |----------|-----|-------------|
-| **Two-call Gemini pipeline for lessons only** | Lessons need deep cognition (Pro thinks deeply), then Flash formats. Other content (roadmaps, MCQs, feedback) is fast and clear—Flash handles it alone. Saves cost and latency. | Single call for all → slower, more expensive, lower quality for complex lessons |
+| **Groq model selection per task** | Llama 70b for lessons (superior reasoning), 8b for roadmap/feedback (speed-optimized). Free tier TPM limits force this split. | Single model for all → hits TPM limits, slower, more expensive |
 | **Session caching in MongoDB** | AI is called once per day per user. Content is generated, validated, saved, then served from DB forever. Fast and cheap. | Regenerate on every request → 10x API calls, 10x cost, high latency |
-| **guardSessionContent before every DB write** | If Gemini returns malformed content, we catch it before caching. Prevents MongoDB from storing broken lessons that corrupt the user journey. | Trust Gemini output → cached corrupt data breaks lesson flow permanently |
+| **guardSessionContent before every DB write** | If AI model returns malformed content, we catch it before caching. Prevents MongoDB from storing broken lessons that corrupt the user journey. | Trust AI output → cached corrupt data breaks lesson flow permanently |
 | **calculateNextPosition as single source of truth** | One utility function, used everywhere progress advances. Ensures all code paths (learning → revision → exam → next module) follow the same logic. No drift. | Inline position logic in each controller → inconsistent state, skip days, loop logic |
 | **.lean() on stats queries** | Progress stats don't need full Mongoose document features (virtuals, methods, hooks). Return plain JS objects fast. | Full documents → waste memory and CPU parsing |
 | **JWT in Bearer tokens via Authorization header** | Standard HTTP practice. Easy CORS-safe, no cookies needed, stateless. | Cookies → CORS complexity; session tokens → server-side state burden |
@@ -255,9 +255,9 @@ Starts the server with `node` directly. No auto-restart. Use in deployed environ
 - **Cause:** Token was signed with one `JWT_SECRET`, but server is running with a different secret.
 - **Fix:** Ensure `JWT_SECRET` in `.env` matches the one used to sign tokens. This is especially critical in staging/production deployments.
 
-### ❌ Gemini Generation Timeouts
+### ❌ AI Generation Timeouts
 - **Problem:** Session endpoint hangs for 30+ seconds, then returns 500 error.
-- **Cause:** Gemini API is slow or unreachable. Pro model (used for lessons) can take 5-10 seconds.
+- **Cause:** Groq API is slow or unreachable (rare on free tier). 70b model can take 3-5 seconds.
 - **Fix:** Add timeout middleware (`express-timeout-handler` or similar). Return partial content or cached fallback if generation fails.
 
 ### ❌ User Isolation Breaches
@@ -320,25 +320,25 @@ Starts the server with `node` directly. No auto-restart. Use in deployed environ
    const feature = await Feature.findOne({ userId });
    ```
 
-### Adding a New Gemini Service
+### Adding a New AI Service
 
-1. **Create method** in `src/services/gemini.service.js`:
+1. **Create method** in `src/services/ai.service.js`:
    ```javascript
    export const generateMyContent = async (params) => {
-     const response = await ai.models.generateContent({
-       model: STRUCTURE_MODEL, // Flash for most content
-       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-       generationConfig: { responseSchema: MY_SCHEMA, ... }
+     const response = await groq.chat.completions.create({
+       model: REASONING_MODEL, // llama-3.3-70b-versatile for complex tasks
+       messages: [{ role: 'user', content: prompt }],
+       max_tokens: 4096
      });
      
      // Always validate before returning
-     return response.candidates[0].content.parts[0].text;
+     return response.choices[0].message.content;
    };
    ```
 
 2. **Import and use in controller**:
    ```javascript
-   import { generateMyContent } from '../services/gemini.service.js';
+   import { generateMyContent } from '../services/ai.service.js';
    
    const content = await generateMyContent({ ... });
    guardSessionContent(type, content); // validate
@@ -367,7 +367,54 @@ const progress = await Progress.findOne({ roadmapId });
 
 Use linting rules or TypeScript to catch this at development time, not production time.
 
+## Environment Variables
+
+| Variable | Description | Reference |
+|----------|-------------|-----------|
+| `MONGO_URI` | MongoDB connection string | `mongodb+srv://user:pass@cluster.mongodb.net/skillmaster` |
+| `JWT_SECRET` | Secret key for signing JWT tokens (32+ chars recommended) | Generated locally |
+| `GROQ_API_KEY` | Groq API key | https://console.groq.com/keys |
+| `PORT` | Server port (default 5000) | Optional |
+
+## npm Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `express` | ^5.x | HTTP server & routing |
+| `mongoose` | ^8.x | MongoDB ODM & schema validation |
+| `groq-sdk` | ^0.x | Groq API client for Llama 3 model family |
+| `jsonwebtoken` | ^9.x | JWT token encoding/decoding |
+| `bcryptjs` | ^2.x | Password hashing & comparison |
+| `dotenv` | ^16.x | Environment variable loading |
+| `cors` | ^2.x | Cross-origin request handling |
+| `nodemon` | ^3.x | Dev: auto-restart on file changes |
+
+## AI Service
+
+**File:** `src/services/ai.service.js`  
+**Provider:** Groq (https://console.groq.com/keys)
+
+**Models:**
+| Model | Usage | Free Tier TPM |
+|---|---|---|
+| `llama-3.3-70b-versatile` | Lesson content generation | 12,000 |
+| `llama-3.1-8b-instant` | Roadmap generation + feedback | 20,000 |
+
+**Why model selection matters:**  
+Groq's free tier TPM limit = input tokens + max_tokens. The 70b model is capped at 4096 output tokens per call to stay under 12k TPM. The 8b model handles roadmap (8192 output) because its 20k TPM limit allows it.
+
+**Exports (identical signatures to previous gemini.service.js):**
+- `generateRoadmapSkeleton(data)` → roadmapJson
+- `generateLessonContent(data)` → `{ parts, task }`
+- `generateFeedback(data)` → string with `OUTCOME:` and `RESOURCES:` sections
+
+**Error codes (preserved for controller compatibility):**
+- `JSON_PARSE_FAILURE` — invalid JSON from model, triggers retry
+- `GEMINI_FAILURE` — unrecoverable error after 3 attempts
+
+**Retry logic:** 3 attempts, backoff 5s → 15s → 30s on 429 / 500 / 503. Fails fast on 413 (request too large).
+
 ---
 
 **Last Updated:** May 2026  
-**Stack:** Node.js ES Modules, Express 5, MongoDB/Mongoose, JWT, bcrypt, Google Gemini 2.5 (Pro + Flash)
+**Stack:** Node.js ES Modules, Express 5, MongoDB/Mongoose, JWT, bcrypt, Groq Llama 3 (70b + 8b)

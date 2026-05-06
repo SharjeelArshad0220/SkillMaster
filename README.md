@@ -11,7 +11,7 @@ Learn smarter with personalized learning paths powered by AI.
 ![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
-![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B6?style=flat-square)
+![Groq](https://img.shields.io/badge/Groq%20API-000000?style=flat-square)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 ![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white)
 
@@ -28,7 +28,7 @@ Learn smarter with personalized learning paths powered by AI.
 ### Prerequisites
 - Node.js >= 20
 - MongoDB Atlas account (free M0 tier)
-- Google AI Studio API key (free tier or pay-as-you-go)
+- Groq API key (free tier, no billing required)
 
 ### Installation
 Clone the repository and install dependencies:
@@ -53,7 +53,7 @@ Create a `.env` file in the `server/` directory with the following keys:
 ```
 MONGO_URI=mongodb+srv://your-user:your-pass@cluster.mongodb.net/skillmaster
 JWT_SECRET=your-32-char-random-secret
-GEMINI_API_KEY=your-api-key-from-aistudio.google.com
+GROQ_API_KEY=your-api-key-from-console.groq.com
 PORT=5000
 ```
 
@@ -89,7 +89,7 @@ Expected response:
 ```
 
 ## Purpose
-Skill Master is an AI-powered adaptive learning platform that generates personalized learning roadmaps using Google Gemini, guiding users through structured lessons, interactive tasks, feedback loops, and assessments—all coordinated between a React frontend and Express.js backend.
+Skill Master is an AI-powered adaptive learning platform that generates personalized learning roadmaps using Groq's Llama models, guiding users through structured lessons, interactive tasks, feedback loops, and assessments—all coordinated between a React frontend and Express.js backend.
 
 ## Responsibility Boundary
 
@@ -173,6 +173,12 @@ RESULT
   - **Why**: Gemini Pro has superior reasoning (for lesson thinking phase), Flash is faster and cheaper (for formatting and feedback)
   - **Alternative**: Single model for everything—slower, more expensive, lower quality for thinking-intensive tasks
   - **Where**: `server/src/services/gemini.service.js`
+
+- **AI Provider Migration (Gemini → Groq)**
+  - **Why**: Google Gemini billing setup is geographically restricted in Pakistan. Free tier produced persistent 503 errors during demos.
+  - **What**: Migrated to Groq API using Meta's Llama 3.3 and Llama 3.1 models.
+  - **How**: Single file change (gemini.service.js → ai.service.js). Zero controller changes. Error codes preserved for backward compatibility.
+  - **Result**: Sub-3-second inference, no rate limit errors on free tier, Pakistan-compatible billing.
 
 - **Flexible Resource Parsing**
   - **Why**: Gemini output format varies; strict regex patterns fail. Relaxed pattern `/RESOURCES:\s*([\s\S]*?)$/im` handles space or newline
@@ -273,7 +279,7 @@ RESULT
 ## Dependencies
 
 ### Depends On:
-- **Google Gemini API** — AI content generation, feedback, evaluation (critical path)
+- **Groq API** — AI content generation, feedback, evaluation (critical path)
 - **MongoDB** — persistent storage for Users, Roadmaps, Sessions, Progress
 - **Express.js** — HTTP server, routing, middleware
 - **React** — UI framework, component lifecycle
