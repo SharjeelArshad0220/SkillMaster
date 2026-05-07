@@ -16,7 +16,7 @@ const OPENROUTER_BASE = 'https://openrouter.ai/api/v1/chat/completions';
 
 // ✅ BEST FREE COMBO
 const QUALITY_MODEL = 'qwen/qwen-2.5-7b-instruct:free';
-const FAST_MODEL    = 'meta-llama/llama-3.1-8b-instruct:free';
+const FAST_MODEL    = 'qwen/qwen-2.5-7b-instruct:free';
 
 // ==============================================================================
 // UTILITIES
