@@ -3,7 +3,7 @@
 Learn smarter with personalized learning paths powered by AI.
 
 ## Live Demo
-[https://skill-master-xi.vercel.app/](https://skill-master-xi.vercel.app/)
+[https://skill-master-ls.vercel.app/](https://skill-master-ls.vercel.app/)
 
 ## Tech Stack
 ![React 18](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white)
