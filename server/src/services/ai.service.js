@@ -1,69 +1,370 @@
 /*==============================================================================
-SKILL MASTER — AI SERVICE v2 (OpenRouter / DeepSeek V3)
-Drop-in replacement for gemini.service.js
+SKILL MASTER — AI SERVICE v4 (OpenAI — Mentor-Driven, Semantically-Sized)
+Replaces ai.service.js v3. Same provider (OpenAI), same exports, same signatures.
+Zero controller changes required — this is a prompt-quality and code-quality
+rewrite, not a provider migration.
 
-PROVIDER: OpenRouter (https://openrouter.ai)
-MODELS:
-  - deepseek/deepseek-chat       → roadmap generation + lesson content
-  - meta-llama/llama-3.1-8b-instruct:free → feedback (free, no credits needed)
+WHAT CHANGED FROM v3, AND WHY
+------------------------------------------------------------------------------
+1. MENTOR-DRIVEN GENERATION, NOT TEMPLATE-FILLING.
+   Both the lesson pipeline and the roadmap generator now run the same
+   reasoning discipline used in this codebase's engineering-mentor teaching
+   process: analyze the real objective and the learner's actual stated goal,
+   classify what KIND of content this is (concept / tool / architecture /
+   debugging / workflow / judgment-call), and let that classification pick
+   the teaching shape — instead of forcing every lesson through one fixed
+   3-part / 2-3-card template regardless of what the topic actually needs.
 
-WHY OPENROUTER:
-  - Single API key, 50+ models, OpenAI-compatible
-  - No TPM (tokens-per-minute) nonsense — rate limits are per-request
-  - DeepSeek V3 = GPT-4o level intelligence, generous free credits
-  - Pakistan signup works, no billing restrictions
-  - If one model fails, swap model string — zero other code changes
+2. SEMANTIC SIZING, NOT FIXED COUNTS.
+   Previous versions hardcoded "EXACTLY 3 parts", "2-3 cards per part",
+   "10-15 MCQs". None of that is enforced by the JSON Schema itself — arrays
+   were always open-length — the rigidity was entirely in the PROMPT. That
+   rigidity is removed here. Part count, card count, and end-of-lesson
+   question count are now OUTPUTS of the mentor's reasoning about what a
+   given topic actually requires, not INPUTS forced onto every topic. A
+   simple mental model gets a short, tight part; a genuine multi-piece
+   architecture gets more room. Light guardrails remain only to prevent
+   degenerate output (a 20-part lesson, a single 4000-word card) — they are
+   safety ceilings, not targets.
 
-EXPORTS (identical signatures to gemini.service.js — zero controller changes):
+3. MARKDOWN-NATIVE CONTENT.
+   The frontend now renders markdown (react-markdown + Tailwind Typography).
+   Card content, task descriptions, and feedback text are written with
+   markdown syntax (bold, inline code, fenced code blocks, bullet lists)
+   where it genuinely aids clarity — code is no longer flattened into prose.
+
+4. MASTERY ARCHITECTURE, NOT DECORATIVE QUIZZES.
+   Every part's miniExercise must test judgment/reasoning against a
+   realistic scenario, never bare recall of a definition. The end-of-lesson
+   task is a genuine mastery task — a concrete, self-directed challenge that
+   exercises the day's competency the way a real engineering situation
+   would, never something answerable by pattern-matching wording back at
+   the lesson text.
+
+5. ROADMAP GENERATION UPGRADED TO gpt-4.1 (was gpt-4.1-mini in v3).
+   Roadmap generation is a single call, but it happens exactly once per user
+   and its output shapes every day of their entire journey — a bad roadmap
+   is a bad product experience with no opportunity for the day-to-day
+   generation quality to compensate. That leverage justifies the stronger
+   model even without a second (formatting) pass. Two-pass is still NOT used
+   for roadmaps: curriculum architecture is structural/evaluative reasoning,
+   not prose craftsmanship, so the quality gain from splitting reasoning and
+   formatting into separate calls is far smaller here than it is for
+   lessons — the cost of a second call is not justified by the return.
+
+6. ONE SHARED RETRY/BACKOFF CORE (withRetry). v3 duplicated the retry loop
+   almost identically between the free-text call and the structured call.
+   Both now wrap a single `withRetry()` helper — the only thing that differs
+   between them is the OpenAI request shape and how the response is parsed.
+
+EXPORTS (unchanged signatures — zero controller changes):
   generateRoadmapSkeleton(data) → roadmapJson
-  generateLessonContent(data)   → { parts, task }
-  generateFeedback(data)        → string (with OUTCOME: and RESOURCES: sections)
+  generateLessonContent(data)   → { competencyGoal, parts, task }
+  generateFeedback(data)        → string (OUTCOME: / RESOURCES: sections)
 
-REQUIRED ENV VAR:
-  OPENROUTER_API_KEY — get from https://openrouter.ai/keys
-
-IMPORT PATHS TO UPDATE (only these 2 files):
-  server/src/controllers/session.controller.js  → from '../services/ai.service.js'
-  server/src/controllers/roadmap.controller.js  → from '../services/ai.service.js'
+REQUIRED ENV VAR: OPENAI_API_KEY
 ==============================================================================*/
 
+import OpenAI from 'openai';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const OPENROUTER_BASE = 'https://openrouter.ai/api/v1/chat/completions';
-const QUALITY_MODEL   = 'deepseek/deepseek-chat';                        // roadmap + lessons
-const FAST_MODEL      = 'meta-llama/llama-3.1-8b-instruct:free';         // feedback
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// ==============================================================================
+// CONFIG — every tunable constant lives here, not scattered through the file.
+// ==============================================================================
+
+const MODELS = {
+  THINKING: 'gpt-4.1',        // lesson reasoning pass — free-form, no schema
+  STRUCTURE: 'gpt-4.1-mini',  // lesson formatting pass — schema-locked repackaging
+  ROADMAP: 'gpt-4.1',         // single combined call, strong model (see header note #5)
+  FEEDBACK: 'gpt-4.1-mini'    // frequent, short-form, evaluative — mini is sufficient
+};
+
+const RETRY = {
+  MAX_ATTEMPTS: 3,
+  BACKOFF_MS: [5000, 15000, 30000] // attempt 1 / 2 / 3 wait times
+};
+
+const MAX_TOKENS = {
+  LESSON_THINKING: 5000,   // raw reasoning + prose — content is semantically sized, not capped small
+  LESSON_STRUCTURE: 9000,  // must comfortably fit a longer-than-average lesson without truncating
+  ROADMAP: 9000,
+  FEEDBACK: 1024
+};
+
+// ==============================================================================
+// JSON SCHEMAS (OpenAI Structured Outputs, strict mode)
+// Strict mode requires additionalProperties:false on every object and every
+// property listed in "required" (use nullable types for conceptually-optional
+// fields rather than omitting them). Arrays are intentionally left with no
+// minItems/maxItems — length is semantic, decided by the model's reasoning,
+// not enforced by the schema. Guardrails against degenerate output live in
+// the prompt (soft ceilings) and in validateLessonStructure() (non-emptiness),
+// never in artificial schema-level count limits.
+// ==============================================================================
+
+const LESSON_JSON_SCHEMA = {
+  name: 'lesson_content',
+  strict: true,
+  schema: {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      competencyGoal: {
+        type: 'string',
+        description: 'One sentence: "After this lesson, the learner should be able to ___." Forces the objective to be explicit and testable rather than implicit.'
+      },
+      parts: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            partNumber: { type: 'integer' },
+            partTitle: { type: 'string' },
+            cards: {
+              type: 'array',
+              items: {
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                  cardNumber: { type: 'integer' },
+                  content: {
+                    type: 'string',
+                    description: 'Markdown-formatted teaching content: use **bold**, `inline code`, fenced ```code blocks``` with a language tag, and bullet lists where they aid clarity. Do not use # / ## headings inside a card.'
+                  }
+                },
+                required: ['cardNumber', 'content']
+              }
+            },
+            miniExercise: {
+              type: 'object',
+              additionalProperties: false,
+              properties: {
+                question: { type: 'string' },
+                options: { type: 'array', items: { type: 'string' } },
+                correctIndex: { type: 'integer' },
+                explanation: { type: 'string' }
+              },
+              required: ['question', 'options', 'correctIndex', 'explanation']
+            }
+          },
+          required: ['partNumber', 'partTitle', 'cards', 'miniExercise']
+        }
+      },
+      task: {
+        type: ['object', 'null'],
+        additionalProperties: false,
+        properties: {
+          type: { type: 'string', enum: ['text', 'mcq'] },
+          description: {
+            type: 'string',
+            description: 'Markdown-formatted. For "text" tasks this is the full mastery-task prompt (may include a fenced code block or scenario). For "mcq" tasks this is a short framing line.'
+          },
+          questions: {
+            type: 'array',
+            items: {
+              type: 'object',
+              additionalProperties: false,
+              properties: {
+                question: { type: 'string' },
+                options: { type: 'array', items: { type: 'string' } },
+                correctIndex: { type: 'integer' },
+                topicTag: { type: 'string' }
+              },
+              required: ['question', 'options', 'correctIndex', 'topicTag']
+            }
+          }
+        },
+        required: ['type', 'description', 'questions']
+      }
+    },
+    required: ['competencyGoal', 'parts', 'task']
+  }
+};
+
+const ROADMAP_JSON_SCHEMA = {
+  name: 'roadmap_skeleton',
+  strict: true,
+  schema: {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      skillName: { type: 'string' },
+      targetLevel: { type: 'string' },
+      totalModules: { type: 'integer' },
+      estimatedWeeks: { type: 'integer' },
+      modules: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            moduleNumber: { type: 'integer' },
+            title: { type: 'string' },
+            weeks: {
+              type: 'array',
+              items: {
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                  weekNumber: { type: 'integer' },
+                  title: { type: 'string' },
+                  days: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      additionalProperties: false,
+                      properties: {
+                        dayNumber: { type: 'integer' },
+                        dayName: { type: 'string' },
+                        type: { type: 'string', enum: ['Learning', 'Revision', 'Exam'] },
+                        title: { type: 'string' },
+                        topicsList: { type: 'array', items: { type: 'string' } },
+                        examQuestions: {
+                          type: 'array',
+                          items: {
+                            type: 'object',
+                            additionalProperties: false,
+                            properties: {
+                              question: { type: 'string' },
+                              options: { type: 'array', items: { type: 'string' } },
+                              correctIndex: { type: 'integer' },
+                              topicTag: { type: 'string' }
+                            },
+                            required: ['question', 'options', 'correctIndex', 'topicTag']
+                          }
+                        }
+                      },
+                      required: ['dayNumber', 'dayName', 'type', 'title', 'topicsList', 'examQuestions']
+                    }
+                  }
+                },
+                required: ['weekNumber', 'title', 'days']
+              }
+            }
+          },
+          required: ['moduleNumber', 'title', 'weeks']
+        }
+      }
+    },
+    required: ['skillName', 'targetLevel', 'totalModules', 'estimatedWeeks', 'modules']
+  }
+};
+
+// ==============================================================================
+// SHARED MENTOR PRINCIPLES
+// This is the actual engine. Both lesson generation and roadmap generation
+// are instances of the same discipline: figure out what the learner really
+// needs in order to reach THEIR stated goal, then let that determine shape
+// and length — never the reverse. Extracted once, specialized per use-site,
+// so the underlying philosophy can't drift out of sync between the two.
+// ==============================================================================
+
+const MENTOR_PRINCIPLES = `You are an engineering mentor. Your only success metric is whether the learner becomes measurably more capable of doing the real thing they are trying to do — not whether you covered a topic, and not whether you filled a template.
+
+Before producing anything, reason through this internally (do not show this reasoning in your output):
+
+1. OBJECTIVE — What specific capability must this deliverable produce? State it as "...should be able to ___" using a real verb: explain, debug, design, modify, evaluate, choose, build. Never settle for "understand" alone — it is not testable.
+
+2. REAL TARGET, NOT GENERIC TOPIC — The learner has a stated goal. Teach toward THAT goal, using it as the lens for every example and every decision about depth, not toward a generic, one-size-fits-all treatment of the topic name. Someone building a production system and someone doing a weekend hobby project asking about the "same" topic need different lessons — different examples, different depth, different emphasis.
+
+3. FAILURE MODES — Where do people genuinely get this wrong? Teach directly against that specific confusion, not a sanitized version that avoids it.
+
+4. CLASSIFICATION — Is this fundamentally a Concept, a Tool, an Architecture/Tradeoff decision, a Debugging skill, or a Workflow/Process judgment call? Let this determine the shape:
+   - Concept → mental model + analogy + the specific misconception it corrects
+   - Tool → what it's for, how it's configured/operated, how you troubleshoot it when it breaks
+   - Architecture/Decision → the competing constraints, why this tradeoff wins over the alternatives, what breaks if you choose wrong
+   - Debugging → symptom → investigation approach → diagnosis → fix, strictly in that order
+   - Workflow/Process → the sequence, the decision points, what a mistake looks like at each one
+
+SEMANTIC SIZE — the number of parts, sections, or items you produce is an OUTPUT of the reasoning above, not a fixed input. Content that is genuinely one crisp idea deserves to be short. Content that is a real multi-piece system deserves more room. Asymmetric length between sections is correct when the underlying content is asymmetric — never pad a thin topic to look substantial, and never compress a dense one to hit a round number.
+
+SIGNAL-TO-NOISE — before including any sentence, ask: does this directly serve the objective in step 1? If not, cut it. This applies especially to generic motivational filler, restated definitions, and background trivia that doesn't change what the learner can do afterward.
+
+REAL-WORLD ACCURACY — teach current, production-grade practice. Never present a legacy pattern as the modern default. If historical context genuinely helps (explaining why a modern approach exists), label it explicitly as historical.
+
+DO NOT DO THE LEARNER'S WORK FOR THEM — concrete examples and demonstrations that build understanding are necessary and correct. Do not write a finished solution to the exact exercise you are about to assign.`;
+
+const LESSON_MASTERY_ADDENDUM = `MASTERY ARCHITECTURE (mandatory for every lesson):
+
+- Each part's miniExercise must test judgment against a realistic scenario, never bare recall.
+  Weak (recall): "What does useState do?"
+  Strong (judgment): "A counter isn't updating when you click a button twice in the same event handler. What's actually happening, and how do you fix it?"
+
+- The end-of-lesson task is a genuine MASTERY TASK: a concrete, self-directed challenge that exercises the day's competency the way a real engineering situation would. It must require a decision, not just execution, and must be completable using only what this lesson taught — never something answerable by pattern-matching wording back at the lesson text.
+
+SIZING GUARDRAILS (safety ceilings, not targets — stay well under these for any topic that doesn't genuinely need them):
+- Typically 2-5 parts. Do not exceed 7 regardless of topic — beyond that, the lesson stops being learnable in one sitting and should have been two days, not one lesson.
+- Cards per part: however many distinct ideas that part actually contains — usually 1-4. Do not pad.
+- If the task is type "mcq": however many distinct testable ideas the day's topics produced — usually 4-10. Do not pad to hit a round number, and do not exceed roughly 15 regardless.
+
+FORMATTING: content and task description are markdown. Use **bold** for key terms, backtick-wrapped inline code for identifiers, fenced code blocks with a language tag for anything multi-line, and bullet lists for enumerable items. Do not use # / ## heading markup inside card content — the part title already serves that role.
+
+BANNED PHRASES: "it is important to note", "in conclusion", "as we can see", "let us explore", "in this section", "fundamentals", "in the world of".`;
+
+const LESSON_THINKING_SYSTEM = `${MENTOR_PRINCIPLES}
+
+You are drafting the raw content for one day's lesson. Write in engineer voice — direct, opinionated, real examples, like a senior teammate explaining something in a Slack thread, not a textbook.
+
+${LESSON_MASTERY_ADDENDUM}
+
+OUTPUT FORMAT: Plain text, no JSON. Start with a single line: "COMPETENCY GOAL: <the one-sentence objective>". Then label each part clearly ("PART 1 — <working title>") and each card within it ("CARD 1:"), followed by a labelled "MINI EXERCISE" for that part. End with a labelled "TASK" section (omit entirely only if the prompt tells you this is a revision session). These labels are structural markers for the next processing step only — do not use JSON or markdown heading syntax for them.`;
+
+const REVISION_THINKING_SYSTEM = `${MENTOR_PRINCIPLES}
+
+You are drafting a targeted revision session for a learner who already sat through the original lesson once and got specific things wrong. Your job is not to re-teach everything — it is to fix the specific misunderstanding, from a genuinely different angle than the first pass, using a new example they haven't seen.
+
+SIZING: Revision is deliberately more bounded than a full lesson — its purpose is efficient re-teaching, not full re-coverage. Normally this is ONE part. Only split into two parts if the weak topics are genuinely unrelated clusters that don't benefit from being taught together. Cards: roughly one focused card per distinct weak topic, typically 2-4 total, and never more than 6 — if there are more than 6 weak topics, group the closely related ones into a single card rather than listing every one separately.
+
+Be direct about the correction: "You got this wrong before because X — here's what's actually happening." No task section — revision sessions end after the mini exercise.
+
+FORMATTING: same markdown rules as a full lesson (bold, inline code, fenced code blocks, bullet lists; no heading markup).
+
+OUTPUT FORMAT: Plain text. Start with "COMPETENCY GOAL: <one sentence>". Label part(s) and cards the same way a full lesson does. End with a labelled MINI EXERCISE per part. No TASK section.`;
+
+const LESSON_FORMATTER_SYSTEM = `You are a precise structuring engine. You receive rich lesson content written by a mentor and repackage it into the required schema — nothing more.
+
+Rules:
+- Do NOT simplify, generalize, or trim any example, code snippet, or explanation. Preserve the author's voice, specifics, and markdown formatting exactly.
+- Segment into parts and cards exactly where the source material's own labels ("PART 1", "CARD 1", etc.) break it — do not invent, merge, or split beyond what the source already delineates. The number of parts and cards is whatever the source contains; do not force it toward any particular count.
+- Extract the "COMPETENCY GOAL:" line into the competencyGoal field verbatim (as one clean sentence, without the label itself).
+- Extract each labelled "MINI EXERCISE" into that part's miniExercise object.
+- If the source has a labelled "TASK" section, extract it into task (type "text" with an empty questions array, or type "mcq" with the questions array populated — infer which from the content). If the source has no TASK section at all, set task to null.
+- Preserve all markdown syntax in content and description fields exactly as written — do not strip or alter it.
+- Your only job is lossless repackaging into the schema. If you are ever unsure whether to add, remove, or simplify something: don't.`;
+
+const ROADMAP_SYSTEM = `${MENTOR_PRINCIPLES}
+
+You are designing a full multi-week curriculum, not a single lesson. The same discipline applies at this larger scale:
+
+- The learner's stated goal (not the skill name alone) determines what the roadmap must actually cover, in what order, and at what depth. A roadmap for "MERN stack" aimed at a founder-level architect building a production AI product looks substantially different from one aimed at someone doing a weekend hobby project — different module emphasis, different depth per topic, different real-world framing throughout.
+
+- SEMANTIC SIZING AT CURRICULUM SCALE — module count and week count are OUTPUTS of how much genuine complexity the stated goal requires, not a default you reach for. Do not compress a skill that legitimately needs 10-12 weeks into 4 just to look tidy, and do not pad a narrow skill into an artificially long roadmap. Let real complexity set the length.
+
+- Within a Learning day, topicsList should contain however many specific, actionable topics that day's depth actually warrants — typically 2-4, driven by what's genuinely coverable in one sitting at this learner's stated pace, not a fixed count applied uniformly across every day regardless of topic density.
+
+- Exam question count per week should reflect how many genuinely distinct, testable ideas that week actually covered — typically 4-8. A week that covered five substantially different topics needs more questions than a week that went deep on one thing; do not force every week to the same count.
+
+- Day titles are outcomes, not category labels: "Making Components Reusable with Props" not "React Props".
+
+- Later modules build on earlier ones — never re-teach a concept, only apply it in a new, higher-stakes context.
+
+HARD STRUCTURAL CONSTRAINT (not semantic — this is fixed by how the product tracks progress and must never vary): every week has EXACTLY 7 days, always in this exact order: dayNumber 1-5 = Learning, dayNumber 6 = Revision, dayNumber 7 = Exam. Revision days have topicsList: [] and examQuestions: []. Exam days have topicsList: [] and their examQuestions populated per the semantic sizing rule above. correctIndex is always an integer 0-3.
+
+Return ONLY valid JSON matching the schema. No markdown. No text outside the JSON.`;
+
+const FEEDBACK_SYSTEM = `You are an expert mentor evaluating learner work. Be direct, specific, and useful — never generic praise, never vague criticism. Diagnose the actual gap in understanding, not just the surface mistake, and give exactly one concrete next step the learner can act on immediately. Markdown is fine for inline code or short emphasis, but keep it light — this is short-form feedback, not a lesson. The OUTCOME line is mandatory and must never be omitted.`;
 
 // ==============================================================================
 // UTILITIES
 // ==============================================================================
 
-const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/**
- * Parses JSON from model response text.
- * Strips markdown code fences (``` json ... ```) if present.
- * @throws {Error} JSON_PARSE_FAILURE — triggers retry in session controller
- */
-const parseJSON = (text) => {
-  try {
-    if (typeof text === 'object') return text;
-    const cleaned = text
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/\s*```$/i, '')
-      .trim();
-    return JSON.parse(cleaned);
-  } catch {
-    console.error('[AI Service] JSON parse failed on:', text?.substring(0, 300));
-    throw new Error('JSON_PARSE_FAILURE');
-  }
-};
-
-/**
- * Validates lesson structure before saving to MongoDB.
- * @throws {Error} JSON_PARSE_FAILURE on invalid structure
- */
+/** Validates non-emptiness and minimum substance — never enforces a specific count. */
 const validateLessonStructure = (parsed) => {
   if (!parsed.parts || !Array.isArray(parsed.parts) || parsed.parts.length === 0) {
     console.error('[AI Validation] FAIL: parts array missing or empty');
@@ -75,22 +376,23 @@ const validateLessonStructure = (parsed) => {
       throw new Error('JSON_PARSE_FAILURE');
     }
     for (const card of part.cards) {
-      if (!card.content || typeof card.content !== 'string' || card.content.trim().length < 50) {
+      if (!card.content || typeof card.content !== 'string' || card.content.trim().length < 40) {
         console.error(`[AI Validation] FAIL: card content too short in part ${part.partNumber}`);
         throw new Error('JSON_PARSE_FAILURE');
       }
     }
   }
+  if (!parsed.competencyGoal || typeof parsed.competencyGoal !== 'string' || parsed.competencyGoal.trim().length < 10) {
+    console.error('[AI Validation] FAIL: competencyGoal missing or too short');
+    throw new Error('JSON_PARSE_FAILURE');
+  }
   return true;
 };
 
-/**
- * Cleans partTitle — detects hallucination (word repeated 3+ times) and strips artifacts.
- */
 const cleanPartTitle = (title) => {
   if (typeof title !== 'string' || title.trim().length === 0) return 'Topic Overview';
   const sample = title.substring(0, 80).toLowerCase();
-  const words = sample.split(/\s+/).filter(w => w.length > 3);
+  const words = sample.split(/\s+/).filter((w) => w.length > 3);
   const counts = {};
   for (const word of words) {
     counts[word] = (counts[word] || 0) + 1;
@@ -99,247 +401,193 @@ const cleanPartTitle = (title) => {
       return 'Topic Overview';
     }
   }
-  return title.replace(/[,"\s]+$/, '').replace(/^[,"\s]+/, '').trim().substring(0, 80);
+  return title.replace(/[,"\s]+$/, '').replace(/^[,"\s]+/, '').trim().substring(0, 100);
 };
 
 // ==============================================================================
-// CORE CALL — All AI requests go through here
+// CORE CALL — one retry/backoff policy, two thin request-shape wrappers.
 // ==============================================================================
 
 /**
- * Makes a single OpenRouter API request with retry and exponential backoff.
- * Uses native fetch (Node 18+) — no SDK dependency needed.
- * Retries on 429 (rate limit), 500, 503. Fails fast on 400/413.
- *
- * @param {string} model        - OpenRouter model string
- * @param {string} systemPrompt - System instruction
- * @param {string} userPrompt   - Task prompt
- * @param {boolean} isJson      - Whether to request JSON output
- * @param {number} maxTokens    - Max output tokens
- * @returns {Promise<object|string>} Parsed JSON or raw text
- * @throws {Error} GEMINI_FAILURE | JSON_PARSE_FAILURE
+ * Runs `fn` (a zero-arg async function performing one OpenAI request) with
+ * exponential backoff on transient failures. `fn` must throw an error whose
+ * `.status` is the HTTP status when available, and may throw the sentinel
+ * messages `JSON_PARSE_FAILURE` / `TRUNCATED` to signal a retryable content
+ * failure (as opposed to a genuine API error).
  */
-const callModel = async ({ model, systemPrompt, userPrompt, isJson = true, maxTokens = 4096 }) => {
+const withRetry = async (fn, label) => {
   let attempts = 0;
-  const maxRetries = 3;
-
-  while (attempts < maxRetries) {
+  while (attempts < RETRY.MAX_ATTEMPTS) {
     try {
-      const body = {
-        model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user',   content: userPrompt   },
-        ],
-        temperature: isJson ? 0.7 : 0.6,
-        max_tokens:  maxTokens,
-      };
-
-      if (isJson) {
-        body.response_format = { type: 'json_object' };
-      }
-
-      const response = await fetch(OPENROUTER_BASE, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          'Content-Type':  'application/json',
-          'HTTP-Referer':  'https://skillmaster.ai',
-          'X-Title':       'Skill Master',
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        const errText = await response.text();
-        console.error(`[AI Service] HTTP ${response.status}:`, errText?.substring(0, 200));
-        const err = new Error(`${response.status} ${errText}`);
-        err.status = response.status;
-        throw err;
-      }
-
-      const data = await response.json();
-      const text = data.choices?.[0]?.message?.content;
-
-      if (!text) throw new Error('EMPTY_RESPONSE');
-
-      return isJson ? parseJSON(text) : text;
-
+      return await fn();
     } catch (error) {
       attempts++;
       const status = error.status || 0;
-      const is429 = status === 429 || error.message?.includes('429');
-      const is500 = status === 500 || error.message?.includes('500');
-      const is503 = status === 503 || error.message?.includes('503');
-      const isFatal = status === 400 || status === 413 || error.message === 'JSON_PARSE_FAILURE';
-      const retryable = (is429 || is500 || is503) && attempts < maxRetries;
+      const isContentRetry = error.message === 'JSON_PARSE_FAILURE' || error.message === 'TRUNCATED';
+      const isTransient = status === 429 || status === 500 || status === 503;
+      const retryable = (isTransient || isContentRetry) && attempts < RETRY.MAX_ATTEMPTS;
 
-      console.error(
-        `[AI Service] Attempt ${attempts} failed: ${error.message?.substring(0, 150)}` +
-        (retryable ? ` — retrying in ${attempts === 1 ? 5 : attempts === 2 ? 15 : 30}s` : '')
-      );
+      console.error(`[AI Service] ${label} attempt ${attempts} failed: ${error.message}${retryable ? ' — retrying' : ''}`);
 
-      if (isFatal) {
-        if (error.message === 'JSON_PARSE_FAILURE') throw error;
+      if (status === 400 && !isContentRetry) throw new Error(`GEMINI_FAILURE: ${error.message}`);
+      if (!retryable) {
+        if (isContentRetry) throw new Error('JSON_PARSE_FAILURE');
         throw new Error(`GEMINI_FAILURE: ${error.message}`);
       }
-
-      if (retryable) {
-        const ms = attempts === 1 ? 5000 : attempts === 2 ? 15000 : 30000;
-        await wait(ms);
-      } else {
-        throw new Error(`GEMINI_FAILURE: ${error.message}`);
-      }
+      await wait(RETRY.BACKOFF_MS[attempts - 1]);
     }
   }
 };
 
+/** Free-form text call — no schema. Used for the lesson thinking pass only. */
+const callThinking = ({ model, systemPrompt, userPrompt, maxTokens }) =>
+  withRetry(async () => {
+    const completion = await openai.chat.completions.create({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ],
+      temperature: 0.7,
+      max_tokens: maxTokens
+    });
+
+    if (completion.choices?.[0]?.finish_reason === 'length') throw new Error('TRUNCATED');
+    const text = completion.choices?.[0]?.message?.content;
+    if (!text) throw new Error('EMPTY_RESPONSE');
+    return text;
+  }, 'thinking pass');
+
+/** Schema-locked JSON call using OpenAI Structured Outputs (strict mode). */
+const callStructured = ({ model, systemPrompt, userPrompt, jsonSchema, maxTokens }) =>
+  withRetry(async () => {
+    const completion = await openai.chat.completions.create({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ],
+      temperature: 0.4,
+      max_tokens: maxTokens,
+      response_format: { type: 'json_schema', json_schema: jsonSchema }
+    });
+
+    if (completion.choices?.[0]?.finish_reason === 'length') throw new Error('TRUNCATED');
+    const text = completion.choices?.[0]?.message?.content;
+    if (!text) throw new Error('EMPTY_RESPONSE');
+    return JSON.parse(text); // safe: Structured Outputs guarantees schema-valid JSON
+  }, 'structured call');
+
 // ==============================================================================
-// PUBLIC API — identical signatures to gemini.service.js
+// TWO-CALL LESSON PIPELINE (learning days AND revision days both use this —
+// only the system prompts and sizing guidance differ between them)
+// ==============================================================================
+
+const generateLessonTwoPass = async ({ thinkingSystem, thinkingPrompt, formatterPrompt }) => {
+  console.log('[AI Service] Lesson: thinking pass (mentor reasoning)...');
+  const rawContent = await callThinking({
+    model: MODELS.THINKING,
+    systemPrompt: thinkingSystem,
+    userPrompt: thinkingPrompt,
+    maxTokens: MAX_TOKENS.LESSON_THINKING
+  });
+
+  console.log('[AI Service] Lesson: formatting pass (schema-locked repackaging)...');
+  const structured = await callStructured({
+    model: MODELS.STRUCTURE,
+    systemPrompt: LESSON_FORMATTER_SYSTEM,
+    userPrompt: `${formatterPrompt}\n\n---\nRAW LESSON CONTENT TO STRUCTURE:\n${rawContent}`,
+    jsonSchema: LESSON_JSON_SCHEMA,
+    maxTokens: MAX_TOKENS.LESSON_STRUCTURE
+  });
+
+  validateLessonStructure(structured);
+  structured.parts = structured.parts.map((part) => ({ ...part, partTitle: cleanPartTitle(part.partTitle) }));
+  return structured;
+};
+
+// ==============================================================================
+// PUBLIC API — identical signatures to v3
 // ==============================================================================
 
 /**
- * Generates the full roadmap skeleton — modules, weeks, days, exam questions.
- *
- * @param {object} data
- * @param {string} data.skillInput
- * @param {string} data.motivation
- * @param {string} data.currentLevel
- * @param {string} data.role
- * @param {string} data.learningStyle
- * @param {string} data.goalClarity
- * @param {string} data.dailyTime
- * @returns {Promise<object>} roadmapJson
+ * Generates the full roadmap skeleton. Single call (see header note #5 for
+ * why this stays single-pass while lessons are two-pass), on the strong
+ * model, schema-locked directly.
  */
 export const generateRoadmapSkeleton = (data) => {
-  const systemPrompt = `You are an expert curriculum designer. Design practical, realistic learning roadmaps.
-
-STRICT RULES:
-- Each week = EXACTLY 7 days: dayNumber 1-5 = Learning, dayNumber 6 = Revision, dayNumber 7 = Exam
-- Learning days: topicsList = 2-4 specific actionable topics (NOT category names)
-- Revision day: topicsList = [], no examQuestions field
-- Exam day: topicsList = [], EXACTLY 5 MCQ questions in examQuestions
-- Day titles are OUTCOMES not labels: "Making Components Reusable with Props" not "React Props"
-- Realistic pacing — let skill complexity set module count
-- correctIndex = integer 0-3
-- Return ONLY valid JSON. No markdown. No text outside JSON.
-
-JSON STRUCTURE:
-{"skillName":"string","targetLevel":"string","totalModules":0,"estimatedWeeks":0,"modules":[{"moduleNumber":1,"title":"string","weeks":[{"weekNumber":1,"title":"string","days":[{"dayNumber":1,"dayName":"Monday","type":"Learning","title":"string","topicsList":["string"]},{"dayNumber":6,"dayName":"Saturday","type":"Revision","title":"string","topicsList":[]},{"dayNumber":7,"dayName":"Sunday","type":"Exam","title":"string","topicsList":[],"examQuestions":[{"question":"string","options":["string","string","string","string"],"correctIndex":0,"topicTag":"string"}]}]}]}]}`;
-
-  const userPrompt = `Generate a learning roadmap:
+  const userPrompt = `Design a learning roadmap for this learner:
 Skill: ${data.skillInput}
-Goal: ${data.motivation || 'Not specified'}
-Level: ${data.currentLevel} | Role: ${data.role}
-Style: ${data.learningStyle} | Clarity: ${data.goalClarity}
-Daily time: ${data.dailyTime}
+Their actual stated goal: ${data.motivation || 'Not specified'}
+Current level: ${data.currentLevel} | Role: ${data.role}
+Learning style: ${data.learningStyle} | Goal clarity: ${data.goalClarity}
+Daily time available: ${data.dailyTime}
 
-Follow the 7-day week pattern strictly. Every Sunday needs exactly 5 exam questions.`;
+Design the module/week structure and topic depth around what THEIR stated goal actually requires — not a generic treatment of "${data.skillInput}". Follow the fixed 7-day week pattern exactly as specified in your instructions.`;
 
-  return callModel({
-    model:       QUALITY_MODEL,
-    systemPrompt,
+  return callStructured({
+    model: MODELS.ROADMAP,
+    systemPrompt: ROADMAP_SYSTEM,
     userPrompt,
-    isJson:      true,
-    maxTokens:   6000,
+    jsonSchema: ROADMAP_JSON_SCHEMA,
+    maxTokens: MAX_TOKENS.ROADMAP
   });
 };
 
 /**
- * Generates lesson content for a learning or revision day.
- *
- * @param {object} data
- * @returns {Promise<object>} { parts, task }
+ * Generates lesson content for a learning day or a revision session, via the
+ * two-pass mentor pipeline. Returns { competencyGoal, parts, task }.
  */
 export const generateLessonContent = async (data) => {
-
-  // ---- REVISION / EXAM RETRY ----
   if (data.isRevision || data.isExamRetry) {
     const topics = data.weakTopicsStr || data.allWeekTopics || 'General review of the week';
 
-    const systemPrompt = `You are a senior engineer running a targeted revision session.
-Re-explain weak topics from a completely different angle with fresh examples.
-Return ONLY valid JSON. No markdown. No text outside JSON.
+    return generateLessonTwoPass({
+      thinkingSystem: REVISION_THINKING_SYSTEM,
+      thinkingPrompt: `Weak topics to address: ${topics}
+Skill: ${data.skillName} | Learner level: ${data.currentLevel || 'Beginner'}
 
-REQUIRED STRUCTURE:
-{"parts":[{"partNumber":1,"partTitle":"string (5-8 words)","cards":[{"cardNumber":1,"content":"string (min 80 words)"},{"cardNumber":2,"content":"string (min 80 words)"},{"cardNumber":3,"content":"string (min 80 words)"}],"miniExercise":{"question":"string","options":["string","string","string","string"],"correctIndex":0,"explanation":"string"}}],"task":null}
-
-RULES: EXACTLY 1 part. EXACTLY 3 cards. task MUST be null.`;
-
-    const userPrompt = `Write a revision session.
-Weak topics: ${topics}
-Skill: ${data.skillName} | Level: ${data.currentLevel || 'Beginner'}
-Re-explain from a new angle. Start each card with what the learner likely misunderstood.`;
-
-    const result = await callModel({
-      model:       QUALITY_MODEL,
-      systemPrompt,
-      userPrompt,
-      isJson:      true,
-      maxTokens:   3000,
+Re-explain each weak topic from a genuinely different angle than the original lesson likely used, with a new example. Connect related weak topics to each other where it helps; keep unrelated ones separate.`,
+      formatterPrompt: `Format this revision content into the lesson schema. Segment exactly as the source labels it (typically 1 part, occasionally 2). task must be null. Preserve all markdown formatting.`
     });
-
-    validateLessonStructure(result);
-    result.parts = result.parts.map(p => ({ ...p, partTitle: cleanPartTitle(p.partTitle) }));
-    return result;
   }
 
-  // ---- LEARNING SESSION ----
-  const systemPrompt = `You are a senior engineer mentoring a developer. Direct, practical, not a textbook.
-Return ONLY valid JSON. No markdown. No text outside JSON.
-
-REQUIRED STRUCTURE:
-{"parts":[{"partNumber":1,"partTitle":"string (5-8 words, outcome-focused)","cards":[{"cardNumber":1,"content":"string (min 100 words — open with the PROBLEM this concept solves, concrete example)"},{"cardNumber":2,"content":"string (min 100 words — The mistake most devs make here is...)"}],"miniExercise":{"question":"string","options":["string","string","string","string"],"correctIndex":0,"explanation":"string"}},{"partNumber":2,"partTitle":"string","cards":[{"cardNumber":1,"content":"string (min 100 words)"},{"cardNumber":2,"content":"string (min 100 words)"}],"miniExercise":{"question":"string","options":["string","string","string","string"],"correctIndex":0,"explanation":"string"}},{"partNumber":3,"partTitle":"string","cards":[{"cardNumber":1,"content":"string (min 100 words — synthesize Parts 1+2 in realistic scenario)"},{"cardNumber":2,"content":"string (min 100 words)"}],"miniExercise":{"question":"string","options":["string","string","string","string"],"correctIndex":0,"explanation":"string"}}],"task":{"type":"text","description":"string (one open engineering question)","questions":[]}}
-
-For conceptual topics use: "task":{"type":"mcq","description":"string","questions":[{"question":"string","options":["string","string","string","string"],"correctIndex":0,"topicTag":"string"}]}
-
-RULES: EXACTLY 3 parts. Part 1 opens with the PROBLEM not definition. Part 3 synthesizes.
-BANNED: "it is important to note", "in conclusion", "as we can see", "let us explore"`;
-
-  const userPrompt = `Write a full learning session:
-Skill: ${data.skillName} | Module ${data.moduleNumber}: ${data.moduleTitle}
-Week ${data.weekNumber}: ${data.weekTitle} | Day ${data.dayNumber} (${data.dayName})
+  return generateLessonTwoPass({
+    thinkingSystem: LESSON_THINKING_SYSTEM,
+    thinkingPrompt: `Skill: ${data.skillName}
+Module ${data.moduleNumber}: ${data.moduleTitle}
+Week ${data.weekNumber}: ${data.weekTitle}
+Day ${data.dayNumber} (${data.dayName})
 Topics: ${data.topicsList?.join(', ') || ''}
-Level: ${data.currentLevel} | Goal: ${data.motivation || 'Not specified'} | Style: ${data.learningStyle}
+Learner level: ${data.currentLevel}
+Learner's actual stated goal: ${data.motivation || 'Not specified'}
+Learning style: ${data.learningStyle}
 
-Part 1: Open with the real PROBLEM these topics solve — not the definition.
-Part 3: Synthesize Parts 1+2 in a realistic scenario connected to: "${data.motivation}"`;
-
-  const result = await callModel({
-    model:       QUALITY_MODEL,
-    systemPrompt,
-    userPrompt,
-    isJson:      true,
-    maxTokens:   4000,
+Reason through the objective, the failure modes, and the classification for these specific topics before writing. Structure the lesson (problem → core mechanism with a runnable example → synthesis toward the learner's stated goal) with however many parts and cards this content genuinely needs. End with a mastery task sized and typed (text vs mcq) appropriately for whether these topics are conceptual or practical.`,
+    formatterPrompt: `Format this lesson into the schema. Segment exactly as the source labels it — do not force a particular part or card count. Extract the TASK section (or set task: null only if the source truly has none). Preserve all markdown formatting.`
   });
-
-  validateLessonStructure(result);
-  result.parts = result.parts.map(p => ({ ...p, partTitle: cleanPartTitle(p.partTitle) }));
-  return result;
 };
 
 /**
- * Generates AI feedback on task submission.
- *
- * @param {object} data
- * @returns {Promise<string>} Feedback text with OUTCOME: and RESOURCES: sections
+ * Generates AI feedback on a task submission — text or MCQ. Single call,
+ * unchanged mechanism from v3; system prompt sharpened for directness.
  */
 export const generateFeedback = (data) => {
   let userPrompt;
 
   if (data.isMcq) {
-    const wrongAnswers = data.report.filter(r => !r.isCorrect);
-    const correctCount = data.report.filter(r => r.isCorrect).length;
+    const wrongAnswers = data.report.filter((r) => !r.isCorrect);
+    const correctCount = data.report.filter((r) => r.isCorrect).length;
     const score = data.score ?? Math.round((correctCount / data.report.length) * 100);
 
     userPrompt = `Score: ${score}% (${correctCount}/${data.report.length} correct)
 
 Wrong answers:
 ${wrongAnswers.map((r, i) =>
-    `${i + 1}. "${r.questionText}"\n   Chose: ${r.options?.[r.selectedIndex] ?? 'none'}\n   Correct: ${r.options?.[r.correctIndex]}`
-  ).join('\n\n')}
+      `${i + 1}. "${r.questionText}"\n   Chose: ${r.options?.[r.selectedIndex] ?? 'none'}\n   Correct: ${r.options?.[r.correctIndex]}`
+    ).join('\n\n')}
 
-Write exactly 3 paragraphs: (1) what they understood, (2) what broke down, (3) one concrete fix.
+Write exactly 3 paragraphs: (1) what they understood, (2) the actual confusion behind the wrong answers — not just the topic name, (3) one concrete fix.
 
 OUTCOME: positive OR OUTCOME: needs_improvement
 
@@ -350,9 +598,9 @@ If none needed: RESOURCES: (no additional resources needed)`;
   } else {
     userPrompt = `Task: ${data.description}
 Topics: ${data.topicsList}
-Answer: ${data.userAnswer}
+Learner's answer: ${data.userAnswer}
 
-Write exactly 3 paragraphs: (1) what they got right, (2) what is missing or wrong, (3) one concrete next step.
+Write exactly 3 paragraphs: (1) what they got right, (2) what's missing or wrong, (3) one concrete next step.
 
 OUTCOME: positive OR OUTCOME: needs_improvement
 
@@ -361,405 +609,10 @@ RESOURCES:
 If none needed: RESOURCES: (no additional resources needed)`;
   }
 
-  const systemPrompt = `You are an expert mentor evaluating learner work. Be direct, specific, encouraging. The OUTCOME line is mandatory.`;
-
-  return callModel({
-    model:       FAST_MODEL,
-    systemPrompt,
+  return callThinking({
+    model: MODELS.FEEDBACK,
+    systemPrompt: FEEDBACK_SYSTEM,
     userPrompt,
-    isJson:      false,
-    maxTokens:   1024,
+    maxTokens: MAX_TOKENS.FEEDBACK
   });
 };
-// /*==============================================================================
-// SKILL MASTER — AI SERVICE v2 (Groq / Llama 3)
-// Drop-in replacement for gemini.service.js
-
-// PROVIDER: Groq (https://console.groq.com)
-// MODELS:
-//   - llama-3.1-8b-instant    → roadmap generation (20,000 TPM free tier)
-//   - llama-3.3-70b-versatile → lesson content (12,000 TPM — output capped at 4096)
-//   - llama-3.1-8b-instant    → feedback (20,000 TPM, speed priority)
-
-// WHY THESE LIMITS:
-//   Groq TPM = input tokens + max_tokens (not just output).
-//   Previous version set max_tokens: 32768 which alone exceeded the 12k TPM limit.
-//   Fix: cap lesson output at 4096, roadmap at 8192 (uses 8b model with 20k limit).
-
-// EXPORTS (identical signatures to gemini.service.js — zero controller changes):
-//   generateRoadmapSkeleton(data) → roadmapJson
-//   generateLessonContent(data)   → { parts, task }
-//   generateFeedback(data)        → string (with OUTCOME: and RESOURCES: sections)
-
-// REQUIRED ENV VAR:
-//   GROQ_API_KEY — get from https://console.groq.com/keys
-
-// IMPORT PATHS TO UPDATE:
-//   server/src/controllers/session.controller.js  → from '../services/ai.service.js'
-//   server/src/controllers/roadmap.controller.js  → from '../services/ai.service.js'
-// ==============================================================================
-// */
-// import Groq from 'groq-sdk';
-// import dotenv from 'dotenv';
-
-// dotenv.config();
-
-// const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
-// const ROADMAP_MODEL  = 'llama-3.1-8b-instant';    // 20k TPM — large JSON output safe
-// const LESSON_MODEL   = 'llama-3.3-70b-versatile';  // 12k TPM — capped at 4096 output
-// const FEEDBACK_MODEL = 'llama-3.1-8b-instant';     // 20k TPM — text feedback, 1024 output
-
-// // ==============================================================================
-// // UTILITIES
-// // ==============================================================================
-
-// /** Simple async delay for retry backoff */
-// const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-// /**
-//  * Parses JSON from model response text.
-//  * Strips markdown code fences (common with smaller models).
-//  * @param {string} text - Raw model output
-//  * @returns {object} Parsed JSON object
-//  * @throws {Error} JSON_PARSE_FAILURE — triggers retry logic in session controller
-//  */
-// const parseJSON = (text) => {
-//   try {
-//     if (typeof text === 'object') return text;
-//     const cleaned = text
-//       .replace(/^```json\s*/i, '')
-//       .replace(/^```\s*/i, '')
-//       .replace(/\s*```$/i, '')
-//       .trim();
-//     return JSON.parse(cleaned);
-//   } catch {
-//     console.error('[AI Service] JSON parse failed on:', text?.substring(0, 300));
-//     throw new Error('JSON_PARSE_FAILURE');
-//   }
-// };
-
-// /**
-//  * Validates that a parsed lesson object has correct semantic structure.
-//  * Called after JSON.parse, before saving to MongoDB via guardSessionContent.
-//  * @param {object} parsed - Parsed lesson JSON
-//  * @throws {Error} JSON_PARSE_FAILURE on invalid structure
-//  */
-// const validateLessonStructure = (parsed) => {
-//   if (!parsed.parts || !Array.isArray(parsed.parts) || parsed.parts.length === 0) {
-//     console.error('[AI Validation] FAIL: parts array missing or empty');
-//     throw new Error('JSON_PARSE_FAILURE');
-//   }
-//   for (const part of parsed.parts) {
-//     if (!part.cards || !Array.isArray(part.cards) || part.cards.length === 0) {
-//       console.error(`[AI Validation] FAIL: part ${part.partNumber} has no cards`);
-//       throw new Error('JSON_PARSE_FAILURE');
-//     }
-//     for (const card of part.cards) {
-//       if (!card.content || typeof card.content !== 'string' || card.content.trim().length < 50) {
-//         console.error(`[AI Validation] FAIL: card content too short in part ${part.partNumber}`);
-//         throw new Error('JSON_PARSE_FAILURE');
-//       }
-//     }
-//   }
-//   return true;
-// };
-
-// /**
-//  * Cleans a partTitle string.
-//  * Detects repetitive hallucination pattern (word repeated 3+ times in 80 chars).
-//  * Strips trailing JSON artifacts from partial outputs.
-//  * @param {string} title - Raw partTitle from model
-//  * @returns {string} Clean partTitle, max 80 chars
-//  */
-// const cleanPartTitle = (title) => {
-//   if (typeof title !== 'string' || title.trim().length === 0) return 'Topic Overview';
-//   const sample = title.substring(0, 80).toLowerCase();
-//   const words = sample.split(/\s+/).filter(w => w.length > 3);
-//   const counts = {};
-//   for (const word of words) {
-//     counts[word] = (counts[word] || 0) + 1;
-//     if (counts[word] >= 3) {
-//       console.warn('[AI Validation] Hallucinated partTitle replaced with fallback');
-//       return 'Topic Overview';
-//     }
-//   }
-//   return title.replace(/[,"\s]+$/, '').replace(/^[,"\s]+/, '').trim().substring(0, 80);
-// };
-
-// // ==============================================================================
-// // CORE CALL
-// // ==============================================================================
-
-// /**
-//  * Makes a single Groq API request with retry and exponential backoff.
-//  * Retries on 429 (rate limit), 500 (server error), 503 (overloaded).
-//  * Fails fast on 413 (request too large — retrying won't help).
-//  *
-//  * TOKEN BUDGET NOTE:
-//  *   Groq TPM = input tokens + max_tokens.
-//  *   Always pass maxTokens explicitly — never use a global default.
-//  *   llama-3.3-70b free tier: 12,000 TPM → keep maxTokens at 4096 max.
-//  *   llama-3.1-8b free tier: 20,000 TPM → maxTokens up to 8192 is safe.
-//  *
-//  * @param {string} model - Groq model identifier
-//  * @param {string} systemPrompt - System instruction (keep under 500 tokens)
-//  * @param {string} userPrompt - Task prompt
-//  * @param {boolean} isJson - Whether to enforce JSON response mode
-//  * @param {number} maxTokens - Max output tokens (set per call, not globally)
-//  * @returns {Promise<object|string>} Parsed JSON or raw text
-//  * @throws {Error} GEMINI_FAILURE | JSON_PARSE_FAILURE
-//  */
-// const callModel = async ({ model, systemPrompt, userPrompt, isJson = true, maxTokens = 4096 }) => {
-//   let attempts = 0;
-//   const maxRetries = 3;
-
-//   while (attempts < maxRetries) {
-//     try {
-//       const config = {
-//         model,
-//         messages: [
-//           { role: 'system', content: systemPrompt },
-//           { role: 'user',   content: userPrompt   },
-//         ],
-//         temperature: isJson ? 0.7 : 0.6,
-//         max_tokens:  maxTokens,
-//       };
-
-//       if (isJson) {
-//         config.response_format = { type: 'json_object' };
-//       }
-
-//       const completion = await groq.chat.completions.create(config);
-//       const text = completion.choices[0]?.message?.content;
-
-//       if (!text) throw new Error('EMPTY_RESPONSE');
-
-//       return isJson ? parseJSON(text) : text;
-
-//     } catch (error) {
-//       attempts++;
-
-//       const is429 = error.message?.includes('429') || error.status === 429;
-//       const is413 = error.message?.includes('413') || error.status === 413;
-//       const is500 = error.message?.includes('500') || error.status === 500;
-//       const is503 = error.message?.includes('503') || error.status === 503;
-//       const retryable = (is429 || is500 || is503) && attempts < maxRetries;
-
-//       console.error(
-//         `[AI Service] Attempt ${attempts} failed: ${error.message?.substring(0, 120)}` +
-//         (retryable ? ` — retrying in ${attempts === 1 ? 5 : attempts === 2 ? 15 : 30}s` : '')
-//       );
-
-//       if (is413) throw new Error(`GEMINI_FAILURE: ${error.message}`); // fail fast
-//       if (retryable) {
-//         const ms = attempts === 1 ? 5000 : attempts === 2 ? 15000 : 30000;
-//         await wait(ms);
-//       } else {
-//         if (error.message === 'JSON_PARSE_FAILURE') throw error;
-//         throw new Error(`GEMINI_FAILURE: ${error.message}`);
-//       }
-//     }
-//   }
-// };
-
-// // ==============================================================================
-// // PUBLIC API — identical signatures to gemini.service.js
-// // ==============================================================================
-
-// /**
-//  * Generates the full roadmap skeleton — modules, weeks, days, exam questions.
-//  * Uses ROADMAP_MODEL (8b, 20k TPM) with 8192 output tokens for large roadmap JSON.
-//  *
-//  * @param {object} data - Learner profile from setup form
-//  * @param {string} data.skillInput - Skill to learn
-//  * @param {string} [data.motivation] - Learning goal / motivation
-//  * @param {string} data.currentLevel - Beginner | Intermediate | Advanced
-//  * @param {string} data.role - Student | Job Seeker | Other
-//  * @param {string} data.learningStyle - Reading | Examples | Practice
-//  * @param {string} data.goalClarity - Clear | General | Exploring
-//  * @param {string} data.dailyTime - Daily time commitment string
-//  * @returns {Promise<object>} roadmapJson — modules → weeks → days → examQuestions
-//  */
-// export const generateRoadmapSkeleton = (data) => {
-//   const systemPrompt = `You are an expert curriculum designer. Design practical, realistic learning roadmaps.
-
-// STRICT RULES:
-// - Each week = EXACTLY 7 days: dayNumber 1-5 = Learning, dayNumber 6 = Revision, dayNumber 7 = Exam
-// - Learning days: topicsList = 2-4 specific actionable topics (NOT category names like "React Hooks")
-// - Revision day: topicsList = [], no examQuestions field
-// - Exam day: topicsList = [], EXACTLY 5 MCQ questions in examQuestions
-// - Day titles are OUTCOMES: "Making Components Reusable with Props" not "React Props"
-// - Realistic pacing — let skill complexity set module count, do not compress
-// - correctIndex = integer 0-3 (index into options array)
-// - Return ONLY valid JSON. No markdown. No text outside JSON.
-
-// REQUIRED JSON STRUCTURE:
-// {"skillName": "string","targetLevel": "string","totalModules": number,"estimatedWeeks": number,"modules": [{"moduleNumber": number,"title": "string","weeks": [{"weekNumber": number,"title": "string","days": [{"dayNumber": number,"dayName": "string","type": "Learning","title": "string","topicsList": ["string"],"examQuestions": [{"question":"string","options":["string","string","string","string"],"correctIndex":0,"topicTag":"string"}]}]}]}]}`;
-//   const userPrompt = `Generate a learning roadmap for this learner:Skill: ${data.skillInput}Goal: ${data.motivation || 'Not specified'}Level: ${data.currentLevel} | Role: ${data.role}Style: ${data.learningStyle} | Goal clarity: ${data.goalClarity}Daily time: ${data.dailyTime} . Follow the 7-day pattern strictly. Every Sunday needs exactly 5 exam questions with correctIndex values.`;
-//   return callModel({
-//     model: ROADMAP_MODEL,
-//     systemPrompt,
-//     userPrompt,
-//     isJson: true,
-//     maxTokens: 6000, // large roadmap JSON output
-//   });
-// };
-
-// /**
-//  * Generates lesson content for a learning or revision day.
-//  * Uses LESSON_MODEL (70b) with maxTokens 4096 — stays under 12k TPM limit.
-//  * Validates and cleans structure before returning to controller.
-//  *
-//  * Handles three session types:
-//  *   - isRevision: Saturday revision (1 part, 3 cards, no task)
-//  *   - isExamRetry: Post-exam-fail revision (same shape as isRevision)
-//  *   - Default: Full learning session (3 parts, 2-3 cards each, 1 task)
-//  *
-//  * @param {object} data - Session generation context
-//  * @param {boolean} [data.isRevision] - Saturday revision session flag
-//  * @param {boolean} [data.isExamRetry] - Post-exam retry revision flag
-//  * @param {string} data.skillName - Name of the skill being learned
-//  * @param {number} [data.moduleNumber] - Current module number
-//  * @param {string} [data.moduleTitle] - Module title (mod.title from roadmapJson)
-//  * @param {number} [data.weekNumber] - Current week number
-//  * @param {string} [data.weekTitle] - Week title (week.title from roadmapJson)
-//  * @param {number} [data.dayNumber] - Day number 1-7
-//  * @param {string} [data.dayName] - Day name e.g. "Monday"
-//  * @param {string[]} [data.topicsList] - Topics to cover today
-//  * @param {string} [data.currentLevel] - Learner level
-//  * @param {string} [data.motivation] - Learner goal for contextualisation
-//  * @param {string} [data.learningStyle] - Reading | Examples | Practice
-//  * @param {string} [data.weakTopicsStr] - Comma-separated weak topics (revision)
-//  * @param {string} [data.allWeekTopics] - Fallback week topics (revision)
-//  * @returns {Promise<object>} { parts: [...], task: {...} | null }
-//  */
-// export const generateLessonContent = async (data) => {
-
-//   // ---- REVISION / EXAM RETRY SESSION ----
-//   if (data.isRevision || data.isExamRetry) {
-//     const topics = data.weakTopicsStr || data.allWeekTopics || 'General review of the week';
-
-//     const systemPrompt = `You are a senior engineer running a targeted revision session.
-// Re-explain weak topics from a completely different angle with fresh examples.
-// Return ONLY valid JSON. No markdown fences. No text outside JSON.
-
-// REQUIRED STRUCTURE (EXACT — do not deviate):
-// {"parts": [{"partNumber": 1,"partTitle": "string (5-8 words, title case)","cards": [{"cardNumber": 1, "content": "string (min 80 words — first weak topic, new angle, fresh example)"},{"cardNumber": 2, "content": "string (min 80 words — second topic or connecting concept)"},{"cardNumber": 3, "content": "string (min 80 words — practical application tying topics together)"}],"miniExercise": {"question": "string (tests genuine understanding)","options": ["string","string","string","string"],"correctIndex": 0,"explanation": "string"}}],"task": null}
-// ABSOLUTE RULES: EXACTLY 1 part. EXACTLY 3 cards. task MUST be null. No extra fields.`;
-//     const userPrompt = `Write a revision session. Weak topics: ${topics} Skill: ${data.skillName} | Level: ${data.currentLevel || 'Beginner'} Use a completely different angle than the original lesson. Start each card with what the learner likely misunderstood.`;
-
-//     const result = await callModel({
-//       model: LESSON_MODEL,
-//       systemPrompt,
-//       userPrompt,
-//       isJson: true,
-//       maxTokens: 4096,
-//     });
-
-//     validateLessonStructure(result);
-//     result.parts = result.parts.map(part => ({
-//       ...part,
-//       partTitle: cleanPartTitle(part.partTitle),
-//     }));
-//     return result;
-//   }
-
-//   // ---- LEARNING SESSION ----
-//   const systemPrompt = `You are a senior engineer mentoring a developer. Direct, opinionated, practical — not a textbook.
-// Return ONLY valid JSON. No markdown fences. No text outside JSON.
-
-// REQUIRED STRUCTURE (EXACT — do not deviate):
-// {"parts": [{"partNumber": 1,"partTitle": "string (5-8 words, outcome-focused, title case)","cards": [{"cardNumber": 1, "content": "string (min 100 words — open with the PROBLEM this concept solves, then concrete example)"},{"cardNumber": 2, "content": "string (min 100 words — most common mistake, start with: The mistake most devs make here is...)"}],"miniExercise": {"question":"string","options":["string","string","string","string"],"correctIndex":0,"explanation":"string"}},{"partNumber": 2,"partTitle": "string","cards": [{"cardNumber": 1, "content": "string (min 100 words)"},{"cardNumber": 2, "content": "string (min 100 words)"}],"miniExercise": {"question":"string","options":["string","string","string","string"],"correctIndex":0,"explanation":"string"}},{"partNumber": 3,"partTitle": "string","cards": [{"cardNumber": 1, "content": "string (min 100 words — synthesize Parts 1 and 2 in realistic scenario from learner goal)"},{"cardNumber": 2, "content": "string (min 100 words)"}],"miniExercise": {"question":"string","options":["string","string","string","string"],"correctIndex":0,"explanation":"string"} }],
-//   "task": {"type": "text","description": "string (one open engineering question requiring 100+ word detailed answer)","questions": []}}
-// For conceptual/theory-heavy topics, replace task with:
-// {"type":"mcq","description":"string","questions":[{"question":"string","options":["string","string","string","string"],"correctIndex":0,"topicTag":"string"}]}
-// RULES:
-// - EXACTLY 3 parts. Part 1 opens with the PROBLEM not the definition. Part 3 synthesizes.
-// - Text task for practical/hands-on topics. MCQ for conceptual topics.
-// - BANNED phrases: "it is important to note", "in conclusion", "as we can see", "let us explore"`;
-
-//   const userPrompt = `Write a full learning session: Skill: ${data.skillName} Module ${data.moduleNumber}: ${data.moduleTitle} Week ${data.weekNumber}: ${data.weekTitle} Day ${data.dayNumber} (${data.dayName}) Topics: ${data.topicsList?.join(', ') || ''} Level: ${data.currentLevel} | Goal: ${data.motivation || 'Not specified'} | Style: ${data.learningStyle}
-// Part 1: Open with the real PROBLEM these topics solve — not the definition.
-// Part 3: Synthesize Parts 1+2 in a realistic scenario connected to: "${data.motivation}"`;
-//   const result = await callModel({
-//     model: LESSON_MODEL,
-//     systemPrompt,
-//     userPrompt,
-//     isJson: true,
-//     maxTokens: 4096,
-//   });
-
-//   validateLessonStructure(result);
-//   result.parts = result.parts.map(part => ({
-//     ...part,
-//     partTitle: cleanPartTitle(part.partTitle),
-//   }));
-//   return result;
-// };
-
-// /**
-//  * Generates AI feedback on task submission — text answer or MCQ.
-//  * Uses FEEDBACK_MODEL (8b, 20k TPM) with 1024 output — fast text generation.
-//  * Returns raw text string. Session controller parses OUTCOME: and RESOURCES: via regex.
-//  *
-//  * @param {object} data - Submission context
-//  * @param {boolean} [data.isMcq] - True for MCQ task feedback
-//  * @param {string} [data.description] - Task description (text tasks only)
-//  * @param {string} [data.userAnswer] - Learner's text answer (text tasks only)
-//  * @param {string} [data.topicsList] - Topics being tested
-//  * @param {object[]} [data.report] - MCQ answer report: [{questionText, options, selectedIndex, correctIndex, isCorrect, topicTag}]
-//  * @param {number} [data.score] - MCQ percentage score (optional, computed if missing)
-//  * @returns {Promise<string>} Feedback text ending with OUTCOME: positive|needs_improvement and RESOURCES: section
-//  */
-// export const generateFeedback = (data) => {
-//   let userPrompt;
-
-//   if (data.isMcq) {
-//     const wrongAnswers = data.report.filter(r => !r.isCorrect);
-//     const correctCount = data.report.filter(r => r.isCorrect).length;
-//     const score = data.score ?? Math.round((correctCount / data.report.length) * 100);
-
-//     userPrompt = `Score: ${score}% (${correctCount}/${data.report.length} correct)
-
-// Wrong answers:
-// ${wrongAnswers.map((r, i) =>
-//     `${i + 1}. "${r.questionText}"\n   Chose: ${r.options?.[r.selectedIndex] ?? 'none'}\n   Correct: ${r.options?.[r.correctIndex]}`
-//   ).join('\n\n')}
-
-// Write exactly 3 paragraphs "two-three liners ": (1) what they understood, (2) what broke down — diagnose actual confusion not just topic names, (3) one concrete fix.
-
-// Then on a new line:
-// OUTCOME: positive OR OUTCOME: needs_improvement
-
-// Then:
-// RESOURCES:
-// - [Title](https://url) — one sentence why this helps (official docs only: MDN, React, Node.js, MongoDB, Python)
-// If none needed: RESOURCES: (no additional resources needed)`;
-
-//   } else {
-//     userPrompt = `Task: ${data.description}
-// Topics: ${data.topicsList}
-// Learner answer: ${data.userAnswer}
-
-// Write exactly 3 paragraphs: (1) what they got right — specific, (2) what's missing or wrong — specific, not vague, (3) one concrete next step.
-
-// Then on a new line:
-// OUTCOME: positive OR OUTCOME: needs_improvement
-
-// Then:
-// RESOURCES:
-// - [Title](https://url) — one sentence why this helps (official docs only)
-// If none needed: RESOURCES: (no additional resources needed)`;
-//   }
-
-//   const systemPrompt = `You are an expert mentor evaluating learner work. Be direct, specific, and encouraging. The OUTCOME line is mandatory — never omit it.`;
-
-//   return callModel({
-//     model: FEEDBACK_MODEL,
-//     systemPrompt,
-//     userPrompt,
-//     isJson: false,
-//     maxTokens: 1024,
-//   });
-// };
