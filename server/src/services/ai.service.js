@@ -65,8 +65,8 @@ EXPORTS (unchanged signatures — zero controller changes):
 REQUIRED ENV VAR: OPENAI_API_KEY
 ==============================================================================*/
 
-import OpenAI from 'openai';
-import dotenv from 'dotenv';
+import OpenAI from "openai";
+import dotenv from "dotenv";
 dotenv.config();
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -76,22 +76,22 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // ==============================================================================
 
 const MODELS = {
-  THINKING: 'gpt-4.1',        // lesson reasoning pass — free-form, no schema
-  STRUCTURE: 'gpt-4.1-mini',  // lesson formatting pass — schema-locked repackaging
-  ROADMAP: 'gpt-4.1',         // single combined call, strong model (see header note #5)
-  FEEDBACK: 'gpt-4.1-mini'    // frequent, short-form, evaluative — mini is sufficient
+  THINKING: "gpt-4.1", // lesson reasoning pass — free-form, no schema
+  STRUCTURE: "gpt-4.1-mini", // lesson formatting pass — schema-locked repackaging
+  ROADMAP: "gpt-4.1", // single combined call, strong model (see header note #5)
+  FEEDBACK: "gpt-4.1-mini", // frequent, short-form, evaluative — mini is sufficient
 };
 
 const RETRY = {
   MAX_ATTEMPTS: 3,
-  BACKOFF_MS: [5000, 15000, 30000] // attempt 1 / 2 / 3 wait times
+  BACKOFF_MS: [5000, 30000, 45000], // attempt 1 / 2 / 3 wait times
 };
 
 const MAX_TOKENS = {
-  LESSON_THINKING: 5000,   // raw reasoning + prose — content is semantically sized, not capped small
-  LESSON_STRUCTURE: 9000,  // must comfortably fit a longer-than-average lesson without truncating
+  LESSON_THINKING: 5000, // raw reasoning + prose — content is semantically sized, not capped small
+  LESSON_STRUCTURE: 9000, // must comfortably fit a longer-than-average lesson without truncating
   ROADMAP: 9000,
-  FEEDBACK: 1024
+  FEEDBACK: 1024,
 };
 
 // ==============================================================================
@@ -106,152 +106,182 @@ const MAX_TOKENS = {
 // ==============================================================================
 
 const LESSON_JSON_SCHEMA = {
-  name: 'lesson_content',
+  name: "lesson_content",
   strict: true,
   schema: {
-    type: 'object',
+    type: "object",
     additionalProperties: false,
     properties: {
       competencyGoal: {
-        type: 'string',
-        description: 'One sentence: "After this lesson, the learner should be able to ___." Forces the objective to be explicit and testable rather than implicit.'
+        type: "string",
+        description:
+          'One sentence: "After this lesson, the learner should be able to ___." Forces the objective to be explicit and testable rather than implicit.',
       },
       parts: {
-        type: 'array',
+        type: "array",
         items: {
-          type: 'object',
+          type: "object",
           additionalProperties: false,
           properties: {
-            partNumber: { type: 'integer' },
-            partTitle: { type: 'string' },
+            partNumber: { type: "integer" },
+            partTitle: { type: "string" },
             cards: {
-              type: 'array',
+              type: "array",
               items: {
-                type: 'object',
+                type: "object",
                 additionalProperties: false,
                 properties: {
-                  cardNumber: { type: 'integer' },
+                  cardNumber: { type: "integer" },
                   content: {
-                    type: 'string',
-                    description: 'Markdown-formatted teaching content: use **bold**, `inline code`, fenced ```code blocks``` with a language tag, and bullet lists where they aid clarity. Do not use # / ## headings inside a card.'
-                  }
+                    type: "string",
+                    description:
+                      "Markdown-formatted teaching content: use **bold**, `inline code`, fenced ```code blocks``` with a language tag, and bullet lists where they aid clarity. Do not use # / ## headings inside a card.",
+                  },
                 },
-                required: ['cardNumber', 'content']
-              }
+                required: ["cardNumber", "content"],
+              },
             },
             miniExercise: {
-              type: 'object',
+              type: "object",
               additionalProperties: false,
               properties: {
-                question: { type: 'string' },
-                options: { type: 'array', items: { type: 'string' } },
-                correctIndex: { type: 'integer' },
-                explanation: { type: 'string' }
+                question: { type: "string" },
+                options: { type: "array", items: { type: "string" } },
+                correctIndex: { type: "integer" },
+                explanation: { type: "string" },
               },
-              required: ['question', 'options', 'correctIndex', 'explanation']
-            }
+              required: ["question", "options", "correctIndex", "explanation"],
+            },
           },
-          required: ['partNumber', 'partTitle', 'cards', 'miniExercise']
-        }
+          required: ["partNumber", "partTitle", "cards", "miniExercise"],
+        },
       },
       task: {
-        type: ['object', 'null'],
+        type: ["object", "null"],
         additionalProperties: false,
         properties: {
-          type: { type: 'string', enum: ['text', 'mcq'] },
+          type: { type: "string", enum: ["text", "mcq"] },
           description: {
-            type: 'string',
-            description: 'Markdown-formatted. For "text" tasks this is the full mastery-task prompt (may include a fenced code block or scenario). For "mcq" tasks this is a short framing line.'
+            type: "string",
+            description:
+              'Markdown-formatted. For "text" tasks this is the full mastery-task prompt (may include a fenced code block or scenario). For "mcq" tasks this is a short framing line.',
           },
           questions: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'object',
+              type: "object",
               additionalProperties: false,
               properties: {
-                question: { type: 'string' },
-                options: { type: 'array', items: { type: 'string' } },
-                correctIndex: { type: 'integer' },
-                topicTag: { type: 'string' }
+                question: { type: "string" },
+                options: { type: "array", items: { type: "string" } },
+                correctIndex: { type: "integer" },
+                topicTag: { type: "string" },
               },
-              required: ['question', 'options', 'correctIndex', 'topicTag']
-            }
-          }
+              required: ["question", "options", "correctIndex", "topicTag"],
+            },
+          },
         },
-        required: ['type', 'description', 'questions']
-      }
+        required: ["type", "description", "questions"],
+      },
     },
-    required: ['competencyGoal', 'parts', 'task']
-  }
+    required: ["competencyGoal", "parts", "task"],
+  },
 };
 
 const ROADMAP_JSON_SCHEMA = {
-  name: 'roadmap_skeleton',
+  name: "roadmap_skeleton",
   strict: true,
   schema: {
-    type: 'object',
+    type: "object",
     additionalProperties: false,
     properties: {
-      skillName: { type: 'string' },
-      targetLevel: { type: 'string' },
-      totalModules: { type: 'integer' },
-      estimatedWeeks: { type: 'integer' },
+      skillName: { type: "string" },
+      targetLevel: { type: "string" },
+      totalModules: { type: "integer" },
+      estimatedWeeks: { type: "integer" },
       modules: {
-        type: 'array',
+        type: "array",
         items: {
-          type: 'object',
+          type: "object",
           additionalProperties: false,
           properties: {
-            moduleNumber: { type: 'integer' },
-            title: { type: 'string' },
+            moduleNumber: { type: "integer" },
+            title: { type: "string" },
             weeks: {
-              type: 'array',
+              type: "array",
               items: {
-                type: 'object',
+                type: "object",
                 additionalProperties: false,
                 properties: {
-                  weekNumber: { type: 'integer' },
-                  title: { type: 'string' },
+                  weekNumber: { type: "integer" },
+                  title: { type: "string" },
                   days: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object',
+                      type: "object",
                       additionalProperties: false,
                       properties: {
-                        dayNumber: { type: 'integer' },
-                        dayName: { type: 'string' },
-                        type: { type: 'string', enum: ['Learning', 'Revision', 'Exam'] },
-                        title: { type: 'string' },
-                        topicsList: { type: 'array', items: { type: 'string' } },
+                        dayNumber: { type: "integer" },
+                        dayName: { type: "string" },
+                        type: {
+                          type: "string",
+                          enum: ["Learning", "Revision", "Exam"],
+                        },
+                        title: { type: "string" },
+                        topicsList: {
+                          type: "array",
+                          items: { type: "string" },
+                        },
                         examQuestions: {
-                          type: 'array',
+                          type: "array",
                           items: {
-                            type: 'object',
+                            type: "object",
                             additionalProperties: false,
                             properties: {
-                              question: { type: 'string' },
-                              options: { type: 'array', items: { type: 'string' } },
-                              correctIndex: { type: 'integer' },
-                              topicTag: { type: 'string' }
+                              question: { type: "string" },
+                              options: {
+                                type: "array",
+                                items: { type: "string" },
+                              },
+                              correctIndex: { type: "integer" },
+                              topicTag: { type: "string" },
                             },
-                            required: ['question', 'options', 'correctIndex', 'topicTag']
-                          }
-                        }
+                            required: [
+                              "question",
+                              "options",
+                              "correctIndex",
+                              "topicTag",
+                            ],
+                          },
+                        },
                       },
-                      required: ['dayNumber', 'dayName', 'type', 'title', 'topicsList', 'examQuestions']
-                    }
-                  }
+                      required: [
+                        "dayNumber",
+                        "dayName",
+                        "type",
+                        "title",
+                        "topicsList",
+                        "examQuestions",
+                      ],
+                    },
+                  },
                 },
-                required: ['weekNumber', 'title', 'days']
-              }
-            }
+                required: ["weekNumber", "title", "days"],
+              },
+            },
           },
-          required: ['moduleNumber', 'title', 'weeks']
-        }
-      }
+          required: ["moduleNumber", "title", "weeks"],
+        },
+      },
     },
-    required: ['skillName', 'targetLevel', 'totalModules', 'estimatedWeeks', 'modules']
-  }
+    required: [
+      "skillName",
+      "targetLevel",
+      "totalModules",
+      "estimatedWeeks",
+      "modules",
+    ],
+  },
 };
 
 // ==============================================================================
@@ -366,42 +396,63 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Validates non-emptiness and minimum substance — never enforces a specific count. */
 const validateLessonStructure = (parsed) => {
-  if (!parsed.parts || !Array.isArray(parsed.parts) || parsed.parts.length === 0) {
-    console.error('[AI Validation] FAIL: parts array missing or empty');
-    throw new Error('JSON_PARSE_FAILURE');
+  if (
+    !parsed.parts ||
+    !Array.isArray(parsed.parts) ||
+    parsed.parts.length === 0
+  ) {
+    console.error("[AI Validation] FAIL: parts array missing or empty");
+    throw new Error("JSON_PARSE_FAILURE");
   }
   for (const part of parsed.parts) {
     if (!part.cards || !Array.isArray(part.cards) || part.cards.length === 0) {
-      console.error(`[AI Validation] FAIL: part ${part.partNumber} has no cards`);
-      throw new Error('JSON_PARSE_FAILURE');
+      console.error(
+        `[AI Validation] FAIL: part ${part.partNumber} has no cards`,
+      );
+      throw new Error("JSON_PARSE_FAILURE");
     }
     for (const card of part.cards) {
-      if (!card.content || typeof card.content !== 'string' || card.content.trim().length < 40) {
-        console.error(`[AI Validation] FAIL: card content too short in part ${part.partNumber}`);
-        throw new Error('JSON_PARSE_FAILURE');
+      if (
+        !card.content ||
+        typeof card.content !== "string" ||
+        card.content.trim().length < 40
+      ) {
+        console.error(
+          `[AI Validation] FAIL: card content too short in part ${part.partNumber}`,
+        );
+        throw new Error("JSON_PARSE_FAILURE");
       }
     }
   }
-  if (!parsed.competencyGoal || typeof parsed.competencyGoal !== 'string' || parsed.competencyGoal.trim().length < 10) {
-    console.error('[AI Validation] FAIL: competencyGoal missing or too short');
-    throw new Error('JSON_PARSE_FAILURE');
+  if (
+    !parsed.competencyGoal ||
+    typeof parsed.competencyGoal !== "string" ||
+    parsed.competencyGoal.trim().length < 10
+  ) {
+    console.error("[AI Validation] FAIL: competencyGoal missing or too short");
+    throw new Error("JSON_PARSE_FAILURE");
   }
   return true;
 };
 
 const cleanPartTitle = (title) => {
-  if (typeof title !== 'string' || title.trim().length === 0) return 'Topic Overview';
+  if (typeof title !== "string" || title.trim().length === 0)
+    return "Topic Overview";
   const sample = title.substring(0, 80).toLowerCase();
   const words = sample.split(/\s+/).filter((w) => w.length > 3);
   const counts = {};
   for (const word of words) {
     counts[word] = (counts[word] || 0) + 1;
     if (counts[word] >= 3) {
-      console.warn('[AI Validation] Hallucinated partTitle replaced');
-      return 'Topic Overview';
+      console.warn("[AI Validation] Hallucinated partTitle replaced");
+      return "Topic Overview";
     }
   }
-  return title.replace(/[,"\s]+$/, '').replace(/^[,"\s]+/, '').trim().substring(0, 100);
+  return title
+    .replace(/[,"\s]+$/, "")
+    .replace(/^[,"\s]+/, "")
+    .trim()
+    .substring(0, 100);
 };
 
 // ==============================================================================
@@ -415,23 +466,28 @@ const cleanPartTitle = (title) => {
  * messages `JSON_PARSE_FAILURE` / `TRUNCATED` to signal a retryable content
  * failure (as opposed to a genuine API error).
  */
-const withRetry = async (fn, label) => {
+const withRetry = async (fn, label, maxAttempts = RETRY.MAX_ATTEMPTS) => {
   let attempts = 0;
-  while (attempts < RETRY.MAX_ATTEMPTS) {
+  while (attempts < maxAttempts) {
     try {
       return await fn();
     } catch (error) {
       attempts++;
       const status = error.status || 0;
-      const isContentRetry = error.message === 'JSON_PARSE_FAILURE' || error.message === 'TRUNCATED';
+      const isContentRetry =
+        error.message === "JSON_PARSE_FAILURE" || error.message === "TRUNCATED";
       const isTransient = status === 429 || status === 500 || status === 503;
-      const retryable = (isTransient || isContentRetry) && attempts < RETRY.MAX_ATTEMPTS;
+      const retryable =
+        (isTransient || isContentRetry) && attempts < maxAttempts;
 
-      console.error(`[AI Service] ${label} attempt ${attempts} failed: ${error.message}${retryable ? ' — retrying' : ''}`);
+      console.error(
+        `[AI Service] ${label} attempt ${attempts} failed: ${error.message}${retryable ? " — retrying" : ""}`,
+      );
 
-      if (status === 400 && !isContentRetry) throw new Error(`GEMINI_FAILURE: ${error.message}`);
+      if (status === 400 && !isContentRetry)
+        throw new Error(`AI_FAILURE: ${error.message}`);
       if (!retryable) {
-        if (isContentRetry) throw new Error('JSON_PARSE_FAILURE');
+        if (isContentRetry) throw new Error("JSON_PARSE_FAILURE");
         throw new Error(`GEMINI_FAILURE: ${error.message}`);
       }
       await wait(RETRY.BACKOFF_MS[attempts - 1]);
@@ -440,69 +496,101 @@ const withRetry = async (fn, label) => {
 };
 
 /** Free-form text call — no schema. Used for the lesson thinking pass only. */
-const callThinking = ({ model, systemPrompt, userPrompt, maxTokens }) =>
-  withRetry(async () => {
-    const completion = await openai.chat.completions.create({
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.7,
-      max_tokens: maxTokens
-    });
+const callThinking = ({
+  model,
+  systemPrompt,
+  userPrompt,
+  maxTokens,
+  maxAttempts,
+}) =>
+  withRetry(
+    async () => {
+      const completion = await openai.chat.completions.create({
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0.7,
+        max_tokens: maxTokens,
+      });
 
-    if (completion.choices?.[0]?.finish_reason === 'length') throw new Error('TRUNCATED');
-    const text = completion.choices?.[0]?.message?.content;
-    if (!text) throw new Error('EMPTY_RESPONSE');
-    return text;
-  }, 'thinking pass');
+      if (completion.choices?.[0]?.finish_reason === "length")
+        throw new Error("TRUNCATED");
+      const text = completion.choices?.[0]?.message?.content;
+      if (!text) throw new Error("EMPTY_RESPONSE");
+      return text;
+    },
+    "thinking pass",
+    maxAttempts,
+  );
 
 /** Schema-locked JSON call using OpenAI Structured Outputs (strict mode). */
-const callStructured = ({ model, systemPrompt, userPrompt, jsonSchema, maxTokens }) =>
-  withRetry(async () => {
-    const completion = await openai.chat.completions.create({
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.4,
-      max_tokens: maxTokens,
-      response_format: { type: 'json_schema', json_schema: jsonSchema }
-    });
+const callStructured = ({
+  model,
+  systemPrompt,
+  userPrompt,
+  jsonSchema,
+  maxTokens,
+  maxAttempts,
+}) =>
+  withRetry(
+    async () => {
+      const completion = await openai.chat.completions.create({
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0.4,
+        max_tokens: maxTokens,
+        response_format: { type: "json_schema", json_schema: jsonSchema },
+      });
 
-    if (completion.choices?.[0]?.finish_reason === 'length') throw new Error('TRUNCATED');
-    const text = completion.choices?.[0]?.message?.content;
-    if (!text) throw new Error('EMPTY_RESPONSE');
-    return JSON.parse(text); // safe: Structured Outputs guarantees schema-valid JSON
-  }, 'structured call');
+      if (completion.choices?.[0]?.finish_reason === "length")
+        throw new Error("TRUNCATED");
+      const text = completion.choices?.[0]?.message?.content;
+      if (!text) throw new Error("EMPTY_RESPONSE");
+      return JSON.parse(text); // safe: Structured Outputs guarantees schema-valid JSON
+    },
+    "structured call",
+    maxAttempts,
+  );
 
 // ==============================================================================
 // TWO-CALL LESSON PIPELINE (learning days AND revision days both use this —
 // only the system prompts and sizing guidance differ between them)
 // ==============================================================================
 
-const generateLessonTwoPass = async ({ thinkingSystem, thinkingPrompt, formatterPrompt }) => {
-  console.log('[AI Service] Lesson: thinking pass (mentor reasoning)...');
+const generateLessonTwoPass = async ({
+  thinkingSystem,
+  thinkingPrompt,
+  formatterPrompt,
+}) => {
+  console.log("[AI Service] Lesson: thinking pass (mentor reasoning)...");
   const rawContent = await callThinking({
     model: MODELS.THINKING,
     systemPrompt: thinkingSystem,
     userPrompt: thinkingPrompt,
-    maxTokens: MAX_TOKENS.LESSON_THINKING
+    maxTokens: MAX_TOKENS.LESSON_THINKING,
   });
 
-  console.log('[AI Service] Lesson: formatting pass (schema-locked repackaging)...');
+  console.log(
+    "[AI Service] Lesson: formatting pass (schema-locked repackaging)...",
+  );
   const structured = await callStructured({
     model: MODELS.STRUCTURE,
     systemPrompt: LESSON_FORMATTER_SYSTEM,
     userPrompt: `${formatterPrompt}\n\n---\nRAW LESSON CONTENT TO STRUCTURE:\n${rawContent}`,
     jsonSchema: LESSON_JSON_SCHEMA,
-    maxTokens: MAX_TOKENS.LESSON_STRUCTURE
+    maxTokens: MAX_TOKENS.LESSON_STRUCTURE,
   });
 
   validateLessonStructure(structured);
-  structured.parts = structured.parts.map((part) => ({ ...part, partTitle: cleanPartTitle(part.partTitle) }));
+  structured.parts = structured.parts.map((part) => ({
+    ...part,
+    partTitle: cleanPartTitle(part.partTitle),
+  }));
   return structured;
 };
 
@@ -518,7 +606,7 @@ const generateLessonTwoPass = async ({ thinkingSystem, thinkingPrompt, formatter
 export const generateRoadmapSkeleton = (data) => {
   const userPrompt = `Design a learning roadmap for this learner:
 Skill: ${data.skillInput}
-Their actual stated goal: ${data.motivation || 'Not specified'}
+Their actual stated goal: ${data.motivation || "Not specified"}
 Current level: ${data.currentLevel} | Role: ${data.role}
 Learning style: ${data.learningStyle} | Goal clarity: ${data.goalClarity}
 Daily time available: ${data.dailyTime}
@@ -530,7 +618,7 @@ Design the module/week structure and topic depth around what THEIR stated goal a
     systemPrompt: ROADMAP_SYSTEM,
     userPrompt,
     jsonSchema: ROADMAP_JSON_SCHEMA,
-    maxTokens: MAX_TOKENS.ROADMAP
+    maxTokens: MAX_TOKENS.ROADMAP,
   });
 };
 
@@ -540,15 +628,16 @@ Design the module/week structure and topic depth around what THEIR stated goal a
  */
 export const generateLessonContent = async (data) => {
   if (data.isRevision || data.isExamRetry) {
-    const topics = data.weakTopicsStr || data.allWeekTopics || 'General review of the week';
+    const topics =
+      data.weakTopicsStr || data.allWeekTopics || "General review of the week";
 
     return generateLessonTwoPass({
       thinkingSystem: REVISION_THINKING_SYSTEM,
       thinkingPrompt: `Weak topics to address: ${topics}
-Skill: ${data.skillName} | Learner level: ${data.currentLevel || 'Beginner'}
+Skill: ${data.skillName} | Learner level: ${data.currentLevel || "Beginner"}
 
 Re-explain each weak topic from a genuinely different angle than the original lesson likely used, with a new example. Connect related weak topics to each other where it helps; keep unrelated ones separate.`,
-      formatterPrompt: `Format this revision content into the lesson schema. Segment exactly as the source labels it (typically 1 part, occasionally 2). task must be null. Preserve all markdown formatting.`
+      formatterPrompt: `Format this revision content into the lesson schema. Segment exactly as the source labels it (typically 1 part, occasionally 2). task must be null. Preserve all markdown formatting.`,
     });
   }
 
@@ -558,13 +647,13 @@ Re-explain each weak topic from a genuinely different angle than the original le
 Module ${data.moduleNumber}: ${data.moduleTitle}
 Week ${data.weekNumber}: ${data.weekTitle}
 Day ${data.dayNumber} (${data.dayName})
-Topics: ${data.topicsList?.join(', ') || ''}
+Topics: ${data.topicsList?.join(", ") || ""}
 Learner level: ${data.currentLevel}
-Learner's actual stated goal: ${data.motivation || 'Not specified'}
+Learner's actual stated goal: ${data.motivation || "Not specified"}
 Learning style: ${data.learningStyle}
 
 Reason through the objective, the failure modes, and the classification for these specific topics before writing. Structure the lesson (problem → core mechanism with a runnable example → synthesis toward the learner's stated goal) with however many parts and cards this content genuinely needs. End with a mastery task sized and typed (text vs mcq) appropriately for whether these topics are conceptual or practical.`,
-    formatterPrompt: `Format this lesson into the schema. Segment exactly as the source labels it — do not force a particular part or card count. Extract the TASK section (or set task: null only if the source truly has none). Preserve all markdown formatting.`
+    formatterPrompt: `Format this lesson into the schema. Segment exactly as the source labels it — do not force a particular part or card count. Extract the TASK section (or set task: null only if the source truly has none). Preserve all markdown formatting.`,
   });
 };
 
@@ -578,14 +667,18 @@ export const generateFeedback = (data) => {
   if (data.isMcq) {
     const wrongAnswers = data.report.filter((r) => !r.isCorrect);
     const correctCount = data.report.filter((r) => r.isCorrect).length;
-    const score = data.score ?? Math.round((correctCount / data.report.length) * 100);
+    const score =
+      data.score ?? Math.round((correctCount / data.report.length) * 100);
 
     userPrompt = `Score: ${score}% (${correctCount}/${data.report.length} correct)
 
 Wrong answers:
-${wrongAnswers.map((r, i) =>
-      `${i + 1}. "${r.questionText}"\n   Chose: ${r.options?.[r.selectedIndex] ?? 'none'}\n   Correct: ${r.options?.[r.correctIndex]}`
-    ).join('\n\n')}
+${wrongAnswers
+  .map(
+    (r, i) =>
+      `${i + 1}. "${r.questionText}"\n   Chose: ${r.options?.[r.selectedIndex] ?? "none"}\n   Correct: ${r.options?.[r.correctIndex]}`,
+  )
+  .join("\n\n")}
 
 Write exactly 3 paragraphs: (1) what they understood, (2) the actual confusion behind the wrong answers — not just the topic name, (3) one concrete fix.
 
@@ -594,7 +687,6 @@ OUTCOME: positive OR OUTCOME: needs_improvement
 RESOURCES:
 - [Title](https://url) — why this helps (official docs only)
 If none needed: RESOURCES: (no additional resources needed)`;
-
   } else {
     userPrompt = `Task: ${data.description}
 Topics: ${data.topicsList}
@@ -613,6 +705,7 @@ If none needed: RESOURCES: (no additional resources needed)`;
     model: MODELS.FEEDBACK,
     systemPrompt: FEEDBACK_SYSTEM,
     userPrompt,
-    maxTokens: MAX_TOKENS.FEEDBACK
+    maxTokens: MAX_TOKENS.FEEDBACK,
+    maxAttempts:1
   });
 };
