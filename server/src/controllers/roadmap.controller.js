@@ -11,7 +11,8 @@ export const generateRoadmap = async (req, res) => {
       role,
       currentLevel,
       learningStyle,
-      goalClarity
+      goalClarity,
+      existingRoadmap
     } = req.body;
 
     if (!skillInput || skillInput.trim() === '') {
@@ -25,7 +26,8 @@ export const generateRoadmap = async (req, res) => {
       role: role || '',
       learningStyle: learningStyle || '',
       goalClarity: goalClarity || '',
-      dailyTime: dailyTime || ''
+      dailyTime: dailyTime || '',
+      existingRoadmap: existingRoadmap || '',
     });
 
     if (!roadmapJson || !roadmapJson.modules || roadmapJson.modules.length === 0) {
@@ -33,7 +35,7 @@ export const generateRoadmap = async (req, res) => {
     }
 
     const setupData = {
-      skillInput, motivation, dailyTime, role, currentLevel, learningStyle, goalClarity
+      skillInput, motivation, dailyTime, role, currentLevel, learningStyle, goalClarity ,existingRoadmap
     };
 
     const roadmap = await Roadmap.create({

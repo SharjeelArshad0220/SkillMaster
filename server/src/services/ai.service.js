@@ -382,6 +382,7 @@ You are designing a full multi-week curriculum, not a single lesson. The same di
 
 - Later modules build on earlier ones — never re-teach a concept, only apply it in a new, higher-stakes context.
 
+- If the learner has provided an existing roadmap they are already following, adapt your structure to align with or build on top of it rather than ignoring it — don't contradict a path they've already committed to unless it's clearly flawed.
 HARD STRUCTURAL CONSTRAINT (not semantic — this is fixed by how the product tracks progress and must never vary): every week has EXACTLY 7 days, always in this exact order: dayNumber 1-5 = Learning, dayNumber 6 = Revision, dayNumber 7 = Exam. Revision days have topicsList: [] and examQuestions: []. Exam days have topicsList: [] and their examQuestions populated per the semantic sizing rule above. correctIndex is always an integer 0-3.
 
 Return ONLY valid JSON matching the schema. No markdown. No text outside the JSON.`;
@@ -604,12 +605,16 @@ const generateLessonTwoPass = async ({
  * model, schema-locked directly.
  */
 export const generateRoadmapSkeleton = (data) => {
+   const existingRoadmapBlock = data.existingRoadmap?.trim()
+    ? `\n\nLearner's existing roadmap (they are already following this — adapt to it, don't ignore or contradict it):\n${data.existingRoadmap.trim()}`
+    : '';
   const userPrompt = `Design a learning roadmap for this learner:
 Skill: ${data.skillInput}
 Their actual stated goal: ${data.motivation || "Not specified"}
 Current level: ${data.currentLevel} | Role: ${data.role}
 Learning style: ${data.learningStyle} | Goal clarity: ${data.goalClarity}
 Daily time available: ${data.dailyTime}
+${existingRoadmapBlock}
 
 Design the module/week structure and topic depth around what THEIR stated goal actually requires — not a generic treatment of "${data.skillInput}". Follow the fixed 7-day week pattern exactly as specified in your instructions.`;
 

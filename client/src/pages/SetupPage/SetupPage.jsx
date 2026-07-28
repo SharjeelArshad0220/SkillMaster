@@ -20,17 +20,18 @@ export default function SetupPage() {
     learningStyle: "Reading",
     goalClarity: "General",
     dailyTime: "30 – 60 minutes",
+    existingRoadmap: "",
   });
 
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
-    if (!form.role)         newErrors.role         = "Required";
-    if (!form.skillInput)   newErrors.skillInput   = "Required";
-    if (!form.motivation)   newErrors.motivation   = "Required";
+    if (!form.role) newErrors.role = "Required";
+    if (!form.skillInput) newErrors.skillInput = "Required";
+    if (!form.motivation) newErrors.motivation = "Required";
     if (!form.currentLevel) newErrors.currentLevel = "Required";
-    if (!form.goalClarity)  newErrors.goalClarity  = "Required";
+    if (!form.goalClarity) newErrors.goalClarity = "Required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -61,24 +62,27 @@ export default function SetupPage() {
             Set Up Your Learning Profile
           </h1>
           <p className="text-sm md:text-[14px] text-gray-500 dark:text-muted mt-2">
-            Welcome, {user?.firstName || user?.name?.split(" ")[0]}. Tell us your goal and preferences so we can build your roadmap.
+            Welcome, {user?.firstName || user?.name?.split(" ")[0]}. Tell us
+            your goal and preferences so we can build your roadmap.
           </p>
         </div>
 
         {/* Form card */}
         <div className="bg-white dark:bg-navy-mid border border-gray-200 dark:border-navy-light rounded-xl p-6 md:p-10 shadow-sm">
           <form onSubmit={handleSubmit}>
-            
             {/* LEARNER INFORMATION */}
             <div className="mb-8">
               <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-accent-dk dark:text-accent mb-4">
                 LEARNER INFORMATION
               </p>
-              
+
               <div className="space-y-6">
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 dark:text-slate mb-3">
-                    Which best describes you? {errors.role && <span className="text-fail ml-2">Required</span>}
+                    Which best describes you?{" "}
+                    {errors.role && (
+                      <span className="text-fail ml-2">Required</span>
+                    )}
                   </label>
                   <div className="flex flex-wrap gap-2.5">
                     {["Student", "Job Seeker", "Other"].map((option) => (
@@ -88,7 +92,8 @@ export default function SetupPage() {
                         selected={form.role === option}
                         onClick={() => {
                           setForm((f) => ({ ...f, role: option }));
-                          if (errors.role) setErrors(prev => ({ ...prev, role: null }));
+                          if (errors.role)
+                            setErrors((prev) => ({ ...prev, role: null }));
                         }}
                       />
                     ))}
@@ -97,7 +102,10 @@ export default function SetupPage() {
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 dark:text-slate mb-3">
-                    What is your current level? {errors.currentLevel && <span className="text-fail ml-2">Required</span>}
+                    What is your current level?{" "}
+                    {errors.currentLevel && (
+                      <span className="text-fail ml-2">Required</span>
+                    )}
                   </label>
                   <div className="flex flex-wrap gap-2.5">
                     {["Beginner", "Intermediate", "Advanced"].map((option) => (
@@ -107,7 +115,11 @@ export default function SetupPage() {
                         selected={form.currentLevel === option}
                         onClick={() => {
                           setForm((f) => ({ ...f, currentLevel: option }));
-                          if (errors.currentLevel) setErrors(prev => ({ ...prev, currentLevel: null }));
+                          if (errors.currentLevel)
+                            setErrors((prev) => ({
+                              ...prev,
+                              currentLevel: null,
+                            }));
                         }}
                       />
                     ))}
@@ -122,7 +134,10 @@ export default function SetupPage() {
             <div className="mb-8 grid grid-cols-1 gap-6">
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold text-gray-700 dark:text-slate mb-1">
-                  What skill do you want to learn? {errors.skillInput && <span className="text-fail ml-2">Required</span>}
+                  What skill do you want to learn?{" "}
+                  {errors.skillInput && (
+                    <span className="text-fail ml-2">Required</span>
+                  )}
                 </label>
                 <input
                   type="text"
@@ -138,24 +153,35 @@ export default function SetupPage() {
                   value={form.skillInput}
                   onChange={(e) => {
                     setForm((f) => ({ ...f, skillInput: e.target.value }));
-                    if (errors.skillInput) setErrors(prev => ({ ...prev, skillInput: null }));
+                    if (errors.skillInput)
+                      setErrors((prev) => ({ ...prev, skillInput: null }));
                   }}
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold text-gray-700 dark:text-slate mb-1">
-                  How clear is your goal? {errors.goalClarity && <span className="text-fail ml-2">Required</span>}
+                  How clear is your goal?{" "}
+                  {errors.goalClarity && (
+                    <span className="text-fail ml-2">Required</span>
+                  )}
                 </label>
                 <div className="flex flex-wrap gap-2.5 mt-2">
                   {["Clear", "General", "Exploring"].map((option) => (
                     <PillOption
                       key={option}
-                      label={option === "Clear" ? "I know exactly" : option === "General" ? "General direction" : "Just exploring"}
+                      label={
+                        option === "Clear"
+                          ? "I know exactly"
+                          : option === "General"
+                            ? "General direction"
+                            : "Just exploring"
+                      }
                       selected={form.goalClarity === option}
                       onClick={() => {
                         setForm((f) => ({ ...f, goalClarity: option }));
-                        if (errors.goalClarity) setErrors(prev => ({ ...prev, goalClarity: null }));
+                        if (errors.goalClarity)
+                          setErrors((prev) => ({ ...prev, goalClarity: null }));
                       }}
                     />
                   ))}
@@ -164,7 +190,10 @@ export default function SetupPage() {
 
               <div className="space-y-1.5 pt-2">
                 <label className="block text-xs font-semibold text-gray-700 dark:text-slate mb-1">
-                  Tell us more about your learning goal {errors.motivation && <span className="text-fail ml-2">Required</span>}
+                  Tell us more about your learning goal{" "}
+                  {errors.motivation && (
+                    <span className="text-fail ml-2">Required</span>
+                  )}
                 </label>
                 <textarea
                   className={`w-full px-4 py-3 rounded-lg text-sm font-sans
@@ -180,7 +209,8 @@ export default function SetupPage() {
                   value={form.motivation}
                   onChange={(e) => {
                     setForm((f) => ({ ...f, motivation: e.target.value }));
-                    if (errors.motivation) setErrors(prev => ({ ...prev, motivation: null }));
+                    if (errors.motivation)
+                      setErrors((prev) => ({ ...prev, motivation: null }));
                   }}
                 />
               </div>
@@ -193,7 +223,7 @@ export default function SetupPage() {
               <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-accent-dk dark:text-accent mb-4">
                 PREFERENCES
               </p>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-gray-700 dark:text-slate mb-1">
@@ -208,7 +238,9 @@ export default function SetupPage() {
                                focus:border-accent-dk dark:focus:border-accent
                                focus:outline-none focus:ring-0 transition-colors"
                     value={form.dailyTime}
-                    onChange={(e) => setForm((f) => ({ ...f, dailyTime: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, dailyTime: e.target.value }))
+                    }
                   >
                     <option value="30 – 60 minutes">30 – 60 minutes</option>
                     <option value="1 – 2 hours">1 – 2 hours</option>
@@ -226,38 +258,62 @@ export default function SetupPage() {
                         key={option}
                         label={option}
                         selected={form.learningStyle === option}
-                        onClick={() => setForm((f) => ({ ...f, learningStyle: option }))}
+                        onClick={() =>
+                          setForm((f) => ({ ...f, learningStyle: option }))
+                        }
                       />
                     ))}
                   </div>
                 </div>
               </div>
             </div>
-
+            <div className="mt-6">
+              <p
+                className="text-[10px] font-bold uppercase tracking-[0.12em]
+                text-accent-dk dark:text-accent mb-2"
+              >
+                ALREADY FOLLOWING A ROADMAP? (OPTIONAL)
+              </p>
+              <textarea
+                className="w-full h-[120px] px-4 py-3 rounded-lg text-sm font-sans
+               bg-white dark:bg-navy
+               border border-gray-300 dark:border-divider
+               text-gray-900 dark:text-white
+               placeholder:text-gray-300 dark:placeholder:text-muted
+               focus:border-accent-dk dark:focus:border-accent
+               focus:outline-none focus:ring-0 resize-none"
+                placeholder="Paste your existing roadmap here, if any — Skill Master will adapt around it instead of starting from scratch."
+                value={form.existingRoadmap}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, existingRoadmap: e.target.value }))
+                }
+              />
+            </div>
             {/* ACTION AREA */}
             <div className="hidden md:flex items-center justify-end mt-12 pt-8 border-t border-gray-100 dark:border-divider">
-              <Button 
-                variant="primary" 
-                loading={isGenerating} 
+              <Button
+                variant="primary"
+                loading={isGenerating}
                 onClick={handleSubmit}
                 type="submit"
               >
-                {isGenerating ? "Generating your roadmap..." : "Generate Roadmap"}
+                {isGenerating
+                  ? "Generating your roadmap..."
+                  : "Generate Roadmap"}
               </Button>
             </div>
 
             <div className="md:hidden flex flex-col gap-2.5 mt-12 pt-6 border-t border-gray-100 dark:border-divider">
-              <Button 
-                variant="primary" 
-                fullWidth 
-                loading={isGenerating} 
+              <Button
+                variant="primary"
+                fullWidth
+                loading={isGenerating}
                 onClick={handleSubmit}
                 type="submit"
               >
                 {isGenerating ? "Generating..." : "Generate Roadmap"}
               </Button>
             </div>
-
           </form>
         </div>
       </div>
