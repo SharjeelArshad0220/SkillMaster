@@ -3,6 +3,7 @@ import { useApp } from "../../context/AppContext";
 import StatCard from "../../components/ui/StatCard";
 import Badge from "../../components/ui/Badge";
 import Button from "../../components/ui/Button";
+import HistoryWidget from "../../components/ui/HistoryWidget";
 
 const getCurrentSession = (roadmapJson, progress) => {
   if (!roadmapJson || !progress) return null;
@@ -41,7 +42,7 @@ const getCurrentSession = (roadmapJson, progress) => {
  * Main landing page for authenticated users. Shows stats, current session, and revision queue.
  */
 export default function LearnPage() {
-  const { roadmapJson, progress, roadmapLoading } = useApp();
+  const { roadmapJson, progress, roadmapLoading , roadmapId } = useApp();
   const navigate = useNavigate();
 
   // STATE 1: Still loading
@@ -229,6 +230,7 @@ export default function LearnPage() {
           )}
         </div>
       </div>
+      <HistoryWidget  roadmapId={roadmapId} /> 
     </div>
   );
 }

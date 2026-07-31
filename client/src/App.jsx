@@ -12,6 +12,8 @@ import LearnPage from "./pages/LearnPage/LearnPage";
 import ProgressPage from "./pages/ProgressPage/ProgressPage";
 import SessionPage from "./pages/SessionPage/SessionPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import HistoryPage from "./pages/HistoryPage/HistoryPage";
+import SessionDetailPage from "./pages/HistoryPage/SessionDetailPage";
 
 export default function App() {
   return (
@@ -23,14 +25,16 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/setup" element={<SetupPage />} />
               <Route element={<AppShell />}>
-                <Route path="/roadmap"           element={<RoadmapPage />} />
-                <Route path="/learn"             element={<LearnPage />} />
-                <Route path="/progress"          element={<ProgressPage />} />
-                <Route path="/session/:dayId"    element={<SessionPage />} />
+                <Route path="/roadmap" element={<RoadmapPage />} />
+                <Route path="/learn" element={<LearnPage />} />
+                <Route path="/progress" element={<ProgressPage />} />
+                <Route path="/session/:dayId" element={<SessionPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/history/:dayId" element={<SessionDetailPage />} />
               </Route>
             </Route>
-            <Route path="/"  element={<Navigate to="/learn" replace />} />
-            <Route path="*"  element={<NotFoundPage />} />
+            <Route path="/" element={<Navigate to="/learn" replace />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <Analytics />
         </AppProvider>

@@ -3,6 +3,48 @@ import Session from '../models/Session.model.js';
 import Progress from '../models/Progress.model.js';
 import { generateLessonContent, generateFeedback } from '../services/ai.service.js';
 import { parseDayId, getDayFromRoadmap, calculateNextPosition, buildDayId } from '../utils/dayHelpers.js';
+
+
+
+/**
+ * User ke active roadmap ki saari sessions ki halki-si list deta hai
+ * (nayi se purani order mein). History page ke liye use hota hai.
+ * Poora content nahi bhejta — wo to jab user kisi session pe click karega
+ * tab existing getSession(dayId) se mangwa lenge.
+ */
+export const getSessionHistory = async (req, res) => {
+  try {
+    const { roadmapId } = req.query;
+    const userId = req.userId;
+
+    if (!roadmapId) {
+      return res.status(400).json({ error: "roadmapId query param is required" });
+    }
+
+    const sessions = await Session.find({ userId, roadmapId })
+      .select('dayId type status completedAt generatedAt userSubmission.score userSubmission.passed')
+      .sort({ generatedAt: -1 })
+      .lean();
+
+    const history = sessions.map(s => ({
+      dayId: s.dayId,
+      type: s.type,
+      status: s.status,
+      completedAt: s.completedAt,
+      generatedAt: s.generatedAt,
+      score: s.userSubmission?.score ?? null,
+      passed: s.userSubmission?.passed ?? null
+    }));
+
+    return res.status(200).json({ history });
+  } catch (error) {
+    console.error("getSessionHistory error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
 /*
 **
  * Final guard before saving a session to the database.

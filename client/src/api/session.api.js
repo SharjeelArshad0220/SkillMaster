@@ -10,6 +10,18 @@ export const getSession = async (dayId, roadmapId) => {
   return res.data;
 };
 
+
+/**
+ * Roadmap ki saari sessions ki halki list mangwata hai (History page ke liye).
+ * GET /session/history?roadmapId=X
+ * @returns { history: Array<{ dayId, type, status, completedAt, generatedAt, score, passed }> }
+ */
+export const getSessionHistory = async (roadmapId) => {
+  const res = await api.get('/session/history', { params: { roadmapId } });
+  return res.data;
+};
+
+
 /**
  * Submits a task answer and receives AI feedback.
  * POST /session/:dayId/submit
