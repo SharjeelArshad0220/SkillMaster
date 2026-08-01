@@ -67,6 +67,7 @@ export default function ExamPhase({ questions = [], dayId, roadmapId, onComplete
 
         <div className="text-lg font-semibold text-gray-900 dark:text-white mb-8 leading-snug
                         prose prose-sm max-w-none
+                        prose-headings:text-gray-900 prose-headings:dark:text-white
                         prose-code:text-gray-900 prose-code:dark:text-accent
                         prose-code:bg-gray-100 prose-code:dark:bg-navy
                         prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]

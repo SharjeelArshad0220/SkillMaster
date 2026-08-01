@@ -24,6 +24,19 @@ export const buildDayId = (moduleNumber, weekNumber, dayNumber) =>
   `m${moduleNumber}-w${weekNumber}-d${dayNumber}`;
 
 /**
+ * Sanitizes markdown text by normalizing corrupted characters such as '≡' (triple bar)
+ * or Mojibake back into standard apostrophes/quotes.
+ */
+export const sanitizeMarkdownText = (text) => {
+  if (typeof text !== 'string') return text;
+  return text
+    .replace(/≡/g, "'")           // Fix triple bar symbol replaced for apostrophes
+    .replace(/[’‘]/g, "'")       // Normalize curly smart quotes
+    .replace(/[“”]/g, '"')        // Normalize double smart quotes
+    .replace(/â€™/g, "'");        // Fix UTF-8 Mojibake apostrophe artifact
+};
+
+/**
  * Derives the current session object from the roadmap using progress state.
  */
 export const getCurrentSession = (roadmapJson, progress) => {

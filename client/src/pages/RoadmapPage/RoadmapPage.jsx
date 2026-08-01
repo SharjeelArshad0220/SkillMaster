@@ -123,7 +123,7 @@ export default function RoadmapPage() {
                       ? "bg-white dark:bg-navy-mid border-accent-dk dark:border-accent shadow-lg shadow-accent/10 ring-4 ring-accent/5" 
                       : "bg-white dark:bg-navy-mid border-gray-200 dark:border-divider hover:border-gray-300 dark:hover:border-navy-light shadow-sm"}`}
                 >
-                  <div className="relative">
+                  <div title={mod.title} className="relative">
                     <div className="flex justify-between items-start">
                       <span className={`text-[10px] font-bold uppercase tracking-wider ${isActive ? "text-accent-dk dark:text-accent" : "text-muted"}`}>
                         Module {String(idx + 1).padStart(2, '0')}

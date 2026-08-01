@@ -13,6 +13,7 @@ const sessionSchema = new mongoose.Schema({
   completedAt: { type: Date, default: null }
 }, { timestamps: true });
 
-sessionSchema.index({ userId: 1, dayId: 1 });
+// Enforce strict uniqueness per user, roadmap, and dayId to guarantee data integrity
+sessionSchema.index({ userId: 1, roadmapId: 1, dayId: 1 }, { unique: true });
 
 export default mongoose.model('Session', sessionSchema);

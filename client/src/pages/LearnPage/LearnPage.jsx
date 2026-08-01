@@ -230,7 +230,10 @@ export default function LearnPage() {
           )}
         </div>
       </div>
-      <HistoryWidget  roadmapId={roadmapId} /> 
+
+      <div className="mt-10">
+        <HistoryWidget roadmapId={roadmapId} />
+      </div>
     </div>
   );
 }

@@ -78,6 +78,7 @@ export default function FeedbackPhase({ feedback, outcome, dayId, roadmapId, res
       <p className="text-[11px] font-bold uppercase tracking-[0.06em]
                     text-accent-dk dark:text-accent mb-4">AI FEEDBACK</p>
       <div className="prose prose-sm max-w-none mb-10
+                      prose-headings:text-gray-900 prose-headings:dark:text-white
                       prose-p:text-gray-600 prose-p:dark:text-slate prose-p:leading-[1.7] prose-p:my-2
                       prose-code:text-gray-900 prose-code:dark:text-accent
                       prose-code:bg-gray-100 prose-code:dark:bg-navy

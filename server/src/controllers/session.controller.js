@@ -26,7 +26,18 @@ export const getSessionHistory = async (req, res) => {
       .sort({ generatedAt: -1 })
       .lean();
 
-    const history = sessions.map(s => ({
+    // Canonical deduplication per dayId: prioritize completed status over pending
+    const historyMap = new Map();
+    for (const s of sessions) {
+      const existing = historyMap.get(s.dayId);
+      if (!existing) {
+        historyMap.set(s.dayId, s);
+      } else if (existing.status !== 'completed' && s.status === 'completed') {
+        historyMap.set(s.dayId, s);
+      }
+    }
+
+    const history = Array.from(historyMap.values()).map(s => ({
       dayId: s.dayId,
       type: s.type,
       status: s.status,
@@ -114,7 +125,7 @@ export const getSession = async (req, res) => {
     const { type } = dayData; // Learning, Revision, Exam
 
     // 6. Check sessions collection
-    let session = await Session.findOne({ userId, dayId });
+    let session = await Session.findOne({ userId, roadmapId: roadmap._id, dayId });
     if (session) {
       return res.status(200).json({ session });
     }
@@ -132,9 +143,7 @@ export const getSession = async (req, res) => {
         moduleNumber,
         moduleTitle: mod.title,
         weekTitle: week.title,
-        // moduleTitle: mod.moduleTitle,
         weekNumber,
-        // weekTitle: week.weekTitle,
         dayNumber,
         dayName: dayData.dayName,
         topicsList: dayData.topicsList,
@@ -146,10 +155,7 @@ export const getSession = async (req, res) => {
     }
     else if (type === "Revision") {
       const progress = await Progress.findOne({ userId, roadmapId: roadmap._id });
-      // Get weak topics for this week
       const currentWeekKey = `m${moduleNumber}-w${weekNumber}`;
-      // weeklyWeakTopics is stored as a plain JS object in MongoDB (Mongoose Mixed type)
-      // Always use bracket notation [] — never Map.get() — for consistency
       const weeklyWeakTopics = progress.weeklyWeakTopics || {};
       const weakTopics = Array.isArray(weeklyWeakTopics[currentWeekKey])
         ? weeklyWeakTopics[currentWeekKey]
@@ -159,7 +165,6 @@ export const getSession = async (req, res) => {
       let week = mod.weeks.find(w => w.weekNumber === weekNumber);
       if (!week && mod.weeks) week = mod.weeks[weekNumber - 1];
 
-      // Gather all topics from learning days of this week
       const allWeekTopics = week.days
         .filter(d => d.type === 'Learning')
         .flatMap(d => d.topicsList)
@@ -179,14 +184,25 @@ export const getSession = async (req, res) => {
       content = { examQuestions: dayData.examQuestions };
     }
     guardSessionContent(type, content);
-    session = await Session.create({
-      userId,
-      roadmapId: roadmap._id,
-      dayId,
-      type,
-      content,
-      status: "pending"
-    });
+
+    try {
+      session = await Session.create({
+        userId,
+        roadmapId: roadmap._id,
+        dayId,
+        type,
+        content,
+        status: "pending"
+      });
+    } catch (createErr) {
+      if (createErr.code === 11000) {
+        session = await Session.findOne({ userId, roadmapId: roadmap._id, dayId });
+        if (session) {
+          return res.status(200).json({ session });
+        }
+      }
+      throw createErr;
+    }
 
     return res.status(200).json({ session });
   } catch (error) {

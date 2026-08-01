@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Button from '../../../components/ui/Button';
 import { submitTask } from '../../../api/session.api';
+import { sanitizeMarkdownText } from '../../../utils/sessionHelpers';
 
 const extractErrorMessage = (err) => {
   if (err?.response?.data?.error) return err.response.data.error;
@@ -119,12 +120,13 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
         <p className="text-[11px] font-bold uppercase tracking-[0.06em]
                       text-accent-dk dark:text-accent mb-3">TASK</p>
         <div className="prose prose-sm max-w-none text-gray-700 dark:text-slate leading-[1.65] mb-6
+                        prose-headings:text-gray-900 prose-headings:dark:text-white
                         prose-code:text-gray-900 prose-code:dark:text-accent
                         prose-code:bg-gray-100 prose-code:dark:bg-navy
                         prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px]
                         prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
-                        prose-strong:font-semibold">
-          <ReactMarkdown>{task.description}</ReactMarkdown>
+                        prose-strong:font-semibold prose-strong:text-gray-900 prose-strong:dark:text-white">
+          <ReactMarkdown>{sanitizeMarkdownText(task.description)}</ReactMarkdown>
         </div>
         <div className="border-t border-gray-100 dark:border-divider pt-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.06em]
