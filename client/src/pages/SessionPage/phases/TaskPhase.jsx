@@ -84,6 +84,23 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
     }
   };
 
+  // No-task handler — revision days have no graded task but still need server-side
+  // persistence. A client-only onComplete() would let the user advance without the
+  // session ever being marked completed in the DB. We call submitTask() (which the
+  // server now handles via the no-task branch), and fall back gracefully if it fails.
+  const handleNoTaskFinish = async () => {
+    setLoading(true);
+    try {
+      const result = await submitTask(dayId, { roadmapId, type: 'none', taskAnswer: null, mcqAnswers: null });
+      onComplete({ feedback: result.feedback, outcome: result.outcome });
+    } catch {
+      // Non-fatal: server is unreachable, but don't strand the user.
+      onComplete({ feedback: 'You have completed the session successfully.', outcome: 'positive' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // --- NO TASK CASE (e.g. Revision Days) ---
   if (!task) {
     return (
@@ -101,9 +118,10 @@ export default function TaskPhase({ task, dayId, roadmapId, onComplete }) {
         <p className="text-[15px] text-gray-600 dark:text-slate leading-[1.65] mb-8">
           You've successfully finished this topic's learning material.
         </p>
-        <Button 
-          variant="primary" 
-          onClick={() => onComplete({ feedback: 'You have completed the session successfully.', outcome: 'positive' })}
+        <Button
+          variant="primary"
+          loading={loading}
+          onClick={handleNoTaskFinish}
         >
           Finish Session
         </Button>

@@ -235,7 +235,12 @@ export const submitTask = async (req, res) => {
 
     const task = session.content?.task;
     if (!task) {
-      return res.status(400).json({ error: "No task in this session" });
+      // No task (Revision day) — nothing to grade, but must still persist completion server-side.
+      session.status = "completed";
+      session.completedAt = new Date();
+      session.aiFeedback = "You have completed the session successfully.";
+      await session.save();
+      return res.status(200).json({ feedback: session.aiFeedback, outcome: "positive" });
     }
 
     if (task.type === "text") {
@@ -510,7 +515,7 @@ export const submitExam = async (req, res) => {
         const retryContent = await generateLessonContent({
           isExamRetry: true,
           skillName: roadmap.skillName,
-          weakTopics: weakTopics.join(', '),
+          weakTopicsStr: weakTopics.join(', '),
           examAnswerSummary,
           attemptNumber
         });

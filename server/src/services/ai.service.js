@@ -605,9 +605,9 @@ const generateLessonTwoPass = async ({
  * model, schema-locked directly.
  */
 export const generateRoadmapSkeleton = (data) => {
-   const existingRoadmapBlock = data.existingRoadmap?.trim()
+  const existingRoadmapBlock = data.existingRoadmap?.trim()
     ? `\n\nLearner's existing roadmap (they are already following this — adapt to it, don't ignore or contradict it):\n${data.existingRoadmap.trim()}`
-    : '';
+    : "";
   const userPrompt = `Design a learning roadmap for this learner:
 Skill: ${data.skillInput}
 Their actual stated goal: ${data.motivation || "Not specified"}
@@ -635,13 +635,15 @@ export const generateLessonContent = async (data) => {
   if (data.isRevision || data.isExamRetry) {
     const topics =
       data.weakTopicsStr || data.allWeekTopics || "General review of the week";
-
+      const examContext = data.examAnswerSummary
+     ? `\n\nSpecific wrong answers from the exam attempt:\n${data.examAnswerSummary}`
+     : '';
     return generateLessonTwoPass({
       thinkingSystem: REVISION_THINKING_SYSTEM,
-      thinkingPrompt: `Weak topics to address: ${topics}
+      thinkingPrompt: `Weak topics to address: ${topics}${examContext}
 Skill: ${data.skillName} | Learner level: ${data.currentLevel || "Beginner"}
 
-Re-explain each weak topic from a genuinely different angle than the original lesson likely used, with a new example. Connect related weak topics to each other where it helps; keep unrelated ones separate.`,
+Re-explain each weak topic from a genuinely different angle than the original lesson likely used, with a new example. Connect related weak topics to each other where it helps; keep unrelated ones separate.${data.examAnswerSummary ? ' Address the specific misconception revealed by each wrong answer above directly, not just the topic name.' : ''}`,
       formatterPrompt: `Format this revision content into the lesson schema. Segment exactly as the source labels it (typically 1 part, occasionally 2). task must be null. Preserve all markdown formatting.`,
     });
   }
@@ -669,7 +671,7 @@ Reason through the objective, the failure modes, and the classification for thes
 export const generateFeedback = (data) => {
   let userPrompt;
 
-  if (data.isMcq) {
+  if (data.isMcq || data.isExam) {
     const wrongAnswers = data.report.filter((r) => !r.isCorrect);
     const correctCount = data.report.filter((r) => r.isCorrect).length;
     const score =
@@ -711,6 +713,6 @@ If none needed: RESOURCES: (no additional resources needed)`;
     systemPrompt: FEEDBACK_SYSTEM,
     userPrompt,
     maxTokens: MAX_TOKENS.FEEDBACK,
-    maxAttempts:1
+    maxAttempts: 1,
   });
 };
